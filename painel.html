@@ -548,9 +548,13 @@ const calcRecordes = (ganhos) => {
 };
 
 const montarPainel = (bruto) => {
-  const ganhos = bruto.ganhos.map(([dia, vendedor, area, n, valor]) => ({ data_ganho: dia, vendedor, area, n, valor }));
-  const leads = (bruto.leads || []).map(([dia, vendedor, area, n]) => ({ data_criacao: dia, vendedor, area, n }));
-  // A partir de outubro/2026, Juros virou dois serviços: a meta de Juros vale 80% pra Empréstimo menor e 20% pra RMC.
+  // "Juros" sem subserviço: até setembro/2026 só existia RMC; de outubro em diante é Empréstimo menor (antigo TEA).
+  const INICIO_EMPRESTIMO = '2026-09-26';
+  const ehJurosPuro = (a) => { const k = String(a || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); return (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') && !k.includes('rmc') && !k.includes('emprest'); };
+  const jurosPorData = (a, dia) => (ehJurosPuro(a) ? (dia < INICIO_EMPRESTIMO ? 'Juros RMC' : 'Juros Empréstimo menor') : a);
+  const ganhos = bruto.ganhos.map(([dia, vendedor, area, n, valor]) => ({ data_ganho: dia, vendedor, area: jurosPorData(area, dia), n, valor }));
+  const leads = (bruto.leads || []).map(([dia, vendedor, area, n]) => ({ data_criacao: dia, vendedor, area: jurosPorData(area, dia), n }));
+  // A partir de outubro/2026, Juros virou dois serviços: a meta de Juros vale 80% pra Empréstimo menor e 20% pra RMC. Antes disso, toda meta de Juros era RMC.
   const DIVISAO_JUROS = [['Juros Empréstimo menor', 0.8], ['Juros RMC', 0.2]];
   const dividirJuros = (mes) => new Date().getFullYear() > 2026 || mes >= 10;
   const metas = [];
@@ -558,7 +562,8 @@ const montarPainel = (bruto) => {
     if (String(area).trim().toLowerCase() === 'juros' && dividirJuros(mes)) {
       const emp = Math.round(meta * DIVISAO_JUROS[0][1]);
       metas.push({ funil, vendedor, area: DIVISAO_JUROS[0][0], mes, meta: emp }, { funil, vendedor, area: DIVISAO_JUROS[1][0], mes, meta: meta - emp });
-    } else metas.push({ funil, vendedor, area, mes, meta });
+    } else if (String(area).trim().toLowerCase() === 'juros') metas.push({ funil, vendedor, area: 'Juros RMC', mes, meta });
+    else metas.push({ funil, vendedor, area, mes, meta });
   }
   const calendario = calcCalendario(ganhos);
   const por_area = calcPorArea(ganhos, metas, calendario);
@@ -624,7 +629,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
 (() => {
   const EQUIPE = 'Equipe toda', TODOS_SERV = 'Todos os serviços', TODOS_MESES = 'todos';
   const ORDEM = ['Juros Empréstimo menor', 'Juros RMC', 'Juros', 'Trabalhista', 'Previdenciário', 'Civil', 'Consumidor', 'Não informado'];
-  const NOME = { Juros: 'Juros/TEA' };
+  const NOME = {};
   const COR = { 'Juros Empréstimo menor': '#b98ab0', 'Juros RMC': '#6fa8c9', Juros: '#9a6b93', Trabalhista: '#e07a8f', 'Previdenciário': '#e9c98e', Civil: '#c9a2f0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
   const ACC = '#d5ad95', PLUM = '#9a6b93', INK = '#f5ebe5', MUTED = '#b8a3a9', LINE = '#3a2129';
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
