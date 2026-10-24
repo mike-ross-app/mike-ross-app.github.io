@@ -64,30 +64,67 @@ body{margin:0;padding:20px 16px 0;overflow-x:hidden;background:radial-gradient(e
 .atalhos a:hover{border-color:var(--mr-teal)}
 .atalhos a.destaque{background:var(--mr-wine);border-color:var(--mr-wine);color:#fbe9df}
 @media (max-width:980px){.atalhos{display:none}}
+
+/* home funcional */
+.home{max-width:1240px;margin:8px auto 40px;display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;padding:36px 0 24px}
+.home-txt{min-width:0}
+.home .lead-top{margin:0 0 8px;font:500 15px var(--mr-sans);color:var(--mr-muted)}
+.home h1{margin:0;font:600 clamp(44px,6.4vw,84px)/1 var(--mr-serif)!important;letter-spacing:.05em;text-transform:uppercase}
+.home .lead{margin:16px 0 0;max-width:46ch;font:400 16.5px/1.6 var(--mr-sans);color:var(--mr-muted)}
+.home .search{margin:26px 0 0}
+.home-atalhos{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.home-atalhos a{font:600 14px var(--mr-sans);text-decoration:none;color:var(--mr-ink);background:var(--mr-surface-2);border:1px solid var(--mr-line-strong);border-radius:999px;padding:8px 16px}
+.home-atalhos a:hover{border-color:var(--mr-teal)}
+.hoje{background:linear-gradient(160deg,#3a1422 0%,var(--mr-surface) 75%);border:1px solid var(--mr-line-strong);border-radius:18px;padding:24px;display:grid;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.hoje-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hoje h2{margin:0;font:600 13px var(--mr-sans)!important;letter-spacing:.1em;text-transform:uppercase;color:var(--mr-muted)}
+.hoje-top span{font-size:12px;color:var(--mr-muted)}
+.hoje-nums{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hoje-nums b{display:block;font:600 52px/1 var(--mr-serif);font-variant-numeric:tabular-nums}
+.hoje-nums b small{font-size:20px;color:var(--mr-muted);font-weight:500}
+.hoje-nums span{font-size:13px;color:var(--mr-muted)}
+.hoje-bar{height:8px;border-radius:4px;background:var(--mr-surface-2);overflow:hidden}
+.hoje-bar i{display:block;height:100%;width:0;background:var(--mr-teal);border-radius:4px;transition:width .8s}
+.hoje-ritmo{margin:0;font-size:14px}
+.hoje-rank{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:r}
+.hoje-rank li{display:grid;grid-template-columns:1.6rem 1fr auto;gap:8px;font-size:14.5px;counter-increment:r}
+.hoje-rank li::before{content:counter(r) "º";font:600 16px var(--mr-serif);color:var(--mr-muted)}
+.hoje-rank li b{font-variant-numeric:tabular-nums}
+.hoje-cta{justify-self:start;font:600 14px var(--mr-sans);text-decoration:none;color:#fbe9df;background:var(--mr-wine);border-radius:999px;padding:9px 18px}
+.hoje-cta:hover{background:var(--mr-wine-hover)}
+.pos{color:#7fd3a0}.neg{color:#f08a7e}
+@media (max-width:900px){.home{grid-template-columns:1fr;gap:24px;min-height:0}}
 </style>
 <link rel="icon" href="favicon.png">
 </head>
 <body>
 <nav class="mr-bar"><div class="mr-lado esq"><span class="mr-grupo">Resultados</span><div class="mr-links"><a href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a href="tarefas.html">Tarefas</a><a href="tv.html">Modo TV</a></div></div><a class="mr-brand" href="./" aria-label="Início" title="Início"><img src="simbolo.png" alt="Simeão Advogados"></a><div class="mr-lado dir"><span class="mr-grupo">Ferramentas</span><div class="mr-links"><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="clt.html">CLT</a></div></div></nav>
-<div class="atalhos" aria-label="Atalhos"><a class="destaque" href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="tv.html">Modo TV</a></div>
 
-<div class="sky"><section class="hero">
-  <a class="medal left" href="triagem.html"><div class="ring"><svg width="56" height="56" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="16" width="34" height="23" rx="2.5"/><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M7 26h34M21 26v3h6v-3"/></svg></div><span>Trabalhista</span></a>
-  <a class="medal right" href="previdenciario.html"><div class="ring"><svg width="56" height="56" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7h22M13 41h22M16 7c0 9 8 11 8 17s-8 8-8 17M32 7c0 9-8 11-8 17s8 8 8 17"/><path d="M20 37c1.5-2 6.5-2 8 0"/></svg></div><span>Previdenciário</span></a>
-  <div class="hero-in">
+<section class="home">
+  <div class="home-txt">
     <p class="lead-top">Simeão Advogados e Escolha Certa</p>
     <h1>Mike Ross</h1>
-    <div class="crest" aria-hidden="true"><img src="simbolo.png" alt="" width="30" style="height:auto"></div>
     <p class="lead">Lê a conversa do cliente, faz a conta, acha o artigo e diz o que perguntar. A palavra final é sempre do advogado.</p>
     <form class="search" action="clt.html" onsubmit="event.preventDefault(); const q=this.q.value.trim(); location.href='clt.html'+(q?'#'+encodeURIComponent(q):'');">
       <input name="q" type="search" placeholder="Buscar na CLT: 483, justa causa, intervalo" aria-label="Buscar na CLT" autocomplete="off">
       <button type="submit">Buscar</button>
     </form>
+    <div class="home-atalhos"><a href="triagem.html">Triagem trabalhista</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Raio-X previdenciário</a></div>
   </div>
-<div class="facade" aria-hidden="true"><svg viewBox="0 0 960 330" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M480 18L110 96h740z"/><path d="M180 90L480 30l300 60" opacity=".45"/><circle cx="480" cy="68" r="12" opacity=".7"/><path d="M96 96h768v14H96zM110 110h740"/><rect x="148" y="118" width="26" height="150" rx="2"/><path d="M144 118h34M144 268h34"/><rect x="238" y="118" width="26" height="150" rx="2"/><path d="M234 118h34M234 268h34"/><rect x="328" y="118" width="26" height="150" rx="2"/><path d="M324 118h34M324 268h34"/><rect x="418" y="118" width="26" height="150" rx="2"/><path d="M414 118h34M414 268h34"/><rect x="508" y="118" width="26" height="150" rx="2"/><path d="M504 118h34M504 268h34"/><rect x="598" y="118" width="26" height="150" rx="2"/><path d="M594 118h34M594 268h34"/><rect x="688" y="118" width="26" height="150" rx="2"/><path d="M684 118h34M684 268h34"/><rect x="778" y="118" width="26" height="150" rx="2"/><path d="M774 118h34M774 268h34"/><path d="M80 274h800v14H80zM60 288h840v14H60zM40 302h880v14H40z"/></svg></div>
-</section></div>
+  <aside class="hoje" aria-live="polite">
+    <div class="hoje-top"><h2>Hoje na equipe</h2><span id="h-atual">carregando…</span></div>
+    <div class="hoje-nums">
+      <div><b id="h-hoje">–</b><span>ganhos hoje</span></div>
+      <div><b id="h-mes">–</b><span id="h-mes-l">no mês</span></div>
+    </div>
+    <div class="hoje-bar"><i id="h-bar"></i></div>
+    <p id="h-ritmo" class="hoje-ritmo"></p>
+    <ol id="h-rank" class="hoje-rank"></ol>
+    <a class="hoje-cta" href="meu-dia.html">Abrir meu dia</a>
+  </aside>
+</section>
 
-<section class="tools">
+<section class="tools" id="ferramentas">
   <div class="tools-in">
     <h2>Ferramentas</h2>
     <p class="sub">Tudo roda no seu navegador. Nenhum dado de cliente sai do seu computador.</p>
@@ -122,5 +159,33 @@ body{margin:0;padding:20px 16px 0;overflow-x:hidden;background:radial-gradient(e
     <p class="note">Uso interno do time comercial. Não repasse este link para fora. Valores e prazos são estimativas para orientar o atendimento e nunca devem ser prometidos ao cliente.</p>
   </div>
 </section>
+<script src="motor.js"></script>
+<script>
+(() => {
+  const num = (n) => new Intl.NumberFormat('pt-BR').format(n || 0);
+  const $ = (id) => document.getElementById(id);
+  const carregar = async () => {
+    try {
+      const r = await (await fetch(MR_API, { cache: 'no-store' })).json();
+      if (!r.ok) throw 0;
+      const p = montarPainel(r), R = resumoDe(p, 'Equipe toda');
+      if (!R) return;
+      const T = R.T, t = new Date(r.atualizado);
+      $('h-atual').textContent = 'Kommo às ' + pad2(t.getHours()) + ':' + pad2(t.getMinutes());
+      $('h-hoje').textContent = num(R.feitoHoje);
+      $('h-mes').replaceChildren(document.createTextNode(num(T.feito)), Object.assign(document.createElement('small'), { textContent: T.meta ? ' / ' + num(T.meta) : '' }));
+      $('h-mes-l').textContent = 'no mês de ' + R.c0.nome_mes.split(' ')[0] + (T.meta ? ' · ' + T.atingido_pct + '%' : '');
+      $('h-bar').style.width = (T.meta ? Math.min(100, (T.feito / T.meta) * 100) : 0) + '%';
+      const rit = $('h-ritmo');
+      rit.className = 'hoje-ritmo ' + (T.ritmo >= 0 ? 'pos' : 'neg');
+      rit.textContent = T.meta ? (T.ritmo > 0 ? num(T.ritmo) + ' à frente do ritmo' : T.ritmo === 0 ? 'No ritmo da meta' : num(-T.ritmo) + ' atrás do ritmo') : '';
+      const lin = VENDEDORES.map((v) => ({ v, n: (p.por_area.find((x) => x.mes === R.mes && x.vendedor === v && x.area === 'Total') || {}).feito || 0 })).sort((a, b) => b.n - a.n);
+      $('h-rank').replaceChildren(...lin.map((l) => { const li = document.createElement('li'); li.append(document.createTextNode(l.v)); const b = document.createElement('b'); b.textContent = num(l.n); li.append(b); return li; }));
+    } catch (e) { $('h-atual').textContent = 'sem conexão com o Kommo'; }
+  };
+  carregar(); setInterval(carregar, 5 * 60 * 1000);
+})();
+</script>
+<nav class="mr-tab" aria-label="Navegação rápida"><a href="meu-dia.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg><span>Meu dia</span></a><a href="painel.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Painel</span></a><a href="tarefas.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg><span>Tarefas</span></a><a href="./#ferramentas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></svg><span>Ferramentas</span></a></nav>
 </body>
 </html>

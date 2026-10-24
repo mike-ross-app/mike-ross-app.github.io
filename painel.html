@@ -204,7 +204,7 @@
 
   <section class="sm-card" id="recordes">
     <div class="sm-rec-head">
-      <div><h2>Recordes da equipe</h2><p class="sm-note" style="margin:2px 0 0">Mais ganhos num dia, numa semana (segunda a domingo) e num mês fiscal. Vale pra equipe toda, independente dos filtros.</p></div>
+      <div><h2>Recordes da equipe</h2><p class="sm-note" style="margin:2px 0 0">Equipe toda, sem filtro. <span class="sm-info" tabindex="0" title="Mais ganhos num dia, numa semana (segunda a domingo) e num mês fiscal. Vale pra equipe toda, independente dos filtros.">i</span></p></div>
     </div>
     <div class="sm-recs" id="recs"><div class="sm-rec"><span class="nb dash-skeleton">—</span></div></div>
   </section>
@@ -217,7 +217,7 @@
       </div>
       <div style="display:grid; gap:10px; min-width:0">
         <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; align-items:baseline">
-          <div><h2 id="evo-titulo">Ganhos mês a mês</h2><p class="sm-note" style="margin:2px 0 0">Barras por serviço, linha de conversão. Clique nos meses pra somar ou tirar do período.</p></div>
+          <div><h2 id="evo-titulo">Ganhos mês a mês</h2><p class="sm-note" style="margin:2px 0 0">Barras por serviço, linha de conversão. <span class="sm-info" tabindex="0" title="Clique nos meses pra somar ou tirar do período. O painel inteiro segue os meses marcados.">i</span></p></div>
           <div class="sm-legend" id="evo-legenda"></div>
         </div>
         <div class="sm-chart" id="evo-chart" style="min-height:280px"></div>
@@ -241,7 +241,7 @@
 
   <section class="sm-card" id="semanas">
     <h2 id="semanas-titulo">Metas por semana</h2>
-    <p class="sm-note">Meta de cada semana proporcional aos dias úteis, sem contar feriados nacionais. Da semana atual em diante, a meta é recalculada pelo que falta para bater o mês; o plano original aparece embaixo.</p>
+    <p class="sm-note">Meta recalculada pelo que falta pro mês. <span class="sm-info" tabindex="0" title="Meta de cada semana proporcional aos dias úteis, sem contar feriados nacionais. Da semana atual em diante, a meta é recalculada pelo que falta para bater o mês; o plano original aparece embaixo.">i</span></p>
     <div class="sm-scroll"><table class="sm-t sm-cards" id="tab-semanas"><thead></thead><tbody></tbody></table></div>
     <div class="sm-legend-cells"><span class="ok">bateu a meta da semana</span><span class="mid">70% ou mais</span><span class="low">abaixo de 70%</span></div>
   </section>
@@ -314,7 +314,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
   const EQUIPE = 'Equipe toda', TODOS_SERV = 'Todos os serviços', TODOS_MESES = 'todos';
   const ORDEM = ['Juros Empréstimo menor', 'Juros RMC', 'Juros', 'Trabalhista', 'Previdenciário', 'Civil', 'Consumidor', 'Não informado'];
   const NOME = {};
-  const COR = { 'Juros Empréstimo menor': '#b98ab0', 'Juros RMC': '#6fa8c9', Juros: '#9a6b93', Trabalhista: '#e07a8f', 'Previdenciário': '#e9c98e', Civil: '#c9a2f0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
+  const COR = { 'Juros Empréstimo menor': '#e0905a', 'Juros RMC': '#6fa8c9', Juros: '#9a6b93', Trabalhista: '#e06b86', 'Previdenciário': '#f0d58c', Civil: '#b49af0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
   const ACC = '#d5ad95', PLUM = '#9a6b93', INK = '#f5ebe5', MUTED = '#b8a3a9', LINE = '#3a2129';
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const nomeArea = (a) => NOME[a] || a;
@@ -855,5 +855,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
 carregar();
 setInterval(carregar, ATUALIZA_MIN * 60 * 1000);
 </script>
+<nav class="mr-tab" aria-label="Navegação rápida"><a href="meu-dia.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg><span>Meu dia</span></a><a href="painel.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Painel</span></a><a href="tarefas.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/></svg><span>Tarefas</span></a><a href="./#ferramentas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></svg><span>Ferramentas</span></a></nav>
 </body>
 </html>
