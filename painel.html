@@ -257,6 +257,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 /* Motor do painel: recebe os números somados pelo script e calcula tudo que a tela mostra. */
+/* Mês fiscal: normalmente do dia 26 ao dia 25, com o nome do mês em que fecha.
+   Exceções: meses fiscais que começaram em outro dia (o mês anterior termina na véspera). */
+const INICIO_FISCAL = { '2026-09': '2026-08-28' };
+const pad2 = (n) => String(n).padStart(2, '0');
+const inicioFiscal = (a, m) => INICIO_FISCAL[a + '-' + pad2(m)] || (m === 1 ? (a - 1) + '-12-26' : a + '-' + pad2(m - 1) + '-26');
+const proxMes = (a, m) => (m === 12 ? [a + 1, 1] : [a, m + 1]);
+const antMes = (a, m) => (m === 1 ? [a - 1, 12] : [a, m - 1]);
+const mesFiscalDe = (iso) => {
+  const [a, m, d] = iso.split('-').map(Number);
+  const f = d >= 26 ? proxMes(a, m) : [a, m];
+  const p = proxMes(...f);
+  if (iso >= inicioFiscal(...p)) return p;
+  if (iso < inicioFiscal(...f)) return antMes(...f);
+  return f;
+};
+
 const calcCalendario = (ganhos) => {
   // Mês fiscal: dia 26 ao dia 25, com o nome do mês em que fecha. Semanas de segunda a domingo.
   // Dias úteis: segunda a sexta, sem feriados nacionais (fixos + Sexta-feira Santa). "Hoje" é a data de quem abre o painel.
@@ -279,7 +295,8 @@ const calcCalendario = (ganhos) => {
     return fer[a].has(iso(n));
   };
   const uteis = (a, b) => { let n = 0; for (let x = a; x <= b; x++) { const w = semana(x); if (w > 0 && w < 6 && !feriado(x)) n++; } return n; };
-  const fiscal = (a, m, d) => (d >= 26 ? (m === 12 ? [a + 1, 1] : [a, m + 1]) : [a, m]);
+  const fiscal = (a, m, d) => mesFiscalDe(a + '-' + pad2(m) + '-' + pad2(d));
+  const deIso = (x) => { const [a, m, d] = x.split('-').map(Number); return dia(a, m, d); };
   const NOMES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 
   const agora = new Date();
@@ -294,7 +311,7 @@ const calcCalendario = (ganhos) => {
   }
   const rows = [];
   for (let mes = primeiro; mes <= mesAtual; mes++) {
-    const ini = dia(anoAtual, mes - 1, 26), fim = dia(anoAtual, mes, 25);
+    const ini = deIso(inicioFiscal(anoAtual, mes)), fim = deIso(inicioFiscal(...proxMes(anoAtual, mes))) - 1;
     const sem = [];
     let comeco = ini;
     for (let x = ini; x <= fim; x++) {
@@ -494,13 +511,13 @@ const calcDiario = (ganhos, leads, calendario) => {
 };
 
 const calcRecordes = (ganhos) => {
-  // Recordes de ganhos da equipe toda: melhor dia, melhor semana (segunda a domingo) e melhor mês fiscal (26 ao 25).
+  // Recordes de ganhos da equipe toda: melhor dia, melhor semana (segunda a domingo) e melhor mês fiscal (26 ao 25, salvo exceções).
   // "recorde_anterior" ignora o período de hoje, então "bateu" diz se o período atual já passou o melhor que existia antes dele.
   const iso = (d) => d.toISOString().slice(0, 10);
   const agora = new Date();
   const hoje = iso(new Date(Date.UTC(agora.getFullYear(), agora.getMonth(), agora.getDate())));
   const semanaDe = (dia) => { const d = new Date(dia + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); return iso(d); };
-  const mesDe = (dia) => { let [a, m, d] = dia.split('-').map(Number); if (d >= 26) { m++; if (m > 12) { m = 1; a++; } } return a + '-' + String(m).padStart(2, '0'); };
+  const mesDe = (dia) => { const [a, m] = mesFiscalDe(dia); return a + '-' + pad2(m); };
   const tipos = { dia: (x) => x, semana: semanaDe, mes: mesDe };
   return Object.entries(tipos).map(([tipo, chaveDe]) => {
     const cont = {};

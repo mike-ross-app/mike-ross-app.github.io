@@ -278,13 +278,19 @@ const ehFeriado = (iso) => {
 };
 const util = (iso) => { const w = new Date(iso + 'T12:00:00').getDay(); return w > 0 && w < 6 && !ehFeriado(iso); };
 
-// períodos: mês fiscal vai do dia 26 ao dia 25, com o nome do mês em que fecha
+// períodos: mês fiscal vai do dia 26 ao dia 25, com o nome do mês em que fecha.
+// Exceções: meses fiscais que começaram em outro dia (o mês anterior termina na véspera).
+const INICIO_FISCAL = { '2026-09': '2026-08-28' };
+const inicioFiscal = (a, m) => INICIO_FISCAL[a + '-' + pad(m)] || (m === 1 ? (a - 1) + '-12-26' : a + '-' + pad(m - 1) + '-26');
 const fiscal = (hojeIso, volta) => {
   let a = Number(hojeIso.slice(0, 4)), m = Number(hojeIso.slice(5, 7)), d = Number(hojeIso.slice(8, 10));
   if (d >= 26) { m++; if (m > 12) { m = 1; a++; } }
+  const na = m === 12 ? a + 1 : a, nm = m === 12 ? 1 : m + 1;
+  if (hojeIso >= inicioFiscal(na, nm)) { a = na; m = nm; }
+  else if (hojeIso < inicioFiscal(a, m)) { m--; if (m < 1) { m = 12; a--; } }
   m -= volta; while (m < 1) { m += 12; a--; }
-  const pa = m === 1 ? a - 1 : a, pm = m === 1 ? 12 : m - 1;
-  return { ini: pa + '-' + pad(pm) + '-26', fim: a + '-' + pad(m) + '-25', nome: MESES[m - 1] + ' de ' + a };
+  const pa = m === 12 ? a + 1 : a, pm = m === 12 ? 1 : m + 1;
+  return { ini: inicioFiscal(a, m), fim: somaDias(inicioFiscal(pa, pm), -1), nome: MESES[m - 1] + ' de ' + a };
 };
 const periodos = (hojeIso) => {
   const f0 = fiscal(hojeIso, 0), f1 = fiscal(hojeIso, 1);
