@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Raio-X Previdenciário | Mike Ross</title>
+<style>
+:root{--bg:#fbf8f5;--surface:#fff;--surface-2:#f7efe8;--ink:#5e1624;--text:#2f2a2b;--muted:#777778;--line:#ecdccb;--accent:#9f1c37;--ok:#2f7a4a;--ok-bg:#e3f1e7;--warn:#9a5b00;--warn-bg:#fbefd9;--no:#8a8a8a;--no-bg:#efecea;--bad:#b42318;--bad-bg:#fbe3e0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1214;--surface:#241a1d;--surface-2:#2d2125;--ink:#f1e2d8;--text:#ece5e2;--muted:#a9a0a0;--line:#3d2b30;--accent:#e0677f;--ok:#7ccf98;--ok-bg:#183223;--warn:#f0b35a;--warn-bg:#3a2a10;--no:#a9a0a0;--no-bg:#2d2125;--bad:#f2786b;--bad-bg:#3a1b18}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:20px 16px 60px}
+.wrap{max-width:1160px;margin:0 auto;display:grid;gap:18px}
+a{color:var(--accent)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--accent);padding-bottom:12px}
+h1{color:var(--ink);font-size:28px;margin:0}
+.top p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.top .acts{display:flex;gap:8px;flex-wrap:wrap}
+button{font:600 14.5px system-ui,-apple-system,"Segoe UI",sans-serif;border-radius:8px;padding:8px 13px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--text)}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:920px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:12px;min-width:0}
+.card h2{font-size:18px;margin:0;color:var(--ink)}
+.card h3{font-size:15px;margin:0;color:var(--ink)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label.f{display:grid;gap:4px;font-size:13.5px;font-weight:600;color:var(--muted)}
+input[type=text],input[type=date],input[type=number],select,textarea{font:400 15.5px system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:7px 9px;width:100%;min-width:0}
+textarea{min-height:110px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:14px;cursor:pointer;background:var(--bg)}
+.chip:has(input:checked){border-color:var(--accent);background:var(--surface-2)}
+.hint{font-size:12.5px;color:var(--muted);font-weight:400}
+.fine{font-size:13px;color:var(--muted);margin:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+@media (max-width:620px){table{display:block;overflow-x:auto}}
+th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:4px 4px;border-bottom:1px solid var(--line)}
+td{padding:4px;border-bottom:1px solid var(--line);vertical-align:middle}
+td input{padding:5px 6px;font-size:14px}
+td.x button{border:none;background:none;font-size:18px;padding:0 6px;color:var(--muted)}
+.flag{font-size:11.5px;font-weight:700;color:var(--warn)}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:var(--bg);display:grid;gap:2px}
+.drop:hover,.drop.over{border-color:var(--accent)}
+.drop span{font-size:13px;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.kpi b{display:block;font-size:19px;color:var(--ink)}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.rules{display:grid;gap:8px}
+.rule{border:1px solid var(--line);border-left:5px solid var(--no);border-radius:8px;padding:9px 12px;display:grid;gap:2px}
+.rule.ok{border-left-color:var(--ok)} .rule.soon{border-left-color:var(--warn)} .rule.na{opacity:.75}
+.rule .h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.rule strong{font-size:15px}
+.tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok)} .tag.soon{background:var(--warn-bg);color:var(--warn)} .tag.na{background:var(--no-bg);color:var(--no)} .tag.bad{background:var(--bad-bg);color:var(--bad)}
+.rule .base{font-size:12px;color:var(--accent)}
+.rule .det{font-size:13.5px;color:var(--muted)}
+.alerts{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{border:none;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;background:none;color:var(--muted);white-space:nowrap}
+.tab[aria-selected=true]{color:var(--text);border-bottom-color:var(--accent)}
+pre.out{white-space:pre-wrap;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;margin:0;max-height:440px;overflow:auto}
+.toast{font-size:13.5px;color:var(--ok);font-weight:600}
+[hidden]{display:none!important}
+.two-in{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px}
+@media (max-width:700px){.two-in{grid-template-columns:minmax(0,1fr)}}
+#conv{min-height:180px}
+.doclist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.docitem{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;gap:3px;background:var(--bg);font-size:13.5px}
+.docitem .dtop{display:flex;gap:8px;align-items:center;min-width:0}
+.docitem .dname{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.docitem .badge{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--accent);white-space:nowrap}
+.docitem .dstat{color:var(--muted)}
+.docitem.erro{border-color:var(--bad)}
+.docitem .x{border:none;background:none;color:var(--muted);font-size:17px;padding:0 4px}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.facts li{border-left:3px solid var(--accent);padding:4px 10px;background:var(--bg);border-radius:0 6px 6px 0;font-size:14px}
+.facts li.ded{border-left-color:var(--warn)}
+.facts li b{font-weight:600}
+.facts li q{display:block;color:var(--muted);font-size:13px;quotes:"“" "”"}
+.facts li i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--warn);margin-left:6px}
+.foot{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href="/painel.html">Painel</a><a href="/tarefas.html">Tarefas</a><a href="/triagem.html">Triagem</a><a href="/procuracoes.html">Procurações</a><a href="/previdenciario.html" aria-current="page">Previdenciário</a><a href="/clt.html">CLT</a></div></nav>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Raio-X Previdenciário</h1>
+      <p>Cole a conversa e suba os documentos do cliente. Veja quais aposentadorias ele já alcança, quanto falta nas outras, a qualidade de segurado e o BPC. É uma estimativa para orientar o atendimento: quem confirma é o advogado.</p>
+    </div>
+    <div class="acts"><button type="button" id="btnNovo">Novo cliente</button><button type="button" id="btnEx">Carregar exemplo</button></div>
+  </header>
+
+  <div class="grid">
+    <div style="display:grid;gap:18px;min-width:0">
+      <section class="card">
+        <h2>O que o cliente mandou</h2>
+        <p class="fine">Cole a conversa do WhatsApp e suba tudo que o cliente enviou: CNIS, carteira de trabalho, RG, laudo, carta do INSS, folha do CadÚnico. PDF ou foto. O sistema preenche o que encontrar e mostra de onde tirou cada informação.</p>
+        <div class="two-in">
+          <label class="f">Conversa com o cliente<textarea id="conv" placeholder="[08/10/2026 09:12] Maria: Boa tarde, tenho 63 anos e trabalhei 20 anos de carteira assinada...&#10;Pode colar a conversa inteira, com as mensagens do vendedor também."></textarea></label>
+          <div style="display:grid;gap:8px;align-content:start">
+            <label class="drop" id="drop" for="fileIn">
+              <input type="file" id="fileIn" class="sr" accept=".pdf,image/*" multiple>
+              <strong>Arraste os arquivos ou clique para escolher</strong>
+              <span>PDF ou foto, vários de uma vez. Lidos no próprio computador, nada é enviado.</span>
+            </label>
+            <ul class="doclist" id="docList"></ul>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button type="button" class="primary" id="btnConv">Analisar conversa</button><span class="fine" id="convStatus"></span></div>
+        <div id="factsWrap" hidden>
+          <h3 style="margin:4px 0 6px">O que o sistema entendeu</h3>
+          <ul class="facts" id="facts"></ul>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>1. Cliente</h2>
+        <div class="row">
+          <label class="f">Primeiro nome<input type="text" id="nome" placeholder="Ex.: Maria"></label>
+          <label class="f">Seu nome (vendedor)<input type="text" id="vend" placeholder="Ex.: Lucas"></label>
+        </div>
+        <div class="row">
+          <label class="f">Data de nascimento<input type="date" id="nasc"></label>
+          <label class="f">Sexo
+            <select id="sexo"><option value="">Selecione</option><option value="F">Feminino</option><option value="M">Masculino</option></select>
+          </label>
+        </div>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="contribuindo" checked>Vai continuar contribuindo</label>
+          <label class="chip"><input type="checkbox" id="especial">Trabalhou com insalubridade ou risco</label>
+          <label class="chip"><input type="checkbox" id="professor">Foi professor(a) de ensino básico</label>
+          <label class="chip"><input type="checkbox" id="rural">Trabalhou na roça</label>
+          <label class="chip"><input type="checkbox" id="negado">Já teve pedido negado no INSS</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Períodos de contribuição</h2>
+        <label class="f">Ou cole o texto do CNIS<textarea id="cnisTxt" placeholder="Abra o CNIS, selecione tudo (Ctrl+A), copie e cole aqui."></textarea></label>
+        <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="primary" id="btnLer">Ler CNIS</button><button type="button" id="btnAdd">+ Adicionar período</button><span class="fine" id="status"></span></div>
+        <table>
+          <thead><tr><th>Empresa ou tipo</th><th>Início</th><th>Fim</th><th></th></tr></thead>
+          <tbody id="per"></tbody>
+        </table>
+        <p class="fine">Fim em branco = período em aberto, contado até hoje. Períodos sobrepostos contam uma vez só.</p>
+      </section>
+
+      <section class="card">
+        <h2>3. Incapacidade e qualidade de segurado</h2>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="doente">Está doente ou sem conseguir trabalhar</label>
+          <label class="chip"><input type="checkbox" id="acidente">Foi acidente</label>
+          <label class="chip"><input type="checkbox" id="desempregado">Ficou desempregado e tem como provar</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>4. BPC/LOAS</h2>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="pcd">Tem deficiência de longo prazo (2 anos ou mais)</label>
+          <label class="chip"><input type="checkbox" id="cadunico">CadÚnico atualizado nos últimos 2 anos</label>
+        </div>
+        <table>
+          <thead><tr><th>Quem mora na casa</th><th>Renda mensal (R$)</th><th>Recebe BPC ou benefício de 1 salário, sendo idoso ou PcD</th><th></th></tr></thead>
+          <tbody id="fam"></tbody>
+        </table>
+        <div><button type="button" id="btnFam">+ Adicionar pessoa</button></div>
+        <p class="fine">Entram na conta: o próprio cliente, cônjuge ou companheiro, pais, madrasta ou padrasto, irmãos solteiros, filhos e enteados solteiros e menores tutelados, morando na mesma casa (art. 20, §1º, da Lei 8.742/93). BPC ou benefício de até 1 salário mínimo de idoso ou pessoa com deficiência da casa fica fora da conta (art. 20, §14).</p>
+      </section>
+    </div>
+
+    <div style="display:grid;gap:18px;min-width:0">
+      <section class="card">
+        <h2>Leitura do caso</h2>
+        <div class="kpis" id="kpis"></div>
+        <div class="rules" id="rules"></div>
+      </section>
+      <section class="card">
+        <h3>Pontos de atenção</h3>
+        <ul class="alerts" id="alerts"></ul>
+      </section>
+      <section class="card">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab" role="tab" aria-selected="true" data-p="pMsg">Mensagem WhatsApp</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-p="pQ">Perguntas</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-p="pK">Nota Kommo</button>
+        </div>
+        <div id="pMsg"><div style="display:flex;gap:10px;align-items:center;margin:8px 0"><button type="button" class="primary" data-copy="msgOut">Copiar mensagem</button><span class="toast" id="t_msgOut"></span></div><pre class="out" id="msgOut"></pre></div>
+        <div id="pQ" hidden><div style="display:flex;gap:10px;align-items:center;margin:8px 0"><button type="button" class="primary" data-copy="qOut">Copiar perguntas</button><span class="toast" id="t_qOut"></span></div><pre class="out" id="qOut"></pre></div>
+        <div id="pK" hidden><div style="display:flex;gap:10px;align-items:center;margin:8px 0"><button type="button" class="primary" data-copy="kOut">Copiar nota</button><span class="toast" id="t_kOut"></span></div><pre class="out" id="kOut" style="font-family:ui-monospace,Consolas,monospace;font-size:13px"></pre></div>
+      </section>
+    </div>
+  </div>
+  <div class="foot">Regras: EC 103/2019 (arts. 15 a 20), Lei 8.213/91 (art. 15, período de graça; art. 25, carência) e Lei 8.742/93 (BPC). Salário mínimo de 2026: R$ 1.621,00 (Decreto 12.797/2025). Contas aproximadas pelo CNIS: carência real, contribuições abaixo do mínimo, tempo especial, rural e de professor dependem de análise do advogado.</div>
+</div>
+
+<script>
+"use strict";
+const SM=1621, EC=Date.UTC(2019,10,13), DAY=864e5, YEAR=365.25;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const now=new Date(); const TODAY=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+const pd=s=>{ if(!s) return null; const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m?Date.UTC(+m[1],+m[2]-1,+m[3]):null; };
+const iso=t=>new Date(t).toISOString().slice(0,10);
+const br=t=>t==null?'-':new Date(t).toLocaleDateString('pt-BR',{timeZone:'UTC'});
+const addM=(t,m)=>{ const d=new Date(t); d.setUTCMonth(d.getUTCMonth()+m); return d.getTime(); };
+const yrs=(a,b)=>(b-a)/DAY/YEAR;
+function amd(days){ days=Math.max(0,Math.round(days)); const a=Math.floor(days/365), r=days-a*365, m=Math.floor(r/30), d=r-m*30; return `${a}a ${m}m ${d}d`; }
+const fmtY=y=>{ let a=Math.floor(y+1e-9), m=Math.floor((y-a)*12+1e-6); if(m>=12){a++;m=0;} const ms=m===1?'1 mês':m+' meses', as=a===1?'1 ano':a+' anos'; return a===0?ms:(m?as+' e '+ms:as); };
+
+/* ---------- períodos ---------- */
+let PER=[], FAM=[];
+function perRow(p,i){ return `<tr><td><input type="text" data-p="${i}" data-k="label" value="${esc(p.label||'')}">${p.flag?`<span class="flag">${esc(p.flag)}</span>`:''}</td><td><input type="date" data-p="${i}" data-k="ini" value="${p.ini||''}"></td><td><input type="date" data-p="${i}" data-k="fim" value="${p.fim||''}"></td><td class="x"><button type="button" data-rmp="${i}" aria-label="Remover período">×</button></td></tr>`; }
+function famRow(f,i){ return `<tr><td><input type="text" data-f="${i}" data-k="quem" value="${esc(f.quem||'')}"></td><td><input type="number" min="0" step="10" data-f="${i}" data-k="renda" value="${f.renda??''}"></td><td style="text-align:center"><input type="checkbox" data-f="${i}" data-k="exclui"${f.exclui?' checked':''}></td><td class="x"><button type="button" data-rmf="${i}" aria-label="Remover pessoa">×</button></td></tr>`; }
+function drawTables(){ $('per').innerHTML=PER.length?PER.map(perRow).join(''):'<tr><td colspan="4" class="fine">Nenhum período. Suba o CNIS ou adicione à mão.</td></tr>'; $('fam').innerHTML=FAM.map(famRow).join(''); }
+
+/* intervalos mesclados, clipados em [lo, hi] */
+function merged(hi){ const iv=PER.map(p=>[pd(p.ini), p.fim?pd(p.fim):TODAY]).filter(([a,b])=>a!=null&&b!=null&&b>=a).map(([a,b])=>[a,Math.min(b,hi)]).filter(([a,b])=>b>=a).sort((x,y)=>x[0]-y[0]); const out=[]; iv.forEach(([a,b])=>{ const l=out[out.length-1]; if(l&&a<=l[1]+DAY) l[1]=Math.max(l[1],b); else out.push([a,b]); }); return out; }
+const daysOf=iv=>iv.reduce((s,[a,b])=>s+(b-a)/DAY+1,0);
+function months(iv){ const set=new Set(); iv.forEach(([a,b])=>{ let d=new Date(a); d.setUTCDate(1); while(d.getTime()<=b){ set.add(d.getUTCFullYear()*12+d.getUTCMonth()); d.setUTCMonth(d.getUTCMonth()+1); } }); return set.size; }
+
+/* ---------- leitura do CNIS ---------- */
+const DT=/(\d{2})\/(\d{2})\/(\d{4})/g;
+const toIso=(d,m,y)=>`${y}-${m}-${d}`;
+function lerCNIS(raw){
+  const t=raw.replace(/\r/g,'').replace(/[ \t]+/g,' ');
+  const out={per:[],nasc:null,nome:null};
+  const nb=t.match(/Data de nascimento:?\s*(\d{2})\/(\d{2})\/(\d{4})/i); if(nb) out.nasc=toIso(nb[1],nb[2],nb[3]);
+  const nm=t.match(/Nome:?\s*([A-ZÀ-Ý][A-ZÀ-Ý ]{3,60}?)(?:\s+(?:Data|Nome da m|CPF|NIT)|\n)/); if(nm) out.nome=nm[1].trim().split(' ')[0];
+  const body=t.slice(Math.max(0,t.search(/Rela[çc][õo]es Previdenci[áa]rias/i)));
+  // cada vínculo começa com "Seq NIT ..." (ex.: "1 123.45678.90-1")
+  const parts=body.split(/\n(?=\s*\d{1,3}\s+\d{1,3}\.\d{3,5}\.\d{2,5}-?\d)/);
+  parts.forEach(ch=>{
+    if(!/^\s*\d{1,3}\s+\d/.test(ch)) return;
+    const head=ch.split(/Compet[êe]ncia|Remunera[çc][õo]es|Contribui[çc][õo]es/i)[0];
+    const ds=[...head.matchAll(DT)].map(m=>({iso:toIso(m[1],m[2],m[3]),t:Date.UTC(+m[3],+m[2]-1,+m[1]),i:m.index}));
+    if(!ds.length) return;
+    const ini=ds[0], fim=ds.find((d,k)=>k>0&&d.t>=ini.t);
+    let label=head.slice(0,ini.i).replace(/^\s*\d{1,3}\s+[\d.\-]+\s*/,'').replace(/\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/,'').replace(/\s+/g,' ').trim().slice(0,60)||'Vínculo';
+    const ind=(head.match(/\b(PEXT|AEXT[\w-]*|PREC[\w-]*|IREC[\w-]*|PRPPS|PSC[\w-]*|PADM[\w-]*|PVIN[\w-]*|IEAN|AVRC[\w-]*)\b/g)||[]);
+    const flags=[]; if(!fim) flags.push('sem data de fim'); if(ind.length) flags.push('indicador '+[...new Set(ind)].join(', '));
+    out.per.push({label,ini:ini.iso,fim:fim?fim.iso:'',flag:flags.join(' · ')});
+  });
+  if(!out.per.length){ // plano B: qualquer linha com duas datas
+    t.split('\n').forEach(l=>{ const ds=[...l.matchAll(DT)]; if(ds.length>=2){ const a=ds[0],b=ds[1]; const ta=Date.UTC(+a[3],+a[2]-1,+a[1]), tb=Date.UTC(+b[3],+b[2]-1,+b[1]); if(tb>=ta&&ta>Date.UTC(1950,0,1)) out.per.push({label:l.slice(0,a.index).replace(/\s+/g,' ').trim().slice(0,60)||'Período',ini:toIso(a[1],a[2],a[3]),fim:toIso(b[1],b[2],b[3]),flag:'lido sem padrão do CNIS, confira'}); } });
+  }
+  return out;
+}
+const PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', PDFW='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let pdfReady=null;
+function loadPdf(){ if(!pdfReady) pdfReady=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=PDFJS; s.onload=()=>{ pdfjsLib.GlobalWorkerOptions.workerSrc=PDFW; res(); }; s.onerror=()=>{ pdfReady=null; rej(new Error('Sem internet para abrir o PDF.')); }; document.head.appendChild(s); }); return pdfReady; }
+async function textoPDF(buf){ await loadPdf(); const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out=''; for(let i=1;i<=pdf.numPages;i++){ const p=await pdf.getPage(i); const c=await p.getTextContent(); out+=c.items.map(it=>it.str+(it.hasEOL?'\n':' ')).join('')+'\n'; } return out; }
+function aplicarCNIS(raw){
+  const r=lerCNIS(raw);
+  if(!r.per.length){ $('status').textContent='Não encontrei períodos. Confira se é o CNIS completo ou adicione à mão.'; return; }
+  PER=r.per; if(r.nasc&&!$('nasc').value) $('nasc').value=r.nasc; if(r.nome&&!$('nome').value) $('nome').value=r.nome.charAt(0)+r.nome.slice(1).toLowerCase();
+  $('status').textContent=`${r.per.length} período(s) lidos. Confira datas e pendências marcadas.`; drawTables(); render();
+}
+
+
+/* ---------- documentos: PDF ou foto ---------- */
+const TESS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+let tessReady=null, tess=null;
+function loadTess(){ if(!tessReady) tessReady=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=TESS; s.onload=res; s.onerror=()=>{ tessReady=null; rej(new Error('Sem internet para ler fotos.')); }; document.head.appendChild(s); }); return tessReady; }
+async function ocr(img){ await loadTess(); if(!tess) tess=await Tesseract.createWorker('por'); const r=await tess.recognize(img); return (r&&r.data&&r.data.text)||''; }
+async function lerArquivo(f,step){
+  if(/pdf/i.test(f.type)||/\.pdf$/i.test(f.name)){
+    await loadPdf(); const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise; let out='';
+    for(let i=1;i<=pdf.numPages;i++){ const pg=await pdf.getPage(i); const c=await pg.getTextContent(); out+=c.items.map(it=>it.str+(it.hasEOL?'\n':' ')).join('')+'\n'; }
+    if(out.replace(/\s/g,'').length>80) return {text:out,ocr:false};
+    let o=''; for(let i=1;i<=Math.min(pdf.numPages,4);i++){ step('PDF escaneado, lendo a página '+i+'…'); const pg=await pdf.getPage(i); const vp=pg.getViewport({scale:2}); const cv=document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height; await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; o+=await ocr(cv)+'\n'; }
+    return {text:o,ocr:true};
+  }
+  if(/^image\//.test(f.type)||/\.(jpe?g|png|webp|heic)$/i.test(f.name)){ step('Lendo a foto. A primeira do dia demora um pouco…'); return {text:await ocr(f),ocr:true}; }
+  throw new Error('Formato não aceito. Use PDF, JPG ou PNG.');
+}
+const nrm=x=>x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const dIso=(d,m,y)=>{ y=+y; if(y<100) y+=y>40?1900:2000; const t=Date.UTC(y,+m-1,+d); return (+m>=1&&+m<=12&&+d>=1&&+d<=31&&t<=TODAY)?iso(t):null; };
+function campoData(t,labels){ const m=t.match(new RegExp('(?:'+labels+')[^0-9]{0,40}(\\d{2})\\s?[\\/.-]\\s?(\\d{2})\\s?[\\/.-]\\s?(\\d{2,4})')); return m?dIso(m[1],m[2],m[3]):null; }
+const DOCS=[];
+function analisarDoc(raw,ocrUsado){
+  const t=nrm(raw).replace(/[ \t]+/g,' ');
+  const r={tipo:'outro',label:'Não identificado',facts:[],per:[],info:[]};
+  const fact=(k,val,txt)=>r.facts.push({k,val,trecho:txt,fonte:'doc',ded:ocrUsado});
+  if(/cadastro nacional de informacoes sociais|relacoes previdenciarias|\bcnis\b/.test(t)){
+    r.tipo='cnis'; r.label='CNIS'; const c=lerCNIS(raw); r.per=c.per.map(p=>Object.assign(p,{flag:[p.flag,ocrUsado?'lido de foto, confira':''].filter(Boolean).join(' · ')})); if(c.nasc) fact('nasc',c.nasc,'Data de nascimento no CNIS'); if(c.nome) fact('nome',c.nome.charAt(0)+c.nome.slice(1).toLowerCase(),'Nome no CNIS');
+    r.info.push(r.per.length+' período(s) encontrados');
+  } else if(/carteira de trabalho|contrato de trabalho|\bctps\b/.test(t)){
+    r.tipo='ctps'; r.label='Carteira de trabalho';
+    const adm=[...t.matchAll(/admiss[a-z]*[^0-9]{0,30}(\d{2})\s?[\/.-]\s?(\d{2})\s?[\/.-]\s?(\d{2,4})/g)].map(m=>({i:m.index,d:dIso(m[1],m[2],m[3])})).filter(x=>x.d);
+    const sai=[...t.matchAll(/(?:saida|desligamento|demissao|rescisao|afastamento)[^0-9]{0,30}(\d{2})\s?[\/.-]\s?(\d{2})\s?[\/.-]\s?(\d{2,4})/g)].map(m=>({i:m.index,d:dIso(m[1],m[2],m[3])})).filter(x=>x.d);
+    adm.forEach((a,k)=>{ const s2=sai.find(x=>x.i>a.i&&(!adm[k+1]||x.i<adm[k+1].i)); const emp=([...raw.slice(Math.max(0,a.i-260),a.i).matchAll(/(?:Empregador|Raz[ãa]o [Ss]ocial|Empresa)\s*:?\s*([A-ZÀ-Ý0-9][A-ZÀ-Ý0-9 .&-]{3,60})/g)].pop()||[])[1]; r.per.push({label:(emp||'Vínculo da CTPS').trim(),ini:a.d,fim:s2?s2.d:'',flag:'da carteira, confira'+(s2?'':' (sem saída)')}); });
+    r.info.push(r.per.length?r.per.length+' contrato(s) encontrados':'Não achei datas de admissão');
+  } else if(/indeferi|comunicacao de decisao|nao reconhecido o direito|nao foi reconhecido/.test(t)){
+    r.tipo='indef'; r.label='Carta do INSS'; fact('negado',true,'Carta de indeferimento enviada');
+    const nb=raw.match(/\b(\d{3}\.?\d{3}\.?\d{3}-?\d)\b/); if(nb) r.info.push('Número do benefício: '+nb[1]);
+  } else if(/cadastro unico|cadunico|folha resumo/.test(t)){
+    r.tipo='cad'; r.label='CadÚnico'; fact('cadunico',true,'Folha do CadÚnico enviada');
+    const rp=t.match(/renda (?:per capita|percapita|familiar per capita)[^0-9]{0,25}(?:r\$\s*)?(\d{1,3}(?:\.\d{3})*,\d{2}|\d+)/); if(rp) r.info.push('Renda per capita no CadÚnico: R$ '+rp[1]);
+    const at=campoData(t,'data da ultima atualizacao|ultima atualizacao|atualizado em|data da entrevista'); if(at) r.info.push('Última atualização: '+br(pd(at)));
+  } else if(/atestado|laudo|\bcid\b|relatorio medico|receituario/.test(t)){
+    r.tipo='med'; r.label='Laudo ou atestado'; fact('doente',true,'Laudo ou atestado enviado');
+    const cid=t.match(/\bcid(?:-?10)?\s*[:\-]?\s*([a-z]\s?\d{2}(?:\.\d)?)/); if(cid) r.info.push('CID '+cid[1].toUpperCase().replace(' ',''));
+    if(/deficien|autis|\btea\b|paralisia|amputa|cegueira|surdez|sindrome de down|intelectual/.test(t)) fact('pcd',true,'Laudo cita deficiência');
+  } else if(/registro geral|carteira de identidade|habilitacao|\bcnh\b|identidade/.test(t)){
+    r.tipo='id'; r.label='Documento de identidade';
+  }
+  const nasc=campoData(t,'data de nascimento|nascimento|nasc\\.?|data nasc'); if(nasc&&!r.facts.some(f=>f.k==='nasc')) fact('nasc',nasc,'Data de nascimento no documento');
+  return r;
+}
+function addPer(list){ list.forEach(p=>{ if(!PER.some(q=>q.ini===p.ini&&(q.fim||'')===(p.fim||''))) PER.push(p); }); PER.sort((a,b)=>(a.ini||'').localeCompare(b.ini||'')); }
+function renderDocs(){ $('docList').innerHTML=DOCS.map((d,i)=>`<li class="docitem ${d.status}"><div class="dtop"><span class="dname">${esc(d.name)}</span>${d.label?`<span class="badge">${esc(d.label)}</span>`:''}<button type="button" class="x" data-rmd="${i}" aria-label="Remover ${esc(d.name)}">×</button></div><span class="dstat">${esc(d.status==='lendo'?d.step:d.status==='erro'?d.err:(d.info.join(' · ')||'Nada reconhecido neste arquivo.')+(d.ocr?' (lido de foto, confira)':''))}</span></li>`).join(''); }
+async function addFiles(files){
+  for(const f of [...files]){
+    const d={name:f.name,status:'lendo',step:'Lendo o arquivo…',label:'',info:[],facts:[],per:[]}; DOCS.push(d); renderDocs();
+    try{ const r=await lerArquivo(f,s=>{ d.step=s; renderDocs(); }); if(r.text.replace(/\s/g,'').length<30) throw new Error('Não encontrei texto. Tente uma foto mais nítida, reta e com luz.'); Object.assign(d,analisarDoc(r.text,r.ocr),{status:'ok',ocr:r.ocr}); if(d.tipo==='cnis'&&!$('cnisTxt').value) $('cnisTxt').value=r.text; addPer(d.per); }
+    catch(e){ d.status='erro'; d.err=(e&&e.message)||'Falha ao ler o arquivo.'; }
+    renderDocs(); juntarFatos();
+  }
+}
+
+/* ---------- conversa ---------- */
+const HEAD=/^\s*(?:\[\s*[^\]]{4,32}\]\s*|\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}(?::\d{2})?\s+-\s+)([^:\n\[\]]{1,40}?):\s+(.*)$/;
+function falasDoCliente(raw){
+  const linhas=raw.replace(/\r/g,'').split('\n'); const msgs=[]; let comNome=0;
+  linhas.forEach(l=>{ const h=l.match(HEAD); if(h){ comNome++; msgs.push({who:h[1].trim(),text:h[2]}); } else if(l.trim()){ if(msgs.length) msgs[msgs.length-1].text+=' '+l.trim(); else msgs.push({who:null,text:l.trim()}); } });
+  if(comNome<2) return raw;
+  const cont={}; msgs.forEach(m=>{ if(m.who) cont[m.who]=(cont[m.who]||0)+1; });
+  const v=nrm($('vend').value||'').split(' ')[0];
+  const ehVend=n=>{ const x=nrm(n); return (v.length>2&&x.includes(v))||/(escolha certa|simeao|escritorio|vendedor|consultor|atendente|equipe|comercial|advoga)/.test(x); };
+  const nomes=Object.keys(cont).sort((a,b)=>cont[b]-cont[a]); const cli=nomes.find(n=>!ehVend(n))||nomes[0];
+  return msgs.filter(m=>m.who===cli||!m.who).map(m=>m.text).join('\n');
+}
+function lerConversa(raw){
+  const txt=falasDoCliente(raw), t=nrm(txt); const F=[];
+  const tre=i=>{ const a=Math.max(0,txt.lastIndexOf('\n',i)+1), b=txt.indexOf('\n',i); const line=txt.slice(a,b<0?txt.length:b).trim(); return line.length>160?line.slice(Math.max(0,i-a-60),i-a+100).trim()+'…':line; };
+  const f=(k,val,rx,ded)=>{ const m=t.match(rx); if(m){ F.push({k,val:typeof val==='function'?val(m):val,trecho:tre(m.index),fonte:'conversa',ded:!!ded}); return m; } return null; };
+  f('nasc',m=>dIso(m[1],m[2],m[3]),/(?:nasci|nascid[oa]|nascimento)[^0-9]{0,20}(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if(!F.some(x=>x.k==='nasc')) f('idade',m=>+m[1],/\btenho (\d{2}) anos\b|\b(\d{2}) anos de idade\b/);
+  if(F.length&&F[F.length-1].k==='idade'&&isNaN(F[F.length-1].val)){ const m=t.match(/\b(\d{2}) anos de idade\b/); if(m) F[F.length-1].val=+m[1]; }
+  f('sexo','F',/\b(?:sou|fiquei|estou) (?:viuva|aposentada|separada|divorciada|casada|solteira|desempregada|doente|afastada|dona de casa)\b/,true) || f('sexo','M',/\b(?:sou|fiquei|estou) (?:viuvo|aposentado|separado|divorciado|casado|solteiro|desempregado|afastado)\b/,true);
+  f('especial',true,/insalubr|periculos|produto quimico|barulho|ruido|eletricidade|hospital|frigorifico|metalurgic|soldad|vigilante armado|agente de saude|enfermag/);
+  f('professor',true,/\bprofessor|\bprofessora|dava aula|lecionava/);
+  f('rural',true,/\broca\b|lavoura|\brural\b|agricultor|lavrador|plantacao|sitio|fazenda|trabalhador do campo/);
+  f('negado',true,/negaram|negado|indeferid|recusaram|nao aprovaram|nao me deram o beneficio/);
+  f('doente',true,/doente|doenca|cancer|depress|ansiedade|coluna|hernia|avc|derrame|infarto|diabet|cirurgia|afastad|auxilio[- ]doenca|nao consigo trabalhar|incapacit|tratamento/);
+  f('acidente',true,/acidente/);
+  f('desempregado',true,/desempregad|sem emprego|fui mandad[oa] embora|me demitiram|estou parad[oa]|seguro[- ]desemprego/);
+  f('pcd',true,/deficien|autis|\btea\b|cadeirante|paralisia|amputad|cego|surd[oa]|sindrome de down|intelectual/);
+  f('cadunico',true,/(?:tenho|fiz|atualizei|estou no) (?:o )?(?:cad ?unico|cadastro unico)|bolsa familia/,true);
+  f('naoContribui',true,/parei de (?:pagar|contribuir)|nao (?:pago|contribuo) mais|nao estou (?:pagando|contribuindo)/);
+  f('renda',m=>parseFloat(m[1].replace(/\./g,'').replace(',','.')),/(?:recebo|ganho|minha renda e|renda de)[^0-9]{0,15}(?:r\$\s*)?(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)/);
+  f('sozinho',true,/moro sozinh/);
+  return F;
+}
+
+/* ---------- aplicar fatos ---------- */
+const TOUCH=new Set();
+let FATOS=[];
+function juntarFatos(){
+  const conv=$('conv').value.trim()?lerConversa($('conv').value):[];
+  FATOS=[...conv,...DOCS.filter(d=>d.status==='ok').flatMap(d=>d.facts.map(x=>Object.assign({},x,{fonte:d.label||'documento'})))];
+  const setChk=(id,v)=>{ if(!TOUCH.has(id)) $(id).checked=v; };
+  FATOS.forEach(x=>{
+    if(x.k==='nasc'&&x.val&&!TOUCH.has('nasc')) $('nasc').value=x.val;
+    if(x.k==='nome'&&!$('nome').value) $('nome').value=x.val;
+    if(x.k==='sexo'&&!TOUCH.has('sexo')&&!$('sexo').value) $('sexo').value=x.val;
+    if(['especial','professor','rural','negado','doente','acidente','desempregado','pcd','cadunico'].includes(x.k)) setChk(x.k,true);
+    if(x.k==='naoContribui') setChk('contribuindo',false);
+    if(x.k==='sozinho'&&!FAM.length) FAM=[{quem:'O próprio cliente',renda:'',exclui:false}];
+    if(x.k==='renda'&&($('pcd').checked||FATOS.some(y=>y.k==='idade'&&y.val>=65))){ if(!FAM.length) FAM=[{quem:'O próprio cliente',renda:x.val,exclui:false}]; else if(FAM[0].renda===''||FAM[0].renda==null) FAM[0].renda=x.val; }
+  });
+  const LBL={nasc:'Data de nascimento',idade:'Idade',nome:'Nome',sexo:'Sexo',especial:'Trabalho com insalubridade ou risco',professor:'Foi professor(a)',rural:'Trabalho rural',negado:'Pedido negado no INSS',doente:'Problema de saúde',acidente:'Acidente',desempregado:'Desempregado',pcd:'Deficiência',cadunico:'CadÚnico',naoContribui:'Parou de contribuir',renda:'Renda informada',sozinho:'Mora sozinho(a)'};
+  const fmt=x=>x.k==='nasc'?br(pd(x.val)):x.k==='sexo'?(x.val==='F'?'feminino':'masculino'):x.k==='renda'?brl(x.val):x.k==='idade'?x.val+' anos':typeof x.val==='boolean'?(x.val?'sim':'não'):x.val;
+  $('factsWrap').hidden=!FATOS.length;
+  $('facts').innerHTML=FATOS.map(x=>`<li class="${x.ded?'ded':''}"><b>${esc(LBL[x.k]||x.k)}:</b> ${esc(String(fmt(x)))}${x.ded?'<i>confirmar</i>':''}<q>${esc(x.fonte==='conversa'?x.trecho:x.fonte+': '+x.trecho)}</q></li>`).join('');
+  drawTables(); render();
+}
+/* ---------- regras ---------- */
+function req(Y,sexo){ const f=sexo==='F', k=Math.max(0,Y-2019);
+  return { pontos: f?Math.min(86+k,100):Math.min(96+k,105), idadeProg: f?Math.min(56+0.5*k,62):Math.min(61+0.5*k,65), idadeTrans: f?Math.min(60+0.5*k,62):65, tc: f?30:35 }; }
+function analisar(){
+  const s={ nome:$('nome').value.trim(), vend:$('vend').value.trim(), nasc:pd($('nasc').value), sexo:$('sexo').value, contrib:$('contribuindo').checked, especial:$('especial').checked, professor:$('professor').checked, rural:$('rural').checked, negado:$('negado').checked, doente:$('doente').checked, acidente:$('acidente').checked, desemp:$('desempregado').checked, pcd:$('pcd').checked, cad:$('cadunico').checked };
+  const ivAll=merged(TODAY), ivEC=merged(EC);
+  const tcDays=daysOf(ivAll), tcECdays=daysOf(ivEC), tc=tcDays/YEAR, tcEC=tcECdays/YEAR, carencia=months(ivAll);
+  const first=ivAll.length?ivAll[0][0]:null, last=ivAll.length?ivAll[ivAll.length-1][1]:null;
+  const aberto=PER.some(p=>p.ini&&!p.fim);
+  const antesEC=first!=null&&first<=EC;
+  const idade=s.nasc?yrs(s.nasc,TODAY):null;
+  const A={s,tc,tcEC,tcDays,tcECdays,carencia,first,last,aberto,antesEC,idade,rules:[],alerts:[],perg:[],docs:new Set(['RG e CPF','Comprovante de residência','CNIS completo (Meu INSS)','Carteira de trabalho (todas)'])};
+  const ok=s.nasc&&s.sexo&&PER.length;
+  if(!ok) return A;
+  const f=s.sexo==='F', base=f?30:35;
+  // projeção mês a mês
+  const at=(t,m)=>({t,Y:new Date(t).getUTCFullYear(),idade:yrs(s.nasc,t),tc:tc+(s.contrib?(t-TODAY)/DAY/YEAR:0),car:carencia+(s.contrib?m:0)}); const proj=(test)=>{ let prev=TODAY; for(let m=0;m<=480;m++){ const t=m?addM(TODAY,m):TODAY; if(test(at(t,m))){ if(m===0) return at(t,0); for(let d=prev+DAY;d<=t;d+=DAY){ if(test(at(d,m))) return at(d,m); } return at(t,m); } prev=t; } return null; };
+  const rule=(nome,base,aplica,test,det,naMotivo)=>{ if(!aplica){ A.rules.push({nome,base,st:'na',tag:'Não se aplica',det:naMotivo}); return null; } const r=proj(test); if(!r){ A.rules.push({nome,base,st:'na',tag:'Não alcança',det:s.contrib?'Não fecha nos próximos 40 anos com as contribuições informadas.':'Sem continuar contribuindo, não fecha.'}); return null; } const now0=r.t===TODAY; A.rules.push({nome,base,st:now0?'ok':'soon',tag:now0?'Já cumpre':'Em '+br(r.t),det:det(r),t:r.t}); return r; };
+  // direito adquirido antes da reforma
+  if(antesEC){ const idEC=yrs(s.nasc,EC); const adqTC=tcEC>=base, adqId=idEC>=(f?60:65)&&months(ivEC)>=180; if(adqTC||adqId){ A.rules.push({nome:'Direito adquirido antes da reforma',base:'EC 103/2019, art. 3º',st:'ok',tag:'Já cumpria em 13/11/2019',det:adqTC?`Tinha ${fmtY(tcEC)} de contribuição em 13/11/2019: pode usar a regra antiga, se for melhor.`:'Já tinha idade e carência em 13/11/2019.'}); } }
+  rule('Transição por pontos','EC 103/2019, art. 15',antesEC,st=>{ const r=req(st.Y,s.sexo); return st.tc>=base&&st.idade+st.tc>=r.pontos; },st=>{ const r=req(st.Y,s.sexo); return `Pede ${base} anos de contribuição e ${r.pontos} pontos em ${st.Y}. Hoje: ${fmtY(tc)} de contribuição e ${(idade+tc).toFixed(1)} pontos.`; },'Só para quem contribuía antes de 13/11/2019.');
+  rule('Idade mínima progressiva','EC 103/2019, art. 16',antesEC,st=>{ const r=req(st.Y,s.sexo); return st.tc>=base&&st.idade>=r.idadeProg; },st=>{ const r=req(st.Y,s.sexo); return `Pede ${base} anos de contribuição e ${fmtY(r.idadeProg)} de idade em ${st.Y}. Hoje: ${fmtY(idade)} de idade.`; },'Só para quem contribuía antes de 13/11/2019.');
+  const ped50=antesEC&&tcEC<base&&tcEC>base-2;
+  const need50=base+0.5*(base-tcEC);
+  rule('Pedágio de 50%','EC 103/2019, art. 17',ped50,st=>st.tc>=need50,()=>`Faltavam ${fmtY(base-tcEC)} em 13/11/2019; precisa chegar a ${fmtY(need50)} de contribuição. Tem fator previdenciário.`,antesEC?(tcEC>=base?'Já tinha o tempo em 13/11/2019.':`Em 13/11/2019 faltavam mais de 2 anos (${fmtY(base-tcEC)}).`):'Só para quem contribuía antes de 13/11/2019.');
+  const need100=base+Math.max(0,base-tcEC);
+  rule('Pedágio de 100%','EC 103/2019, art. 20',antesEC&&tcEC<base,st=>st.tc>=need100&&st.idade>=(f?57:60),()=>`Pede ${f?57:60} anos de idade e ${fmtY(need100)} de contribuição (o tempo que faltava em 13/11/2019, em dobro).`,antesEC?'Já tinha o tempo em 13/11/2019.':'Só para quem contribuía antes de 13/11/2019.');
+  rule('Transição por idade','EC 103/2019, art. 18',antesEC,st=>{ const r=req(st.Y,s.sexo); return st.idade>=r.idadeTrans&&st.tc>=15&&st.car>=180; },st=>{ const r=req(st.Y,s.sexo); return `Pede ${fmtY(r.idadeTrans)} de idade, 15 anos de contribuição e 180 meses de carência. Hoje: ${fmtY(idade)} e ${carencia} meses.`; },'Só para quem contribuía antes de 13/11/2019.');
+  rule('Aposentadoria por idade (regra nova)','EC 103/2019, art. 19',!antesEC,st=>st.idade>=(f?62:65)&&st.tc>=(f?15:20)&&st.car>=180,()=>`Pede ${f?62:65} anos de idade e ${f?15:20} anos de contribuição.`,'Quem contribuía antes de 13/11/2019 usa as regras de transição acima.');
+  // qualidade de segurado
+  const graca=12+(carencia>=120?12:0)+(s.desemp?12:0);
+  if(last!=null){ const ultimo=aberto?TODAY:last; const fimGraca=addM(ultimo,graca); const d=new Date(fimGraca); const perda=Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+2,16); A.qual={ultimo,graca,perda,ativo:aberto||perda>TODAY}; }
+  // incapacidade
+  if(s.doente){ A.docs.add('Laudos, atestados e exames recentes'); A.docs.add('Receitas e relatório médico com CID');
+    const carOk=s.acidente||carencia>=12;
+    A.rules.push({nome:'Auxílio por incapacidade',base:'Lei 8.213/91, arts. 25, 26 e 59',st:A.qual&&A.qual.ativo&&carOk?'ok':'soon',tag:A.qual&&A.qual.ativo?(carOk?'Requisitos de cadastro ok':'Falta carência'):'Sem qualidade de segurado',det:`Carência de 12 contribuições${s.acidente?' dispensada por ser acidente':` (tem ${carencia} meses)`}. A incapacidade depende de perícia.`});
+    if(s.acidente) A.docs.add('CAT ou boletim do acidente, se houver');
+  }
+  // BPC
+  const idoso=idade>=65;
+  if(idoso||s.pcd){ const pessoas=FAM.length||1; const soma=FAM.reduce((a,p)=>a+(p.exclui?0:(+p.renda||0)),0); const per=soma/pessoas; A.bpc={pessoas,soma,per};
+    const lim=SM/4, lim2=SM/2; const st=per<=lim?'ok':per<=lim2?'soon':'na';
+    A.rules.push({nome:'BPC/LOAS',base:'Lei 8.742/93, art. 20',st,tag:per<=lim?'Renda dentro do limite':per<=lim2?'Acima de 1/4, avaliar':'Renda acima',det:`${idoso?'Idoso 65+':'Pessoa com deficiência'}. Renda por pessoa: ${brl(per)} (${pessoas} pessoa(s)). Limite: ${brl(lim)}, 1/4 do salário mínimo.${per>lim&&per<=lim2?' Pode caber com gastos comprovados (remédio, fralda, transporte), até 1/2 salário.':''}`});
+    A.docs.add('Folha resumo do CadÚnico'); A.docs.add('Documentos de todos da casa e comprovantes de renda'); if(s.pcd) A.docs.add('Laudos que mostrem a deficiência e há quanto tempo');
+    if(!s.cad) A.alerts.push('Sem CadÚnico atualizado o INSS nem analisa o BPC. Primeiro passo: CRAS.');
+    if(!FAM.length) A.perg.push({q:'Quem mora com você e quanto cada um ganha por mês, contando qualquer benefício?',w:'Renda por pessoa do BPC'});
+  }
+  // alertas
+  PER.filter(p=>p.flag).forEach(p=>A.alerts.push(/sem data de fim/.test(p.flag)&&!/indicador/.test(p.flag)?`${p.label}: sem data de saída no CNIS. Se ainda trabalha lá, normal; se já saiu, o CNIS precisa ser corrigido.`:`${p.label}: ${p.flag}. Pode não estar contando tempo; o advogado precisa ver.`));
+  const gaps=[]; for(let i=1;i<ivAll.length;i++){ const g=(ivAll[i][0]-ivAll[i-1][1])/DAY; if(g>365) gaps.push(`${br(ivAll[i-1][1])} a ${br(ivAll[i][0])}`); } if(gaps.length){ A.alerts.push('Buracos de mais de 1 ano sem contribuição: '+gaps.join('; ')+'.'); A.perg.push({q:'Nesses períodos sem registro você trabalhou de alguma forma? Sem carteira, por conta própria, na roça?',w:'Tempo que pode ser reconhecido'}); }
+  if(A.qual&&!A.qual.ativo) A.alerts.push(`Pelo CNIS, perdeu a qualidade de segurado por volta de ${br(A.qual.perda)}. Benefício por incapacidade e pensão ficam difíceis sem voltar a contribuir.`);
+  if(s.especial){ A.alerts.push('Tempo especial muda tudo: pode antecipar a aposentadoria ou converter tempo até 13/11/2019. Não está calculado aqui.'); A.docs.add('PPP e LTCAT das empresas com insalubridade ou risco'); A.perg.push({q:'Em quais empresas você trabalhou exposto a barulho, produto químico, eletricidade, hospital ou outro risco? Por quanto tempo?',w:'Tempo especial'}); }
+  if(s.professor){ A.alerts.push('Professor de ensino básico tem regra própria (5 anos a menos). Não está calculado aqui.'); A.docs.add('Declaração da escola com o período em sala de aula'); }
+  if(s.rural){ A.alerts.push('Tempo rural não aparece no CNIS e pode somar. Não está calculado aqui.'); A.docs.add('Provas do trabalho rural (sindicato, ITR, notas, declaração)'); A.perg.push({q:'Em que anos você trabalhou na roça, onde e com quem? Tem algum papel dessa época?',w:'Tempo rural'}); }
+  if(s.negado){ A.alerts.push('Pedido negado: peça a carta de indeferimento e o número do benefício. Pode caber recurso ou ação, com atrasados desde o pedido.'); A.docs.add('Carta de indeferimento do INSS'); }
+  if(s.contrib&&!aberto) A.perg.push({q:'Você está contribuindo para o INSS hoje? Como empregado, autônomo ou pelo carnê?',w:'A projeção supõe que sim'});
+  A.perg.push({q:'Você já recebe algum benefício do INSS ou já fez algum pedido?',w:'Evita pedido em duplicidade'});
+  if(!s.doente) A.perg.push({q:'Tem algum problema de saúde que atrapalhe trabalhar hoje?',w:'Incapacidade e BPC'});
+  return A;
+}
+
+/* ---------- saída ---------- */
+function render(){
+  const A=analisar(), s=A.s;
+  if(!(s.nasc&&s.sexo&&PER.length)){ $('kpis').innerHTML=''; $('rules').innerHTML=`<p class="fine">Preencha ${[!s.nasc&&'a data de nascimento',!s.sexo&&'o sexo',!PER.length&&'os períodos (CNIS)'].filter(Boolean).join(', ')} para ver a leitura.</p>`; $('alerts').innerHTML=''; $('msgOut').textContent=''; $('qOut').textContent=''; $('kOut').textContent=''; return; }
+  $('kpis').innerHTML=[[fmtY(A.idade),'idade hoje'],[amd(A.tcDays),'contribuição (aprox.)'],[A.carencia+' meses','carência (aprox.)'],[A.antesEC?amd(A.tcECdays):'Depois da reforma','em 13/11/2019'],[A.qual?(A.qual.ativo?'Segurado':'Sem qualidade'):'-',A.qual?(A.qual.ativo?(A.aberto?'contribuindo agora':'até ~'+br(A.qual.perda)):'perdeu ~'+br(A.qual.perda)):'qualidade de segurado']].map(([b,s])=>`<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
+  const ord={ok:0,soon:1,na:2}; const rs=[...A.rules].sort((a,b)=>ord[a.st]-ord[b.st]||(a.t||0)-(b.t||0));
+  $('rules').innerHTML=rs.map(r=>`<div class="rule ${r.st}"><div class="h"><strong>${esc(r.nome)}</strong><span class="tag ${r.st==='na'&&/acima|Sem qual/i.test(r.tag)?'bad':r.st}">${esc(r.tag)}</span></div><span class="base">${esc(r.base)}</span><span class="det">${esc(r.det)}</span></div>`).join('');
+  $('alerts').innerHTML=A.alerts.length?A.alerts.map(a=>`<li>${esc(a)}</li>`).join(''):'<li>Nada fora do comum no CNIS informado.</li>';
+  const nome=s.nome.split(' ')[0]||'[nome]', quem=s.vend?`Aqui é ${s.vend}, da Escolha Certa.`:'Aqui é da Escolha Certa.';
+  const pend=[...A.docs].filter(d=>!/RG e CPF|residência/.test(d)).slice(0,6);
+  const boa=A.rules.find(r=>r.st==='ok'&&!/BPC|incapacidade/i.test(r.nome)), prox=A.rules.filter(r=>r.st==='soon'&&r.t&&!/BPC|incapacidade/i.test(r.nome)).sort((a,b)=>a.t-b.t)[0];
+  let msg=`Oi, ${nome}, tudo bem? ${quem} Dei uma olhada no seu histórico de contribuição.\n\n`;
+  if(boa) msg+='Pelo que aparece no seu CNIS, tem pontos importantes pro especialista analisar com calma, porque você pode já estar perto ou dentro de alguma regra de aposentadoria.\n\n';
+  else if(prox) msg+='Pelo que aparece no seu CNIS, vale o especialista analisar qual regra é melhor pra você e o que dá pra fazer pra chegar lá mais rápido.\n\n';
+  else msg+='Pra eu te dar uma posição segura, preciso que o especialista olhe seus documentos com calma.\n\n';
+  if(pend.length){ msg+='Pra seguir, me manda por aqui:\n'; pend.forEach((d,i)=>msg+=`${i+1}. ${d}\n`); }
+  msg+='\nPode mandar no seu tempo, por foto ou print. A análise é gratuita.';
+  $('msgOut').textContent=msg;
+  const ps=A.perg.slice(0,5);
+  $('qOut').textContent=ps.length?`Oi, ${nome}! Pra eu fechar a análise, me responde só:\n\n`+ps.map((p,i)=>`${i+1}. ${p.q}`).join('\n')+'\n\nPode responder por áudio, se for mais fácil.':'Nada importante faltando.';
+  let k=`RAIO-X PREVIDENCIÁRIO | ${br(TODAY)}${s.vend?' | '+s.vend:''}\nCliente: ${s.nome||'-'} | ${s.sexo==='F'?'F':'M'} | nasc. ${br(s.nasc)} (${fmtY(A.idade)})\n`;
+  k+=`Contribuição: ${amd(A.tcDays)} | carência ~${A.carencia} meses | em 13/11/2019: ${A.antesEC?amd(A.tcECdays):'depois da reforma'}\n`;
+  if(A.qual) k+=`Qualidade de segurado: ${A.qual.ativo?'mantida':'perdida'} (último recolhimento ${A.aberto?'em aberto':br(A.qual.ultimo)}, graça ${A.qual.graca} meses)\n`;
+  k+='\nRegras:\n'+rs.filter(r=>r.st!=='na').map(r=>`- ${r.nome}: ${r.tag}`).join('\n');
+  if(A.bpc) k+=`\nBPC: renda per capita ${brl(A.bpc.per)} | CadÚnico ${s.cad?'ok':'pendente'}`;
+  if(A.alerts.length) k+='\n\nAtenção:\n'+A.alerts.map(a=>'- '+a).join('\n');
+  k+='\n\nDocumentos pendentes:\n'+[...A.docs].map(d=>'- '+d).join('\n');
+  if(s.especial||s.professor||s.rural||s.negado||A.alerts.some(a=>/qualidade/.test(a))) k+='\n\nNÃO FECHAR SEM O ADVOGADO ANALISAR.';
+  $('kOut').textContent=k;
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('input',e=>{ const t=e.target; if(t.dataset.p!=null){ PER[+t.dataset.p][t.dataset.k]=t.value; if(t.dataset.k!=='label') PER[+t.dataset.p].flag=''; } else if(t.dataset.f!=null){ FAM[+t.dataset.f][t.dataset.k]=t.type==='checkbox'?t.checked:t.value; } render(); });
+document.addEventListener('change',e=>{ if(e.target.type==='checkbox'||e.target.tagName==='SELECT') render(); });
+document.addEventListener('click',e=>{
+  const rp=e.target.closest('[data-rmp]'); if(rp){ PER.splice(+rp.dataset.rmp,1); drawTables(); render(); return; }
+  const rf=e.target.closest('[data-rmf]'); if(rf){ FAM.splice(+rf.dataset.rmf,1); drawTables(); render(); return; }
+  const tb=e.target.closest('.tab'); if(tb){ document.querySelectorAll('.tab').forEach(x=>{ x.setAttribute('aria-selected',x===tb); $(x.dataset.p).hidden=x!==tb; }); return; }
+  const cp=e.target.closest('[data-copy]'); if(cp){ const txt=$(cp.dataset.copy).textContent; navigator.clipboard.writeText(txt).then(()=>{ const t=$('t_'+cp.dataset.copy); t.textContent='Copiado'; setTimeout(()=>t.textContent='',1800); }).catch(()=>{ $('t_'+cp.dataset.copy).textContent='Selecione e copie (Ctrl+C)'; }); }
+});
+$('btnAdd').addEventListener('click',()=>{ PER.push({label:'',ini:'',fim:'',flag:''}); drawTables(); });
+$('btnFam').addEventListener('click',()=>{ FAM.push({quem:FAM.length?'':'O próprio cliente',renda:'',exclui:false}); drawTables(); });
+$('btnLer').addEventListener('click',()=>{ const v=$('cnisTxt').value.trim(); if(!v){ $('status').textContent='Cole o texto do CNIS ou suba o PDF.'; return; } aplicarCNIS(v); });
+$('fileIn').addEventListener('change',e=>{ addFiles(e.target.files); e.target.value=''; });
+const drop=$('drop'); ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add('over'); })); ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.remove('over'); })); drop.addEventListener('drop',e=>{ if(e.dataTransfer&&e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+$('docList').addEventListener('click',e=>{ const b=e.target.closest('[data-rmd]'); if(b){ DOCS.splice(+b.dataset.rmd,1); renderDocs(); juntarFatos(); } });
+$('btnConv').addEventListener('click',()=>{ if(!$('conv').value.trim()&&!DOCS.length){ $('convStatus').textContent='Cole a conversa ou suba um arquivo.'; return; } juntarFatos(); $('convStatus').textContent=FATOS.length?FATOS.length+' informação(ões) encontradas. Confira abaixo.':'Não achei informações na conversa. Preencha à mão.'; });
+$('conv').addEventListener('paste',()=>setTimeout(()=>{ juntarFatos(); $('convStatus').textContent=FATOS.length?FATOS.length+' informação(ões) encontradas. Confira abaixo.':''; },60));
+['nasc','sexo','contribuindo','especial','professor','rural','negado','doente','acidente','desempregado','pcd','cadunico'].forEach(id=>$(id).addEventListener('change',e=>{ if(e.isTrusted) TOUCH.add(id); }));
+$('btnNovo').addEventListener('click',()=>{ PER=[]; FAM=[]; DOCS.length=0; FATOS=[]; TOUCH.clear(); $('conv').value=''; $('convStatus').textContent=''; renderDocs(); $('factsWrap').hidden=true; $('facts').innerHTML=''; ['nome','nasc','cnisTxt'].forEach(id=>$(id).value=''); $('sexo').value=''; ['especial','professor','rural','negado','doente','acidente','desempregado','pcd','cadunico'].forEach(id=>$(id).checked=false); $('contribuindo').checked=true; $('status').textContent=''; drawTables(); render(); });
+$('btnEx').addEventListener('click',()=>{ $('btnNovo').click(); $('nome').value='Rosa (exemplo)'; $('nasc').value='1967-04-12'; $('sexo').value='F'; PER=[{label:'Confecções Alvorada Ltda',ini:'1986-03-01',fim:'1994-08-31',flag:''},{label:'Supermercado Bom Preço',ini:'1995-02-01',fim:'2008-12-15',flag:''},{label:'Contribuinte individual',ini:'2012-01-01',fim:'2019-06-30',flag:'indicador PREC-MENOR-MIN'},{label:'Clínica Santa Luzia',ini:'2021-03-01',fim:'',flag:'sem data de fim'}]; drawTables(); render(); });
+drawTables(); render();
+</script>
+</body>
+</html>

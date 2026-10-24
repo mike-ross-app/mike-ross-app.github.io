@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=feedaffd-28dd-4226-8595-4bcc184639e2
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel da equipe | Mike Ross</title>
+<style>:root {
+    --sm-night: #140a0e; --sm-surface: #1e1016; --sm-surface-2: #29161e; --sm-ink: #f5ebe5; --sm-muted: #b8a3a9;
+    --sm-line: #3a2129; --sm-line-strong: #55303c; --sm-accent: #d5ad95; --sm-wine: #960032; --sm-rose: #e07a8f;
+    --sm-gold: #e9c98e; --sm-plum: #9a6b93; --sm-ok: #7fd3a0; --sm-warn: #e9b45e; --sm-bad: #f08a7e;
+    }
+
+  .sm {
+    --sm-night: #140a0e; --sm-surface: #1e1016; --sm-surface-2: #29161e; --sm-ink: #f5ebe5; --sm-muted: #b8a3a9;
+    --sm-line: #3a2129; --sm-line-strong: #55303c; --sm-accent: #d5ad95; --sm-wine: #960032; --sm-rose: #e07a8f;
+    --sm-gold: #e9c98e; --sm-plum: #9a6b93; --sm-ok: #7fd3a0; --sm-warn: #e9b45e; --sm-bad: #f08a7e;
+    color: var(--sm-ink); font-family: var(--mr-sans); max-width: 1240px; margin: 0 auto;
+    display: grid; gap: 16px;
+  }
+  .sm b { font-weight: 600; }
+  .sm-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--sm-line); }
+  .sm-brand { font-family: var(--mr-serif); letter-spacing: .18em; font-size: 13px; color: var(--sm-accent); text-transform: uppercase; }
+  .sm-title { font-family: var(--mr-serif); font-weight: 400; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.1; margin: 4px 0 0; }
+  .sm-sub { margin: 6px 0 0; color: var(--sm-muted); font-size: 13px; }
+  .sm-ctrl { display: flex; flex-wrap: wrap; gap: 10px; }
+  .sm-ctrl label { display: grid; gap: 4px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--sm-muted); }
+  .sm-ctrl select { font: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--sm-ink); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 7px 10px; min-width: 10.5rem; }
+  .sm-ctrl select:focus { outline: 2px solid var(--sm-accent); outline-offset: 1px; }
+  .sm-take { margin: 0; font-size: 15px; line-height: 1.45; }
+  .sm-grid { display: grid; gap: 16px; }
+  .sm-row1 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .sm-row2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .sm-card { position: relative; background: var(--sm-surface); border: 1px solid var(--sm-line); border-radius: 12px; padding: 18px; min-width: 0; display: grid; gap: 10px; align-content: start; }
+  .sm-card.acc::before { content: ''; position: absolute; left: -1px; right: -1px; top: -1px; height: 5px; border-radius: 12px 12px 0 0; background: var(--acc); }
+  .sm-card h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .sm-card .sm-note { margin: -6px 0 0; color: var(--sm-muted); font-size: 12px; }
+  .sm-k-label { font-size: 13px; color: var(--sm-muted); }
+  .sm-big { font-family: var(--mr-serif); font-weight: 400; font-size: 38px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .sm-big small { font-size: 18px; color: var(--sm-muted); }
+  .sm-dl { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; padding-top: 10px; border-top: 1px dashed var(--sm-line-strong); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .sm-dl dt { color: var(--sm-muted); }
+  .sm-dl dd { margin: 0; text-align: right; font-weight: 600; }
+  .sm-pos { color: var(--sm-ok); } .sm-neg { color: var(--sm-bad); }
+  .sm-chart { position: relative; width: 100%; }
+  .sm-chart svg { display: block; overflow: visible; }
+  .sm-chart text { fill: var(--sm-muted); font-size: 11px; font-family: var(--mr-sans); }
+  .sm-tip { position: absolute; pointer-events: none; z-index: 5; background: #2f1a23; border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: var(--sm-ink); box-shadow: 0 8px 24px rgba(0,0,0,.45); white-space: nowrap; opacity: 0; transition: opacity .12s; }
+  .sm-tip .t { color: var(--sm-muted); margin-bottom: 2px; }
+  .sm-tip i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  .sm-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--sm-muted); }
+  .sm-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sm-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .sm-donut { display: grid; grid-template-columns: minmax(96px, 120px) 1fr; gap: 14px; align-items: center; }
+  .sm-donut ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
+  .sm-donut li { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; cursor: pointer; }
+  .sm-donut li i { width: 10px; height: 10px; border-radius: 50%; }
+  .sm-donut li .q { font-variant-numeric: tabular-nums; color: var(--sm-muted); white-space: nowrap; font-size: 12px; }
+  .sm-donut li.off { opacity: .4; }
+  .sm-evo { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 22px; }
+  @media (max-width: 760px) { .sm-evo { grid-template-columns: 1fr; } }
+  .sm-evo-side { display: grid; gap: 14px; align-content: start; }
+  .sm-meses { display: grid; gap: 10px; }
+  .sm-meses h3 { margin: 0; font-size: 13px; font-weight: 600; }
+  .sm-meses .lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .sm-meses .atalhos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sm-mbtn { font: inherit; font-size: 13px; color: var(--sm-muted); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 7px 4px; cursor: pointer; text-transform: capitalize; font-variant-numeric: tabular-nums; }
+  .sm-mbtn small { display: block; font-size: 10.5px; opacity: .8; margin-top: 1px; }
+  .sm-mbtn:hover { color: var(--sm-ink); border-color: var(--sm-accent); }
+  .sm-mbtn[aria-pressed="true"] { color: #2a0f16; background: var(--sm-accent); border-color: var(--sm-accent); font-weight: 600; }
+  .sm-mbtn.at { font-size: 12px; padding: 5px 10px; border-radius: 999px; text-transform: none; }
+  .sm-meses .dica { margin: 0; font-size: 11.5px; color: var(--sm-muted); }
+  .sm-sum { font-size: 14px; line-height: 1.5; }
+  .sm-sum p { margin: 0 0 8px; }
+  .sm-sum h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  .sm-bars { display: grid; gap: 10px; }
+  .sm-bar-row { display: grid; grid-template-columns: 7.5rem 1fr 3.6rem; gap: 10px; align-items: center; font-size: 13px; cursor: pointer; }
+  .sm-bar-row .track { height: 10px; border-radius: 5px; background: var(--sm-surface-2); position: relative; overflow: hidden; }
+  .sm-bar-row .track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; }
+  .sm-bar-row .pct { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sm-bar-row small { grid-column: 2 / 4; margin-top: -6px; color: var(--sm-muted); font-size: 11.5px; }
+  .sm-bar-row.off { opacity: .45; }
+  .sm-scroll { overflow-x: auto; }
+  .sm-t { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+  .sm-t th { text-align: center; font-weight: 500; color: var(--sm-muted); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--sm-line-strong); white-space: nowrap; }
+  .sm-t th small { display: block; font-weight: 400; font-size: 11px; }
+  .sm-t th.now { color: var(--sm-accent); }
+  .sm-t th:first-child, .sm-t td:first-child { text-align: left; }
+  .sm-t td { text-align: center; padding: 9px 10px; border-bottom: 1px solid var(--sm-line); white-space: nowrap; }
+  .sm-t tr:last-child td { border-bottom: 0; }
+  .sm-t td.svc { font-family: var(--mr-serif); font-size: 17px; }
+  .sm-t tr.total td { font-weight: 600; background: rgba(213,173,149,.05); }
+  .sm-t td .v { display: block; font-size: 16px; font-weight: 600; }
+  .sm-t td small { display: block; color: var(--sm-muted); font-size: 11px; }
+  .sm-t td.ok { background: rgba(127,211,160,.13); }
+  .sm-t td.mid { background: rgba(233,180,94,.14); }
+  .sm-t td.low { background: rgba(240,138,126,.13); }
+  .sm-t td.now { box-shadow: inset 0 0 0 1px var(--sm-accent); }
+  .sm-t td.muted { color: var(--sm-muted); }
+  .sm-t td.name { font-weight: 500; }
+  .sm-vt tbody tr { cursor: pointer; }
+  .sm-vt tbody tr:hover td { background: rgba(245,235,229,.04); }
+  .sm-vt tbody tr.sel td { background: rgba(213,173,149,.12); }
+  .sm-mini { position: relative; height: 6px; border-radius: 3px; background: var(--sm-surface-2); margin-top: 5px; min-width: 5rem; }
+  .sm-mini i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--sm-accent); }
+  .sm-mini em { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--sm-ink); opacity: .6; }
+  .sm-legend-cells { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--sm-muted); }
+  .sm-legend-cells span::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .sm-legend-cells .ok::before { background: rgba(127,211,160,.6); } .sm-legend-cells .mid::before { background: rgba(233,180,94,.6); } .sm-legend-cells .low::before { background: rgba(240,138,126,.6); }
+  .sm-empty { color: var(--sm-muted); font-size: 13px; }
+  .sm-fail { display: flex; align-items: center; gap: 8px; color: var(--sm-muted); font-size: 12px; }
+  .sm-fail::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--sm-bad); }
+  .sm [data-dash-source-state=refreshing] { opacity: .5; transition: opacity .4s; }
+  .sm [data-dash-source-state=empty] { color: transparent; }
+  .sm [hidden] { display: none !important; }
+  .sm-alerta { display: flex; align-items: center; gap: 14px; border-radius: 12px; padding: 14px 18px; color: #2a0f16;
+    background: linear-gradient(100deg, #e9c98e 0%, #d5ad95 45%, #f3dcc0 100%); box-shadow: 0 0 0 1px rgba(233,201,142,.6), 0 10px 30px rgba(233,201,142,.18); }
+  .sm-alerta .ic { font-size: 30px; line-height: 1; }
+  .sm-alerta b { font-weight: 700; }
+  .sm-alerta .tt { font-family: var(--mr-serif); font-size: 22px; line-height: 1.1; }
+  .sm-alerta .tx { font-size: 14px; margin-top: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sm-alerta.novo { animation: sm-pop .7s cubic-bezier(.2,.7,.2,1) both, sm-brilho 2.4s ease-in-out .7s 3; }
+    @keyframes sm-pop { from { transform: scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes sm-brilho { 50% { box-shadow: 0 0 0 2px rgba(255,236,200,.9), 0 0 40px rgba(233,201,142,.55); } }
+  }
+  .sm-rec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+  .sm-recs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 12px; }
+  .sm-rec { background: var(--sm-surface-2); border: 1px solid var(--sm-line); border-radius: 10px; padding: 14px; display: grid; gap: 6px; }
+  .sm-rec.bateu { border-color: var(--sm-gold); box-shadow: inset 0 0 0 1px rgba(233,201,142,.35); }
+  .sm-rec .lb { font-size: 12px; color: var(--sm-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .sm-rec .nb { font-family: var(--mr-serif); font-size: 34px; line-height: 1; color: var(--sm-gold); font-variant-numeric: tabular-nums; }
+  .sm-rec .pr { font-size: 12px; color: var(--sm-muted); }
+  .sm-rec .at { font-size: 13px; }
+  .sm-rec .tr { height: 6px; border-radius: 3px; background: var(--sm-night); position: relative; overflow: hidden; }
+  .sm-rec .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--sm-gold); }
+
+  .mr-login[hidden], #painel[hidden] { display: none !important; }
+  .sm-big, .sm-title, .sm-rec .nb, .sm-alerta .tt, .sm-t td.svc { font-weight: 600; }
+  .sm-title { font-size: clamp(26px, 3.4vw, 36px) !important; }
+  .dash-skeleton { color: transparent !important; background: var(--sm-surface-2); border-radius: 6px; display: inline-block; min-width: 4rem; animation: mr-pulso 1.4s ease-in-out infinite; }
+  @keyframes mr-pulso { 50% { opacity: .5; } }
+  body { margin: 0; padding: 20px 16px 60px; }
+  .mr-topo { max-width: 1240px; margin: 0 auto 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; font-size: 13px; color: var(--sm-muted); }
+  .mr-topo b { color: var(--sm-ink); font-weight: 600; }
+  .mr-topo button { font: inherit; color: var(--sm-accent); background: none; border: 1px solid var(--sm-line-strong); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .mr-aviso { max-width: 1240px; margin: 0 auto 14px; padding: 10px 14px; border-radius: 10px; background: #3a2b12; color: #e9b45e; font-size: 13.5px; }
+  .mr-login { min-height: 70vh; display: grid; place-items: center; }
+  .mr-login form { box-sizing: border-box; width: min(100%, 380px); background: var(--sm-surface); border: 1px solid var(--sm-line); border-radius: 16px; padding: 28px 26px; display: grid; gap: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .mr-login .selo { display: flex; align-items: center; gap: 10px; }
+  .mr-login .selo img { width: 26px; }
+  .mr-login .selo b { font: 600 24px/1 var(--mr-serif); letter-spacing: .06em; text-transform: uppercase; }
+  .mr-login h1 { font-size: 26px !important; margin: 4px 0 0; }
+  .mr-login p { margin: 0; color: var(--sm-muted); font-size: 13.5px; }
+  .mr-login label { display: grid; gap: 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--sm-muted); }
+  .mr-login input { font: inherit; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--sm-ink); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 10px; padding: 11px 12px; }
+  .mr-login input:focus { outline: 2px solid var(--sm-accent); outline-offset: 1px; }
+  .mr-login button { margin-top: 4px; padding: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .mr-login .erro { color: #f2867a; font-size: 13.5px; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+<style>#tab-semanas small.sm-plano{display:block;opacity:.55;font-size:10px;margin-top:2px}#tab-semanas small.sm-plano.risco{opacity:1;color:#e58a7f}</style>
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a aria-current='page' href='/painel'>Painel</a><a href='/tarefas'>Tarefas</a><a href='/triagem'>Triagem</a><a href='/procuracoes'>Procurações</a><a href='/previdenciario'>Previdenciário</a><a href='/clt'>CLT</a></div></nav>
+
+
+
+<div id="painel">
+  <div class="mr-topo"><span id="atualizado">Carregando os números do Kommo…</span></div>
+  <div class="mr-aviso" id="aviso" role="status" hidden></div>
+  <div class="sm">
+  <header class="sm-head" id="topo">
+    <div>
+      <div class="sm-brand">Simeão Advogados · painel comercial</div>
+      <h1 class="sm-title" id="titulo">Painel comercial</h1>
+      <p class="sm-sub" id="periodo"><span class="dash-skeleton">—</span></p>
+    </div>
+    <div class="sm-ctrl">
+      <label>Vendedor <select id="sel-vendedor" aria-label="Vendedor"></select></label>
+      <label>Serviço <select id="sel-servico" aria-label="Serviço"></select></label>
+      <label>Mês fiscal <select id="sel-mes" aria-label="Mês fiscal"></select></label>
+    </div>
+  </header>
+
+  <div class="sm-alerta" id="recorde-alerta" role="status" aria-live="polite" hidden></div>
+
+  <p class="sm-take" id="resumo"><span class="dash-skeleton">—</span></p>
+
+  <section class="sm-grid sm-row1" id="kpis">
+    <div class="sm-card acc" style="--acc: var(--sm-accent)" id="kpi-ganhos"><span class="sm-big dash-skeleton">—</span></div>
+    <div class="sm-card acc" style="--acc: var(--sm-rose)" id="kpi-conversao"><span class="sm-big dash-skeleton">—</span></div>
+    <div class="sm-card acc" style="--acc: var(--sm-plum)" id="kpi-leads"><span class="sm-big dash-skeleton">—</span></div>
+    <div class="sm-card" id="kpi-servicos">
+      <h2>Ganhos por serviço</h2>
+      <div class="sm-donut"><div class="sm-chart" id="donut"></div><ul id="donut-legenda"></ul></div>
+    </div>
+  </section>
+
+  <section class="sm-card" id="recordes">
+    <div class="sm-rec-head">
+      <div><h2>Recordes da equipe</h2><p class="sm-note" style="margin:2px 0 0">Mais ganhos num dia, numa semana (segunda a domingo) e num mês fiscal. Vale pra equipe toda, independente dos filtros.</p></div>
+    </div>
+    <div class="sm-recs" id="recs"><div class="sm-rec"><span class="nb dash-skeleton">—</span></div></div>
+  </section>
+
+  <section class="sm-card" id="evolucao">
+    <div class="sm-evo">
+      <div class="sm-evo-side">
+        <div><div class="sm-big" id="evo-big">—</div><div class="sm-k-label" id="evo-big-label">ganhos</div></div>
+        <div class="sm-meses" id="evo-meses" role="group" aria-label="Meses do período"></div>
+      </div>
+      <div style="display:grid; gap:10px; min-width:0">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; align-items:baseline">
+          <div><h2 id="evo-titulo">Ganhos mês a mês</h2><p class="sm-note" style="margin:2px 0 0">Barras por serviço, linha de conversão. Clique nos meses pra somar ou tirar do período.</p></div>
+          <div class="sm-legend" id="evo-legenda"></div>
+        </div>
+        <div class="sm-chart" id="evo-chart" style="min-height:280px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sm-grid sm-row2">
+    <div class="sm-card" id="diario-card">
+      <h2 id="diario-titulo">Ganhos e leads por dia</h2>
+      <p class="sm-note" id="diario-nota">—</p>
+      <div class="sm-legend"><span><i style="background:var(--sm-accent)"></i>Ganhos</span><span><i style="background:var(--sm-plum)"></i>Leads que entraram</span></div>
+      <div class="sm-chart" id="diario-chart" style="min-height:220px"></div>
+    </div>
+    <div class="sm-card" id="conv-servico">
+      <h2>Conversão por serviço</h2>
+      <p class="sm-note" id="conv-servico-nota">Ganhos ÷ leads que entraram no período. Clique pra filtrar.</p>
+      <div class="sm-bars" id="conv-barras"></div>
+    </div>
+  </section>
+
+  <section class="sm-card" id="semanas">
+    <h2 id="semanas-titulo">Metas por semana</h2>
+    <p class="sm-note">Meta de cada semana proporcional aos dias úteis, sem contar feriados nacionais. Da semana atual em diante, a meta é recalculada pelo que falta para bater o mês; o plano original aparece embaixo.</p>
+    <div class="sm-scroll"><table class="sm-t" id="tab-semanas"><thead></thead><tbody></tbody></table></div>
+    <div class="sm-legend-cells"><span class="ok">bateu a meta da semana</span><span class="mid">70% ou mais</span><span class="low">abaixo de 70%</span></div>
+  </section>
+
+  <section class="sm-card" id="vendedores">
+    <h2 id="vendedores-titulo">Por vendedor</h2>
+    <p class="sm-note" id="vendedores-nota">Clique num vendedor pra ver o painel só dele.</p>
+    <div class="sm-scroll"><table class="sm-t sm-vt" id="tab-vendedores"><thead></thead><tbody></tbody></table></div>
+  </section>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+/* Motor do painel: recebe os números somados pelo script e calcula tudo que a tela mostra. */
+const calcCalendario = (ganhos) => {
+  // Mês fiscal: dia 26 ao dia 25, com o nome do mês em que fecha. Semanas de segunda a domingo.
+  // Dias úteis: segunda a sexta, sem feriados nacionais (fixos + Sexta-feira Santa). "Hoje" é a data de quem abre o painel.
+  const DIA = 864e5;
+  const dia = (a, m, d) => Date.UTC(a, m - 1, d) / DIA;
+  const iso = (n) => new Date(n * DIA).toISOString().slice(0, 10);
+  const semana = (n) => new Date(n * DIA).getUTCDay();
+  const fer = {};
+  const feriado = (n) => {
+    const a = new Date(n * DIA).getUTCFullYear();
+    if (!fer[a]) {
+      const f = new Set(['01-01', '04-21', '05-01', '09-07', '10-12', '11-02', '11-15', '11-20', '12-25'].map((x) => a + '-' + x));
+      const c = a % 19, b = Math.floor(a / 100), d = a % 100, e = Math.floor(b / 4), g = b % 4, h = Math.floor((b + 8) / 25);
+      const i = Math.floor((b - h + 1) / 3), j = (19 * c + b - e - i + 15) % 30, k = Math.floor(d / 4), l = d % 4;
+      const m = (32 + 2 * g + 2 * k - j - l) % 7, q = Math.floor((c + 11 * j + 22 * m) / 451);
+      const pascoa = dia(a, Math.floor((j + m - 7 * q + 114) / 31), ((j + m - 7 * q + 114) % 31) + 1);
+      f.add(iso(pascoa - 2));
+      fer[a] = f;
+    }
+    return fer[a].has(iso(n));
+  };
+  const uteis = (a, b) => { let n = 0; for (let x = a; x <= b; x++) { const w = semana(x); if (w > 0 && w < 6 && !feriado(x)) n++; } return n; };
+  const fiscal = (a, m, d) => (d >= 26 ? (m === 12 ? [a + 1, 1] : [a, m + 1]) : [a, m]);
+  const NOMES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+
+  const agora = new Date();
+  const hoje = dia(agora.getFullYear(), agora.getMonth() + 1, agora.getDate());
+  const [anoAtual, mesAtual] = fiscal(agora.getFullYear(), agora.getMonth() + 1, agora.getDate());
+  // primeiro mês fiscal deste ano com ganho registrado
+  let primeiro = mesAtual;
+  for (const r of ganhos) {
+    const [a, m, d] = r.data_ganho.split('-').map(Number);
+    const [fa, fm] = fiscal(a, m, d);
+    if (fa === anoAtual && fm < primeiro) primeiro = fm;
+  }
+  const rows = [];
+  for (let mes = primeiro; mes <= mesAtual; mes++) {
+    const ini = dia(anoAtual, mes - 1, 26), fim = dia(anoAtual, mes, 25);
+    const sem = [];
+    let comeco = ini;
+    for (let x = ini; x <= fim; x++) {
+      if (semana(x) === 0 || x === fim) { sem.push({ ini: comeco, fim: x }); comeco = x + 1; }
+    }
+    if (sem.length > 1 && (semana(sem[0].ini) === 6 || semana(sem[0].ini) === 0)) { sem[1].ini = sem[0].ini; sem.shift(); }
+    const ult = sem[sem.length - 1];
+    if (sem.length > 1 && ult.ini === ult.fim) { sem[sem.length - 2].fim = ult.fim; sem.pop(); }
+    const total = sem.reduce((s, x) => s + uteis(x.ini, x.fim), 0);
+    const dentro = hoje >= ini && hoje <= fim, passado = hoje > fim;
+    const atual = dentro ? sem.findIndex((x) => hoje >= x.ini && hoje <= x.fim) + 1 : 0;
+    const passados = dentro ? uteis(ini, hoje - 1) : passado ? total : 0;
+    const restantes = dentro ? uteis(hoje, fim) : passado ? 0 : total;
+    const chaveMes = anoAtual + '-' + String(mes).padStart(2, '0');
+    sem.forEach((x, k) => rows.push({
+      chave: chaveMes + '|' + (k + 1),
+      mes: chaveMes,
+      nome_mes: NOMES[mes - 1] + ' de ' + anoAtual,
+      ini: iso(ini),
+      fim: iso(fim),
+      semana: k + 1,
+      semanas: sem.length,
+      semana_ini: iso(x.ini),
+      semana_fim: iso(x.fim),
+      uteis_semana: uteis(x.ini, x.fim),
+      uteis_mes: total,
+      uteis_passados: passados,
+      uteis_restantes: restantes,
+      fracao_mes: total ? passados / total : 0,
+      semana_atual: atual,
+      situacao: dentro ? 'em andamento' : passado ? 'encerrado' : 'futuro',
+    }));
+  }
+  return rows;
+};
+
+const calcPorArea = (ganhos, metas, calendario) => {
+  // Feito e meta por mês fiscal, vendedor e área do direito ("Equipe toda" soma todos; área "Total" soma as áreas).
+  // Metas do funil Simeão, pelo mês em que o período fecha. Meta da semana = meta do mês × dias úteis da semana ÷ dias úteis do mês, arredondada pra cima.
+  const EQUIPE = 'Equipe toda', FUNIL = 'Simeão';
+  const ORDEM = ['Trabalhista', 'Previdenciário', 'Juros', 'Civil', 'Consumidor', 'Não informado'];
+  const area = (a) => {
+    const s = String(a || '').trim();
+    if (!s) return 'Não informado';
+    const k = s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    if (k.startsWith('trabalh')) return 'Trabalhista';
+    if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
+    if (k.startsWith('civ')) return 'Civil';
+    if (k.startsWith('consum')) return 'Consumidor';
+    if (k.startsWith('nao inform')) return 'Não informado';
+    return s;
+  };
+  const meses = {};
+  for (const c of calendario) (meses[c.mes] = meses[c.mes] || []).push(c);
+  const rows = [];
+  for (const [mes, sem] of Object.entries(meses)) {
+    const c0 = sem[0], num = Number(mes.slice(5));
+    const grupos = {};
+    const pegar = (v, a) => {
+      const k = v + '|' + a;
+      return (grupos[k] = grupos[k] || { vendedor: v, area: a, s: sem.map(() => 0), feito: 0, meta: 0, valor: 0 });
+    };
+    for (const g of ganhos) {
+      if (g.data_ganho < c0.ini || g.data_ganho > c0.fim) continue;
+      let k = sem.findIndex((x) => g.data_ganho <= x.semana_fim);
+      if (k < 0) k = sem.length - 1;
+      const a = area(g.area), v = g.vendedor || 'Sem vendedor';
+      for (const grupo of [pegar(v, a), pegar(v, 'Total'), pegar(EQUIPE, a), pegar(EQUIPE, 'Total')]) {
+        grupo.s[k] += g.n || 1; grupo.feito += g.n || 1; grupo.valor += g.valor || 0;
+      }
+    }
+    for (const m of metas) {
+      if (m.mes !== num || m.funil !== FUNIL) continue;
+      const a = area(m.area);
+      for (const grupo of [pegar(m.vendedor, a), pegar(m.vendedor, 'Total'), pegar(EQUIPE, a), pegar(EQUIPE, 'Total')]) grupo.meta += m.meta;
+    }
+    const lista = Object.values(grupos).filter((g) => g.feito || g.meta || g.area === 'Total');
+    const pos = (a) => (a === 'Total' ? 999 : ORDEM.indexOf(a) < 0 ? 99 : ORDEM.indexOf(a));
+    lista.sort((x, y) => (x.vendedor === EQUIPE ? -1 : 0) - (y.vendedor === EQUIPE ? -1 : 0) || x.vendedor.localeCompare(y.vendedor) || pos(x.area) - pos(y.area));
+    for (const g of lista) {
+      const esperado = g.meta ? Math.round(g.meta * c0.fracao_mes) : null;
+      const falta = Math.max(0, g.meta - g.feito);
+      const linha = {
+        chave: mes + '|' + g.vendedor + '|' + g.area,
+        mes,
+        vendedor: g.vendedor,
+        area: g.area,
+        feito: g.feito,
+        meta: g.meta || null,
+        atingido_pct: g.meta ? Math.round((g.feito / g.meta) * 100) : null,
+        esperado_hoje: esperado,
+        ritmo: g.meta ? g.feito - esperado : null,
+        atras: g.meta ? Math.max(0, esperado - g.feito) : null,
+        falta: g.meta ? falta : null,
+        por_dia_util: g.meta ? Math.round((c0.uteis_restantes > 0 ? falta / c0.uteis_restantes : falta) * 10) / 10 : null,
+        valor: g.valor,
+      };
+      for (let k = 0; k < 5; k++) {
+        linha['s' + (k + 1)] = k < sem.length ? g.s[k] : null;
+        linha['meta_s' + (k + 1)] = k < sem.length && g.meta ? Math.ceil((g.meta * sem[k].uteis_semana) / c0.uteis_mes) : null;
+      }
+      // Da semana atual em diante: meta recalculada pelo que falta (feito até a semana anterior), dividido pelos dias úteis das semanas que restam.
+      if (c0.situacao === 'em andamento' && g.meta) {
+        const at = c0.semana_atual - 1;
+        if (at >= 0 && at < sem.length) {
+          let antes = 0; for (let k = 0; k < at; k++) antes += g.s[k] || 0;
+          const restaMes = Math.max(0, g.meta - antes);
+          let uteisResta = 0; for (let k = at; k < sem.length; k++) uteisResta += sem[k].uteis_semana;
+          for (let k = at; k < sem.length; k++) {
+            linha['plano_s' + (k + 1)] = linha['meta_s' + (k + 1)];
+            linha['meta_s' + (k + 1)] = uteisResta ? Math.ceil((restaMes * sem[k].uteis_semana) / uteisResta) : (k === at ? restaMes : 0);
+          }
+        }
+      }
+      rows.push(linha);
+    }
+  }
+  // "todos": soma de todos os meses fiscais do calendário
+  const soma = {};
+  for (const r of rows) {
+    const k = r.vendedor + '|' + r.area;
+    const t = (soma[k] = soma[k] || { vendedor: r.vendedor, area: r.area, feito: 0, meta: 0, valor: 0 });
+    t.feito += r.feito; t.meta += r.meta || 0; t.valor += r.valor;
+  }
+  for (const t of Object.values(soma)) {
+    const linha = { chave: 'todos|' + t.vendedor + '|' + t.area, mes: 'todos', vendedor: t.vendedor, area: t.area, feito: t.feito, meta: t.meta || null,
+      atingido_pct: t.meta ? Math.round((t.feito / t.meta) * 100) : null, esperado_hoje: null, ritmo: null, atras: null, falta: null, por_dia_util: null, valor: t.valor };
+    for (let k = 1; k <= 5; k++) { linha['s' + k] = null; linha['meta_s' + k] = null; }
+    rows.push(linha);
+  }
+  return rows;
+};
+
+const calcConversao = (leads, por_area, calendario) => {
+  // Taxa de conversão = ganhos no mês fiscal ÷ leads que entraram (foram criados) no Funil de Vendas no mesmo mês fiscal.
+  // Por vendedor e área; "Equipe toda" soma todos os leads, inclusive os sem vendedor. Mês "todos" soma todos os meses fiscais.
+  const EQUIPE = 'Equipe toda';
+  const area = (a) => {
+    const s = String(a || '').trim();
+    if (!s) return 'Não informado';
+    const k = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (k.startsWith('trabalh')) return 'Trabalhista';
+    if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
+    if (k.startsWith('civ')) return 'Civil';
+    if (k.startsWith('consum')) return 'Consumidor';
+    if (k.startsWith('nao inform')) return 'Não informado';
+    return s;
+  };
+  const periodos = {};
+  for (const c of calendario) periodos[c.mes] = { ini: c.ini, fim: c.fim };
+  const entraram = {};
+  for (const l of leads) {
+    const mes = Object.keys(periodos).find((m) => l.data_criacao >= periodos[m].ini && l.data_criacao <= periodos[m].fim);
+    if (!mes) continue;
+    const v = l.vendedor || 'Não informado', a = area(l.area);
+    for (const m of [mes, 'todos']) {
+      for (const k of [m + '|' + v + '|' + a, m + '|' + v + '|Total', m + '|' + EQUIPE + '|' + a, m + '|' + EQUIPE + '|Total']) entraram[k] = (entraram[k] || 0) + (l.n || 1);
+    }
+  }
+  const chaves = new Set([...por_area.map((r) => r.chave), ...Object.keys(entraram)]);
+  const ganhos = Object.fromEntries(por_area.map((r) => [r.chave, r.feito]));
+  return [...chaves].map((chave) => {
+    const [mes, vendedor, a] = chave.split('|');
+    const n = entraram[chave] || 0, g = ganhos[chave] || 0;
+    return { chave, mes, vendedor, area: a, leads_entraram: n, ganhos: g, conversao_pct: n ? Math.round((g / n) * 1000) / 10 : null };
+  });
+};
+
+const calcDiario = (ganhos, leads, calendario) => {
+  // Ganhos (pela data do ganho) e leads que entraram (pela data de criação) por dia, vendedor e área, dentro dos meses fiscais do calendário.
+  const EQUIPE = 'Equipe toda';
+  const area = (a) => {
+    const s = String(a || '').trim();
+    if (!s) return 'Não informado';
+    const k = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (k.startsWith('trabalh')) return 'Trabalhista';
+    if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
+    if (k.startsWith('civ')) return 'Civil';
+    if (k.startsWith('consum')) return 'Consumidor';
+    if (k.startsWith('nao inform')) return 'Não informado';
+    return s;
+  };
+  const ini = calendario.reduce((m, c) => (c.ini < m ? c.ini : m), '9999'), fim = calendario.reduce((m, c) => (c.fim > m ? c.fim : m), '0000');
+  const t = {};
+  const somar = (dia, v, a, campo, n) => {
+    for (const [vv, aa] of [[v, a], [v, 'Total'], [EQUIPE, a], [EQUIPE, 'Total']]) {
+      const k = dia + '|' + vv + '|' + aa;
+      (t[k] = t[k] || { chave: k, dia, vendedor: vv, area: aa, ganhos: 0, leads: 0 })[campo] += n;
+    }
+  };
+  for (const g of ganhos) if (g.data_ganho >= ini && g.data_ganho <= fim) somar(g.data_ganho, g.vendedor || 'Sem vendedor', area(g.area), 'ganhos', g.n || 1);
+  for (const l of leads) if (l.data_criacao >= ini && l.data_criacao <= fim) somar(l.data_criacao, l.vendedor || 'Não informado', area(l.area), 'leads', l.n || 1);
+  return Object.values(t);
+};
+
+const calcRecordes = (ganhos) => {
+  // Recordes de ganhos da equipe toda: melhor dia, melhor semana (segunda a domingo) e melhor mês fiscal (26 ao 25).
+  // "recorde_anterior" ignora o período de hoje, então "bateu" diz se o período atual já passou o melhor que existia antes dele.
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const agora = new Date();
+  const hoje = iso(new Date(Date.UTC(agora.getFullYear(), agora.getMonth(), agora.getDate())));
+  const semanaDe = (dia) => { const d = new Date(dia + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); return iso(d); };
+  const mesDe = (dia) => { let [a, m, d] = dia.split('-').map(Number); if (d >= 26) { m++; if (m > 12) { m = 1; a++; } } return a + '-' + String(m).padStart(2, '0'); };
+  const tipos = { dia: (x) => x, semana: semanaDe, mes: mesDe };
+  return Object.entries(tipos).map(([tipo, chaveDe]) => {
+    const cont = {};
+    for (const g of ganhos) { const k = chaveDe(g.data_ganho); cont[k] = (cont[k] || 0) + (g.n || 1); }
+    const atualPeriodo = chaveDe(hoje), atual = cont[atualPeriodo] || 0;
+    let rec = null, ant = null;
+    for (const [k, n] of Object.entries(cont)) {
+      if (!rec || n > rec[1] || (n === rec[1] && k < rec[0])) rec = [k, n];
+      if (k !== atualPeriodo && k < atualPeriodo && (!ant || n > ant[1] || (n === ant[1] && k < ant[0]))) ant = [k, n];
+    }
+    return {
+      tipo,
+      periodo_atual: atualPeriodo,
+      atual,
+      recorde: rec ? rec[1] : 0,
+      recorde_periodo: rec ? rec[0] : null,
+      recorde_anterior: ant ? ant[1] : 0,
+      recorde_anterior_periodo: ant ? ant[0] : null,
+      bateu: atual > 0 && (!ant || atual > ant[1]),
+    };
+  });
+};
+
+const montarPainel = (bruto) => {
+  const ganhos = bruto.ganhos.map(([dia, vendedor, area, n, valor]) => ({ data_ganho: dia, vendedor, area, n, valor }));
+  const leads = (bruto.leads || []).map(([dia, vendedor, area, n]) => ({ data_criacao: dia, vendedor, area, n }));
+  const metas = bruto.metas.map(([funil, vendedor, area, mes, meta]) => ({ funil, vendedor, area, mes, meta }));
+  const calendario = calcCalendario(ganhos);
+  const por_area = calcPorArea(ganhos, metas, calendario);
+  const temLeads = bruto.tem_leads !== false && leads.length > 0;
+  return {
+    calendario, por_area,
+    conversao: temLeads ? calcConversao(leads, por_area, calendario) : null,
+    diario: calcDiario(ganhos, leads, calendario),
+    recordes: calcRecordes(ganhos),
+  };
+};
+
+
+"use strict";
+/* Endereço do Apps Script "Mike Ross Painel" (termina em /exec). Ele devolve os ganhos, leads e
+   metas já somados por dia, vendedor e área, sem nome de cliente. */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzHT8B1qAj5Jt7NyV0K_hOGanYbPhPbdFFTOuZOcE4vxb5XfGpdINoHDRgKoPO7sg6DeQ/exec';
+const ATUALIZA_MIN = 5;
+
+const CHAVE_FILTROS = 'mr_painel_filtros';
+const lerLS = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+const gravarLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sem armazenamento: segue sem lembrar */ } };
+
+/* ---- estado e ponte com o código do painel ---- */
+const estado = { status: 'loading', painel: null, bruto: null, params: Object.assign({ vendedor: 'Equipe toda', servico: 'Todos os serviços', mes: '' }, lerLS(CHAVE_FILTROS) || {}) };
+let desenhar = () => {};
+const dash = {
+  data(id) {
+    if (estado.status !== 'ok') return { status: estado.status, data: [] };
+    if (id === 'ganhos' || id === 'metas') return { status: 'ok', data: [] };
+    if (id === 'leads') return { status: estado.painel.conversao ? 'ok' : 'missing', data: [] };
+    const d = estado.painel[id];
+    return d ? { status: 'ok', data: d } : { status: 'missing', data: [] };
+  },
+  params() { return estado.params; },
+  setParams(o) { Object.assign(estado.params, o); gravarLS(CHAVE_FILTROS, estado.params); desenhar(); },
+  onData(fn) { desenhar = fn; },
+};
+
+/* ---- carregar dados ---- */
+const $id = (id) => document.getElementById(id);
+const carregar = async () => {
+  try {
+    const r = await (await fetch(API_URL, { cache: 'no-store' })).json();
+    if (!r.ok) throw new Error(r.mensagem || 'erro');
+    estado.bruto = r;
+    estado.painel = montarPainel(r);
+    estado.status = 'ok';
+    const t = new Date(r.atualizado);
+    $id('atualizado').textContent = 'Ganhos e leads do Kommo, atualizado às ' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') + ' · atualiza sozinho a cada ' + ATUALIZA_MIN + ' min';
+    $id('aviso').hidden = true;
+  } catch (e) {
+    if (estado.status !== 'ok') estado.status = 'error';
+    $id('aviso').hidden = false;
+    $id('aviso').textContent = 'Não consegui ler os números do Kommo agora. ' + (estado.status === 'ok' ? 'Mostrando os últimos que carreguei. ' : '') + 'Tento de novo em ' + ATUALIZA_MIN + ' minutos.';
+  }
+  desenhar();
+};
+document.addEventListener('visibilitychange', () => { if (!document.hidden && estado.bruto && Date.now() - new Date(estado.bruto.atualizado) > 2 * 60 * 1000) carregar(); });
+
+</script>
+<script>
+(() => {
+  const EQUIPE = 'Equipe toda', TODOS_SERV = 'Todos os serviços', TODOS_MESES = 'todos';
+  const ORDEM = ['Juros', 'Trabalhista', 'Previdenciário', 'Civil', 'Consumidor', 'Não informado'];
+  const NOME = { Juros: 'Juros/TEA' };
+  const COR = { Juros: '#9a6b93', Trabalhista: '#e07a8f', 'Previdenciário': '#e9c98e', Civil: '#c9a2f0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
+  const ACC = '#d5ad95', PLUM = '#9a6b93', INK = '#f5ebe5', MUTED = '#b8a3a9', LINE = '#3a2129';
+  const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  const nomeArea = (a) => NOME[a] || a;
+  const cor = (a) => COR[a] || '#8c7a80';
+  const brl = (n) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(n || 0);
+  const num = (n) => new Intl.NumberFormat('pt-BR').format(n || 0);
+  const dec = (n) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n);
+  const pctBr = (n) => new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(n) + '%';
+  const dm = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
+  const where = (o) => Object.entries(o).map(([k, v]) => k + '=' + encodeURIComponent(v)).join('&');
+  const chave = (m, v, a) => m + '|' + v + '|' + a;
+
+  const el = (tag, props, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(props || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'style') e.style.cssText = v; else e.setAttribute(k, v);
+    }
+    for (const k of kids.flat(3)) if (k != null && k !== false) e.append(k instanceof Node ? k : document.createTextNode(String(k)));
+    return e;
+  };
+  const mark = (src) => (row, field, text, cls) => {
+    if (!row) return el('span', { class: cls, text: text != null ? text : '–' });
+    const t = text != null ? text : String(row[field] == null ? '–' : row[field]);
+    if (row._vazio) return el('span', { class: cls, text: t });
+    return el('span', { class: cls, 'data-source': src, 'data-field': field, 'data-where': where({ chave: row.chave }), text: t });
+  };
+  const pa = mark('por_area'), cv = mark('conversao'), ca = mark('calendario');
+  const $ = (id) => document.getElementById(id);
+  // troca o conteúdo aceitando listas aninhadas e ignorando vazios
+  const put = (node, ...kids) => node.replaceChildren(...kids.flat(5).filter((k) => k != null && k !== false && k !== '').map((k) => (k instanceof Node ? k : document.createTextNode(String(k)))));
+
+  // ---- tooltip ----
+  const tip = (box) => {
+    let t = box.querySelector(':scope > .sm-tip');
+    if (!t) { t = el('div', { class: 'sm-tip' }); box.append(t); }
+    return {
+      show(ev, nodes) {
+        t.replaceChildren(...nodes);
+        const r = box.getBoundingClientRect();
+        let x = ev.clientX - r.left + 14, y = ev.clientY - r.top - 10;
+        t.style.opacity = 1;
+        const w = t.offsetWidth, h = t.offsetHeight;
+        if (x + w > r.width) x = ev.clientX - r.left - w - 14;
+        if (x < 0) x = 4;
+        if (y + h > r.height) y = r.height - h;
+        if (y < 0) y = 0;
+        t.style.left = x + 'px'; t.style.top = y + 'px';
+      },
+      hide() { t.style.opacity = 0; },
+    };
+  };
+  const linha = (c, nome, valor) => el('div', {}, c ? el('i', { style: 'background:' + c }) : null, nome + ': ', el('b', { text: valor }));
+
+  // ---- filtros ----
+  const selVend = $('sel-vendedor'), selServ = $('sel-servico'), selMes = $('sel-mes');
+  selVend.addEventListener('change', () => dash.setParams({ vendedor: selVend.value }));
+  selServ.addEventListener('change', () => dash.setParams({ servico: selServ.value }));
+  let ultimosMeses = [];
+  const ATALHO = { ult2: 2, ult3: 3, ult6: 6 };
+  selMes.addEventListener('change', () => {
+    const v = selMes.value;
+    if (v === 'sel') return;
+    dash.setParams({ mes: ATALHO[v] ? ultimosMeses.slice(-ATALHO[v]) : v });
+  });
+  $('tab-vendedores').addEventListener('click', (ev) => {
+    const tr = ev.target.closest('tr[data-vendedor]');
+    if (tr) { dash.setParams({ vendedor: tr.dataset.vendedor }); $('topo').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+  // liga/desliga um mês na seleção; sempre fica pelo menos um
+  const alternarMes = (m) => {
+    const cal = dash.data('calendario');
+    const todasM = cal.status === 'ok' ? [...new Set(cal.data.map((c) => c.mes))] : [];
+    const p = dash.params() || {};
+    let atual = Array.isArray(p.mes) ? p.mes.slice() : p.mes === TODOS_MESES ? todasM.slice() : p.mes ? [p.mes] : todasM.slice(-1);
+    atual = atual.filter((x) => todasM.includes(x));
+    if (!atual.length) atual = todasM.slice(-1);
+    const nova = atual.includes(m) ? atual.filter((x) => x !== m) : atual.concat(m);
+    dash.setParams({ mes: nova.length ? nova.sort() : [m] });
+  };
+  const escolherServico = (a) => dash.setParams({ servico: (dash.params() || {}).servico === a ? TODOS_SERV : a });
+
+  const falhou = (box, txt) => { box.replaceChildren(el('div', { class: 'sm-fail', text: txt || 'Não carregou' })); return box; };
+
+  const avisados = new Set();
+  const NOMES_MES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  const rotuloRec = (tipo, per) => {
+    if (!per) return '–';
+    if (tipo === 'dia') return dm(per) + '/' + per.slice(0, 4);
+    if (tipo === 'semana') { const d = new Date(per + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + 6); return dm(per) + ' a ' + dm(d.toISOString()); }
+    return NOMES_MES[Number(per.slice(5)) - 1] + ' de ' + per.slice(0, 4);
+  };
+  const NOME_REC = { dia: 'Melhor dia', semana: 'Melhor semana', mes: 'Melhor mês fiscal' };
+  const AGORA_REC = { dia: 'Hoje', semana: 'Esta semana', mes: 'Este mês' };
+  const desenharRecordes = () => {
+    const rec = dash.data('recordes');
+    const box = $('recs'), alerta = $('recorde-alerta');
+    if (rec.status !== 'ok') { if (rec.status !== 'loading') falhou(box); alerta.hidden = true; return; }
+    const rk = mark('recordes');
+    const linhas = rec.data.map((r) => ({ ...r, chave: r.tipo }));
+    put(box, ...linhas.map((r) => {
+      const alvo = r.bateu ? r.recorde_anterior : r.recorde;
+      const falta = Math.max(0, alvo - r.atual + 1);
+      return el('div', { class: 'sm-rec' + (r.bateu ? ' bateu' : '') },
+        el('span', { class: 'lb', text: NOME_REC[r.tipo] }),
+        el('span', { class: 'nb' }, el('span', { 'data-source': 'recordes', 'data-field': 'recorde', 'data-where': where({ tipo: r.tipo }), text: num(r.recorde) })),
+        el('span', { class: 'pr', text: 'ganhos · ' + rotuloRec(r.tipo, r.recorde_periodo) }),
+        el('span', { class: 'at' }, AGORA_REC[r.tipo] + ': ', el('b', {}, el('span', { 'data-source': 'recordes', 'data-field': 'atual', 'data-where': where({ tipo: r.tipo }), text: num(r.atual) })),
+          r.bateu ? ' · recorde batido! 🏆' : ' · faltam ' + num(falta) + ' pra bater'),
+        el('div', { class: 'tr' }, el('i', { style: 'width:' + Math.min(100, alvo ? (r.atual / alvo) * 100 : 0) + '%' })));
+    }));
+    const novos = linhas.filter((r) => r.bateu);
+    alerta.hidden = !novos.length;
+    if (novos.length) {
+      const chaveAviso = novos.map((r) => r.tipo + r.periodo_atual + r.atual).join('|');
+      put(alerta, el('span', { class: 'ic', text: '🏆' }), el('div', {},
+        el('div', { class: 'tt', text: novos.length > 1 ? 'Novos recordes da equipe!' : 'Novo recorde da equipe!' }),
+        el('div', { class: 'tx' }, novos.map((r, i) => [i ? ' ' : '', AGORA_REC[r.tipo] + ' já são ', el('b', { text: num(r.atual) }), ' ganhos, passando o recorde anterior de ' + num(r.recorde_anterior) + ' (' + rotuloRec(r.tipo, r.recorde_anterior_periodo) + ').']))));
+      if (!avisados.has(chaveAviso)) {
+        avisados.add(chaveAviso);
+        alerta.classList.remove('novo'); void alerta.offsetWidth; alerta.classList.add('novo');
+      }
+    }
+  };
+
+  dash.onData(() => {
+    desenharRecordes();
+    const cal = dash.data('calendario'), por = dash.data('por_area'), conv = dash.data('conversao'), dia = dash.data('diario');
+    const base = ['ganhos', 'metas', 'calendario', 'por_area'].map((id) => dash.data(id).status);
+    if (cal.status !== 'ok' || por.status !== 'ok') {
+      if (base.some((s) => s === 'error' || s === 'connect' || s === 'declined' || s === 'missing')) {
+        ['kpi-ganhos', 'kpi-conversao', 'kpi-leads'].forEach((id) => falhou($(id)));
+        $('resumo').textContent = ''; $('periodo').textContent = '';
+      }
+      return;
+    }
+    const convOk = conv.status === 'ok', diaOk = dia.status === 'ok';
+    const leadsCarregando = ['leads', 'conversao', 'diario'].some((id) => dash.data(id).status === 'loading');
+    const calRows = cal.data;
+    const PA = new Map(por.data.map((r) => [r.chave, r]));
+    const CV = new Map(convOk ? conv.data.map((r) => [r.chave, r]) : []);
+    const paRow = (m, v, a) => PA.get(chave(m, v, a)) || { chave: chave(m, v, a), mes: m, vendedor: v, area: a, feito: 0, meta: null, valor: 0, _vazio: true };
+    const cvRow = (m, v, a) => CV.get(chave(m, v, a)) || null;
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    // meses
+    const meses = [...new Map(calRows.map((c) => [c.mes, c.nome_mes]))];
+    const mesAtual = meses[meses.length - 1][0];
+    const p = dash.params() || {};
+    const todasM = meses.map(([m]) => m);
+    ultimosMeses = todasM;
+    let selArr = Array.isArray(p.mes) ? p.mes.filter((m) => todasM.includes(m))
+      : p.mes === TODOS_MESES ? todasM.slice() : todasM.includes(p.mes) ? [p.mes] : [mesAtual];
+    if (!selArr.length) selArr = [mesAtual];
+    selArr = [...new Set(selArr)].sort();
+    const selSet = new Set(selArr);
+    const multi = selArr.length > 1;
+    const todos = multi && selArr.length === todasM.length;
+    const mes = !multi ? selArr[0] : todos ? TODOS_MESES : 'sel';
+    const nomeDe = (m) => (meses.find(([x]) => x === m) || [m, m])[1];
+    const curto = (m) => MES_CURTO[Number(m.slice(5)) - 1];
+    const seguidos = selArr.every((m, i) => i === 0 || todasM.indexOf(m) === todasM.indexOf(selArr[i - 1]) + 1);
+    const rotSel = !multi ? nomeDe(mes) : todos ? 'todos os meses'
+      : seguidos ? curto(selArr[0]) + ' a ' + curto(selArr[selArr.length - 1]) + ' (' + selArr.length + ' meses)'
+      : selArr.slice(0, -1).map(curto).join(', ') + ' e ' + curto(selArr[selArr.length - 1]);
+    // soma dos meses escolhidos (quando não é um mês só nem todos)
+    let porRows = por.data, convRows = convOk ? conv.data : [];
+    if (mes === 'sel') {
+      const soma = {};
+      for (const r of por.data) {
+        if (!selSet.has(r.mes)) continue;
+        const k = r.vendedor + '|' + r.area;
+        const t = (soma[k] = soma[k] || { vendedor: r.vendedor, area: r.area, feito: 0, meta: 0, valor: 0 });
+        t.feito += r.feito; t.meta += r.meta || 0; t.valor += r.valor;
+      }
+      const agg = Object.values(soma).map((t) => {
+        const linha = { chave: chave('sel', t.vendedor, t.area), mes: 'sel', vendedor: t.vendedor, area: t.area, feito: t.feito, meta: t.meta || null,
+          atingido_pct: t.meta ? Math.round((t.feito / t.meta) * 100) : null, esperado_hoje: null, ritmo: null, atras: null, falta: null, por_dia_util: null, valor: t.valor };
+        for (let k = 1; k <= 5; k++) { linha['s' + k] = null; linha['meta_s' + k] = null; }
+        return linha;
+      });
+      agg.forEach((r) => PA.set(r.chave, r));
+      porRows = por.data.concat(agg);
+      if (convOk) {
+        const sc = {};
+        for (const r of conv.data) {
+          if (!selSet.has(r.mes)) continue;
+          const k = r.vendedor + '|' + r.area;
+          const t = (sc[k] = sc[k] || { vendedor: r.vendedor, area: r.area, leads_entraram: 0, ganhos: 0 });
+          t.leads_entraram += r.leads_entraram; t.ganhos += r.ganhos;
+        }
+        const aggC = Object.values(sc).map((t) => ({ chave: chave('sel', t.vendedor, t.area), mes: 'sel', vendedor: t.vendedor, area: t.area,
+          leads_entraram: t.leads_entraram, ganhos: t.ganhos, conversao_pct: t.leads_entraram ? Math.round((t.ganhos / t.leads_entraram) * 1000) / 10 : null }));
+        aggC.forEach((r) => CV.set(r.chave, r));
+        convRows = conv.data.concat(aggC);
+      }
+    }
+    selMes.replaceChildren(
+      ...(mes === 'sel' ? [new Option(cap(rotSel), 'sel')] : []),
+      new Option('Todos os meses', TODOS_MESES),
+      ...(todasM.length > 2 ? [new Option('Últimos 2 meses', 'ult2')] : []),
+      ...(todasM.length > 3 ? [new Option('Últimos 3 meses', 'ult3')] : []),
+      ...(todasM.length > 6 ? [new Option('Últimos 6 meses', 'ult6')] : []),
+      ...meses.slice().reverse().map(([m, n]) => new Option(cap(n), m)));
+    selMes.value = mes;
+
+    // vendedores do período
+    const vendSet = new Set(porRows.filter((r) => r.mes === mes && r.vendedor !== EQUIPE && (r.feito > 0 || r.meta)).map((r) => r.vendedor));
+    if (convOk) convRows.filter((r) => r.mes === mes && r.area === 'Total' && r.leads_entraram >= 10 && r.vendedor !== EQUIPE && r.vendedor !== 'Não informado').forEach((r) => vendSet.add(r.vendedor));
+    const vend = p.vendedor || EQUIPE;
+    if (vend !== EQUIPE) vendSet.add(vend);
+    const vendedores = [...vendSet].sort((a, b) => a.localeCompare(b));
+    selVend.replaceChildren(new Option(EQUIPE, EQUIPE), ...vendedores.map((v) => new Option(v, v)));
+    selVend.value = vend;
+
+    // serviços com movimento
+    const areasTodas = ORDEM.filter((a) => por.data.some((r) => r.area === a && (r.feito || r.meta)));
+    const serv = p.servico && p.servico !== TODOS_SERV ? p.servico : TODOS_SERV;
+    if (serv !== TODOS_SERV && !areasTodas.includes(serv)) areasTodas.push(serv);
+    selServ.replaceChildren(new Option(TODOS_SERV, TODOS_SERV), ...areasTodas.map((a) => new Option(nomeArea(a), a)));
+    selServ.value = serv;
+    const A = serv === TODOS_SERV ? 'Total' : serv;
+
+    // calendário do período
+    const sem = multi ? [] : calRows.filter((c) => c.mes === mes);
+    const c0 = multi ? null : sem[0];
+    const emAndamento = !multi && c0.situacao === 'em andamento';
+    const calSel = calRows.filter((c) => selSet.has(c.mes));
+    const ini = multi ? calSel[0].ini : c0.ini, fim = multi ? calSel[calSel.length - 1].fim : c0.fim;
+    const noPeriodo = (d) => calSel.some((c) => d >= c.ini && d <= c.fim);
+    const quem = vend === EQUIPE ? 'a equipe' : vend.split(' ')[0];
+    const quemCap = cap(quem);
+    const T = paRow(mes, vend, A);
+    const C = cvRow(mes, vend, A);
+    const rotServ = A === 'Total' ? '' : ' · ' + nomeArea(A);
+    const rotPeriodo = rotSel;
+
+    // ---- cabeçalho ----
+    $('titulo').textContent = (vend === EQUIPE ? 'Painel da equipe' : 'Painel de ' + vend) + rotServ + ' · ' + rotPeriodo;
+    $('periodo').textContent = multi
+      ? (todos ? '' : selArr.length + ' meses fiscais somados. ') + 'Meses fiscais de ' + dm(ini) + '/' + ini.slice(0, 4) + ' a ' + dm(fim) + '/' + fim.slice(0, 4) + ' (dia 26 ao dia 25).'
+      : 'Mês fiscal de ' + dm(ini) + ' a ' + dm(fim) + '. ' + (emAndamento ? 'Semana ' + c0.semana_atual + ' de ' + c0.semanas + '. ' : 'Mês fiscal encerrado. ') + '';
+
+    // ---- frase de resumo ----
+    if (emAndamento && T.meta) {
+      put($('resumo'), el('b', {}, quemCap + ' está ', T.ritmo >= 0 ? [pa(T, 'ritmo'), ' à frente do ritmo'] : [pa(T, 'atras'), ' atrás do ritmo'], rotServ ? ' em ' + nomeArea(A) : '', '.'),
+        ' ', T.ritmo >= 0 ? 'Mantendo o passo, a meta do mês fecha.' : ['Precisa de ', pa(T, 'por_dia_util', dec(T.por_dia_util)), ' ganhos por dia útil até ' + dm(fim) + '.'],
+        C && C.leads_entraram ? [' Conversão de ', cv(C, 'conversao_pct', pctBr(C.conversao_pct)), ' no mês.'] : '');
+    } else {
+      put($('resumo'), el('b', {}, pa(T, 'feito', num(T.feito)), ' ganhos', T.meta ? [' de ', pa(T, 'meta', num(T.meta)), ' de meta (', pa(T, 'atingido_pct'), '%)'] : '', ' em ' + rotPeriodo + '.'),
+        C && C.leads_entraram ? [' Conversão de ', cv(C, 'conversao_pct', pctBr(C.conversao_pct)), ' sobre ', cv(C, 'leads_entraram', num(C.leads_entraram)), ' leads que entraram.'] : '');
+    }
+
+    // ---- KPI ganhos ----
+    const dl = (...pares) => el('dl', { class: 'sm-dl' }, pares.filter(Boolean).map(([k, v]) => [el('dt', { text: k }), el('dd', {}, v)]));
+    $('kpi-ganhos').replaceChildren(
+      el('span', { class: 'sm-k-label', text: 'Ganhos' + rotServ }),
+      el('span', { class: 'sm-big' }, pa(T, 'feito', num(T.feito)), T.meta ? el('small', {}, ' de ', pa(T, 'meta', num(T.meta))) : null),
+      dl(
+        T.meta ? ['Atingido', [pa(T, 'atingido_pct'), '%']] : ['Meta', 'sem meta'],
+        emAndamento && T.meta ? ['Deveria estar hoje', pa(T, 'esperado_hoje')] : null,
+        emAndamento && T.meta ? ['Faltam', pa(T, 'falta')] : null,
+        emAndamento && T.meta ? ['Por dia útil', pa(T, 'por_dia_util', dec(T.por_dia_util))] : null,
+        ['Valor', pa(T, 'valor', brl(T.valor))]));
+
+    // ---- KPI conversão ----
+    const boxC = $('kpi-conversao');
+    if (convOk) {
+      const idx = meses.findIndex(([m]) => m === mes);
+      const ant = !multi && idx > 0 ? cvRow(meses[idx - 1][0], vend, A) : null;
+      boxC.replaceChildren(
+        el('span', { class: 'sm-k-label', text: 'Conversão' + rotServ }),
+        el('span', { class: 'sm-big' }, C && C.leads_entraram ? cv(C, 'conversao_pct', pctBr(C.conversao_pct)) : '–'),
+        dl(['Leads que entraram', C ? cv(C, 'leads_entraram', num(C.leads_entraram)) : '0'],
+          ['Ganhos', pa(T, 'feito', num(T.feito))],
+          ant && ant.leads_entraram ? ['Mês anterior', cv(ant, 'conversao_pct', pctBr(ant.conversao_pct))] : null));
+    } else if (leadsCarregando) {
+      boxC.replaceChildren(el('span', { class: 'sm-big dash-skeleton', text: '—' }));
+    } else {
+      boxC.replaceChildren(el('span', { class: 'sm-k-label', text: 'Conversão' }), falhou(el('div'), 'Falta a aba Leads Simeão na planilha'));
+    }
+
+    // ---- série diária do período ----
+    const dias = [];
+    for (let d = new Date(ini + 'T12:00:00Z'); d.toISOString().slice(0, 10) <= fim; d.setUTCDate(d.getUTCDate() + 1)) { const di = d.toISOString().slice(0, 10); if (noPeriodo(di)) dias.push(di); }
+    const DI = new Map(diaOk ? dia.data.filter((r) => r.vendedor === vend && r.area === A).map((r) => [r.dia, r]) : []);
+    const serie = dias.map((d) => ({ dia: d, ganhos: (DI.get(d) || {}).ganhos || 0, leads: (DI.get(d) || {}).leads || 0 }));
+    const hojeIso = new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+    const serieAteHoje = serie.filter((s) => s.dia <= hojeIso);
+
+    // ---- KPI leads com sparkline ----
+    const boxL = $('kpi-leads');
+    if (diaOk) {
+      const totLeads = C ? C.leads_entraram : serieAteHoje.reduce((s, x) => s + x.leads, 0);
+      const media = serieAteHoje.length ? totLeads / serieAteHoje.length : 0;
+      const spark = el('div', { class: 'sm-chart', style: 'height:64px' });
+      boxL.replaceChildren(
+        el('span', { class: 'sm-k-label', text: 'Leads que entraram' + rotServ }),
+        el('span', { class: 'sm-big' }, C ? cv(C, 'leads_entraram', num(C.leads_entraram)) : num(totLeads)),
+        spark,
+        el('div', { class: 'sm-k-label', style: 'display:flex;justify-content:space-between;font-size:11px' }, el('span', { text: dm(ini) }), el('span', { text: dec(media) + ' por dia' }), el('span', { text: dm(serieAteHoje.length ? serieAteHoje[serieAteHoje.length - 1].dia : fim) })));
+      const w = spark.clientWidth || 240, h = 64;
+      const x = d3.scaleLinear([0, Math.max(1, serieAteHoje.length - 1)], [0, w]);
+      const y = d3.scaleLinear([0, d3.max(serieAteHoje, (s) => s.leads) || 1], [h - 2, 4]);
+      const svg = d3.select(spark).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('height', h);
+      const g = svg.append('defs').append('linearGradient').attr('id', 'sm-grad-leads').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+      [[0, .45], [1, 0]].forEach(([o, a]) => g.append('stop').attr('offset', o).attr('stop-color', PLUM).attr('stop-opacity', a));
+      svg.append('path').datum(serieAteHoje).attr('fill', 'url(#sm-grad-leads)').attr('d', d3.area().x((d, i) => x(i)).y0(h).y1((d) => y(d.leads)));
+      svg.append('path').datum(serieAteHoje).attr('fill', 'none').attr('stroke', PLUM).attr('stroke-width', 1.8).attr('stroke-linejoin', 'round').attr('d', d3.line().x((d, i) => x(i)).y((d) => y(d.leads)));
+    } else if (leadsCarregando) {
+      boxL.replaceChildren(el('span', { class: 'sm-big dash-skeleton', text: '—' }));
+    } else {
+      boxL.replaceChildren(el('span', { class: 'sm-k-label', text: 'Leads que entraram' }), falhou(el('div'), 'Falta a aba Leads Simeão na planilha'));
+    }
+
+    // ---- donut ganhos por serviço ----
+    const fatias = ORDEM.map((a) => paRow(mes, vend, a)).filter((r) => r.feito > 0);
+    const totalF = d3.sum(fatias, (r) => r.feito);
+    const donut = $('donut');
+    donut.replaceChildren();
+    const sz = 130, rO = sz / 2, rI = rO * 0.62;
+    const svgD = d3.select(donut).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${sz} ${sz}`).style('max-width', sz + 'px');
+    const gD = svgD.append('g').attr('transform', `translate(${rO},${rO})`);
+    const arcs = d3.pie().sort(null).value((r) => r.feito).padAngle(0.02)(fatias);
+    const tD = tip($('kpi-servicos'));
+    gD.selectAll('path').data(arcs).join('path')
+      .attr('d', d3.arc().innerRadius(rI).outerRadius(rO).cornerRadius(3))
+      .attr('fill', (d) => cor(d.data.area)).attr('opacity', (d) => (A === 'Total' || A === d.data.area ? 1 : 0.3))
+      .style('cursor', 'pointer')
+      .on('click', (ev, d) => escolherServico(d.data.area))
+      .on('mousemove', (ev, d) => tD.show(ev, [el('div', { class: 't', text: nomeArea(d.data.area) }), linha(null, 'Ganhos', num(d.data.feito) + ' (' + Math.round((d.data.feito / totalF) * 100) + '%)')]))
+      .on('mouseleave', () => tD.hide());
+    gD.append('text').attr('text-anchor', 'middle').attr('dy', '0.1em').style('font-family', 'var(--font-anthropic-serif)').style('font-size', '26px').style('fill', INK).text(num(A === 'Total' ? totalF : T.feito));
+    gD.append('text').attr('text-anchor', 'middle').attr('dy', '1.6em').style('font-size', '10px').text(A === 'Total' ? 'ganhos' : nomeArea(A));
+    $('donut-legenda').replaceChildren(...(fatias.length ? fatias.map((r) => el('li', { class: A !== 'Total' && A !== r.area ? 'off' : null, 'data-area': r.area },
+      el('i', { style: 'background:' + cor(r.area) }), el('span', { text: nomeArea(r.area) }),
+      el('span', { class: 'q' }, pa(r, 'feito', num(r.feito)), ' · ' + Math.round((r.feito / totalF) * 100) + '%'))) : [el('li', { class: 'sm-empty', text: 'Nenhum ganho no período' })]));
+    $('donut-legenda').onclick = (ev) => { const li = ev.target.closest('li[data-area]'); if (li) escolherServico(li.dataset.area); };
+
+    // ---- evolução mês a mês ----
+    const areasEvo = A === 'Total' ? ORDEM.filter((a) => meses.some(([m]) => paRow(m, vend, a).feito > 0)) : [A];
+    const dadosEvo = meses.map(([m, n]) => {
+      const c = cvRow(m, vend, A) || {};
+      const o = { mes: m, rotulo: MES_CURTO[Number(m.slice(5)) - 1], nome: n, total: paRow(m, vend, A).feito, conv: c.leads_entraram ? c.conversao_pct : null, leads: c.leads_entraram };
+      areasEvo.forEach((a) => { o[a] = paRow(m, vend, a).feito; });
+      return o;
+    });
+    $('evo-titulo').textContent = 'Ganhos mês a mês' + rotServ + (vend === EQUIPE ? '' : ' · ' + vend);
+    put($('evo-legenda'), ...areasEvo.map((a) => el('span', {}, el('i', { style: 'background:' + cor(a) }), nomeArea(a))),
+      convOk ? el('span', {}, el('i', { style: 'background:' + INK + ';border-radius:1px;height:2px;width:14px' }), 'Conversão') : null);
+    const boxE = $('evo-chart');
+    boxE.replaceChildren();
+    {
+      const w = boxE.clientWidth || 600, h = 280, mg = { t: 22, r: convOk ? 42 : 8, b: 26, l: 34 };
+      const x = d3.scaleBand(dadosEvo.map((d) => d.mes), [mg.l, w - mg.r]).padding(0.28);
+      const y = d3.scaleLinear([0, (d3.max(dadosEvo, (d) => d.total) || 1) * 1.15], [h - mg.b, mg.t]).nice();
+      const y2 = d3.scaleLinear([0, Math.max(10, (d3.max(dadosEvo, (d) => d.conv || 0) || 0) * 1.2)], [h - mg.b, mg.t]).nice();
+      const svg = d3.select(boxE).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('height', h);
+      svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', mg.l).attr('x2', w - mg.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', LINE);
+      svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', mg.l - 8).attr('y', (d) => y(d)).attr('dy', '0.32em').attr('text-anchor', 'end').text((d) => num(d));
+      if (convOk) svg.append('g').selectAll('text').data(y2.ticks(4)).join('text').attr('x', w - mg.r + 8).attr('y', (d) => y2(d)).attr('dy', '0.32em').text((d) => d + '%');
+      const stack = d3.stack().keys(areasEvo)(dadosEvo);
+      const ativo = (d) => selSet.has(d.mes);
+      svg.append('g').selectAll('g').data(stack).join('g').attr('fill', (s) => cor(s.key))
+        .selectAll('rect').data((s) => s).join('rect')
+        .attr('x', (d) => x(d.data.mes)).attr('width', x.bandwidth())
+        .attr('y', (d) => y(d[1])).attr('height', (d) => Math.max(0, y(d[0]) - y(d[1]) - (d[1] > d[0] ? 1 : 0)))
+        .attr('rx', 3).attr('opacity', (d) => (ativo(d.data) ? 1 : 0.4));
+      svg.append('g').selectAll('text').data(dadosEvo).join('text')
+        .attr('x', (d) => x(d.mes) + x.bandwidth() / 2).attr('y', (d) => y(d.total) - 6).attr('text-anchor', 'middle')
+        .style('fill', (d) => (ativo(d) ? INK : MUTED)).style('font-weight', 600).style('paint-order', 'stroke').style('stroke', '#1e1016').style('stroke-width', '4px').style('stroke-linejoin', 'round').text((d) => (d.total ? num(d.total) : ''));
+      svg.append('g').selectAll('text').data(dadosEvo).join('text')
+        .attr('x', (d) => x(d.mes) + x.bandwidth() / 2).attr('y', h - 8).attr('text-anchor', 'middle')
+        .style('fill', (d) => (selSet.has(d.mes) ? ACC : MUTED)).style('font-weight', (d) => (selSet.has(d.mes) ? 600 : null)).text((d) => d.rotulo);
+      if (convOk) {
+        const pts = dadosEvo.filter((d) => d.conv != null);
+        svg.append('path').datum(pts).attr('fill', 'none').attr('stroke', INK).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('opacity', 0.9)
+          .attr('d', d3.line().x((d) => x(d.mes) + x.bandwidth() / 2).y((d) => y2(d.conv)));
+        svg.append('g').selectAll('circle').data(pts).join('circle').attr('cx', (d) => x(d.mes) + x.bandwidth() / 2).attr('cy', (d) => y2(d.conv)).attr('r', 3.5)
+          .attr('fill', '#1e1016').attr('stroke', INK).attr('stroke-width', 2);
+      }
+      const tE = tip(boxE);
+      svg.append('g').selectAll('rect').data(dadosEvo).join('rect')
+        .attr('x', (d) => x(d.mes) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', mg.t).attr('height', h - mg.t - mg.b)
+        .attr('fill', 'transparent').style('cursor', 'pointer')
+        .on('click', (ev, d) => alternarMes(d.mes))
+        .on('mousemove', (ev, d) => tE.show(ev, [el('div', { class: 't', text: cap(d.nome) }),
+          ...areasEvo.filter((a) => d[a]).map((a) => linha(cor(a), nomeArea(a), num(d[a]))),
+          areasEvo.length > 1 ? linha(null, 'Total', num(d.total)) : null,
+          d.leads != null ? linha(null, 'Leads', num(d.leads)) : null,
+          d.conv != null ? linha(null, 'Conversão', pctBr(d.conv)) : null].filter(Boolean)))
+        .on('mouseleave', () => tE.hide());
+    }
+    // lado esquerdo: número grande + resumo
+    $('evo-big').replaceChildren(pa(T, 'feito', num(T.feito)));
+    $('evo-big-label').textContent = 'ganhos em ' + rotPeriodo + rotServ;
+    const atalho = (rot, lista) => {
+      const ativoAt = lista.length === selArr.length && lista.every((m) => selSet.has(m));
+      const bt = el('button', { type: 'button', class: 'sm-mbtn at', 'aria-pressed': ativoAt ? 'true' : 'false', text: rot });
+      bt.onclick = () => dash.setParams({ mes: lista });
+      return bt;
+    };
+    const temGanho = (m) => paRow(m, vend, A).feito > 0;
+    put($('evo-meses'), el('h3', { text: 'Meses do período' }),
+      el('div', { class: 'lista' }, meses.map(([m, n]) => {
+        const bt = el('button', { type: 'button', class: 'sm-mbtn', 'aria-pressed': selSet.has(m) ? 'true' : 'false', title: cap(n) },
+          curto(m) + (m.slice(0, 4) !== mesAtual.slice(0, 4) ? '/' + m.slice(2, 4) : ''), el('small', { text: temGanho(m) ? num(paRow(m, vend, A).feito) : '–' }));
+        bt.onclick = () => alternarMes(m);
+        return bt;
+      })),
+      el('div', { class: 'atalhos' },
+        atalho('Mês atual', [mesAtual]),
+        todasM.length > 2 ? atalho('Últimos 2', todasM.slice(-2)) : null,
+        todasM.length > 3 ? atalho('Últimos 3', todasM.slice(-3)) : null,
+        todasM.length > 1 ? atalho('Todos', todasM) : null),
+      el('p', { class: 'dica', text: 'Clique pra somar ou tirar um mês. O painel inteiro segue os meses marcados.' }));
+
+    // ---- ganhos e leads por dia ----
+    const boxD = $('diario-chart');
+    boxD.replaceChildren();
+    $('diario-titulo').textContent = 'Ganhos e leads por dia' + rotServ;
+    $('diario-nota').textContent = 'De ' + dm(ini) + ' a ' + dm(serieAteHoje.length ? serieAteHoje[serieAteHoje.length - 1].dia : fim) + (vend === EQUIPE ? ', equipe toda.' : ', ' + vend + '.');
+    if (diaOk && serieAteHoje.length) {
+      const w = boxD.clientWidth || 480, h = 220, mg = { t: 10, r: 10, b: 24, l: 32 };
+      const pd = (s) => new Date(s + 'T12:00:00Z');
+      const x = d3.scaleUtc([pd(serieAteHoje[0].dia), pd(serieAteHoje[serieAteHoje.length - 1].dia)], [mg.l, w - mg.r]);
+      const y = d3.scaleLinear([0, d3.max(serieAteHoje, (s) => Math.max(s.leads, s.ganhos)) || 1], [h - mg.b, mg.t]).nice();
+      const svg = d3.select(boxD).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('height', h);
+      svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', mg.l).attr('x2', w - mg.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', LINE);
+      svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', mg.l - 6).attr('y', (d) => y(d)).attr('dy', '0.32em').attr('text-anchor', 'end').text((d) => num(d));
+      const nt = Math.max(2, Math.min(6, Math.floor(w / 90)));
+      svg.append('g').selectAll('text').data(x.ticks(nt)).join('text').attr('x', (d) => x(d)).attr('y', h - 6).attr('text-anchor', 'middle').text((d) => dm(d.toISOString()));
+      const gr = svg.append('defs').append('linearGradient').attr('id', 'sm-grad-ganhos').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+      [[0, .3], [1, 0]].forEach(([o, a]) => gr.append('stop').attr('offset', o).attr('stop-color', ACC).attr('stop-opacity', a));
+      svg.append('path').datum(serieAteHoje).attr('fill', 'none').attr('stroke', PLUM).attr('stroke-width', 1.6).attr('stroke-linejoin', 'round').attr('opacity', 0.9)
+        .attr('d', d3.line().x((d) => x(pd(d.dia))).y((d) => y(d.leads)));
+      svg.append('path').datum(serieAteHoje).attr('fill', 'url(#sm-grad-ganhos)').attr('d', d3.area().x((d) => x(pd(d.dia))).y0(h - mg.b).y1((d) => y(d.ganhos)));
+      svg.append('path').datum(serieAteHoje).attr('fill', 'none').attr('stroke', ACC).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+        .attr('d', d3.line().x((d) => x(pd(d.dia))).y((d) => y(d.ganhos)));
+      const foco = svg.append('g').style('display', 'none');
+      foco.append('line').attr('y1', mg.t).attr('y2', h - mg.b).attr('stroke', MUTED).attr('stroke-dasharray', '3 3');
+      const fG = foco.append('circle').attr('r', 4).attr('fill', ACC);
+      const fL = foco.append('circle').attr('r', 3.5).attr('fill', PLUM);
+      const tDi = tip(boxD);
+      const bis = d3.bisector((d) => pd(d.dia)).center;
+      svg.append('rect').attr('x', mg.l).attr('y', mg.t).attr('width', w - mg.l - mg.r).attr('height', h - mg.t - mg.b).attr('fill', 'transparent')
+        .on('mousemove', (ev) => {
+          const [mx] = d3.pointer(ev);
+          const d = serieAteHoje[bis(serieAteHoje, x.invert(mx))];
+          foco.style('display', null).attr('transform', `translate(${x(pd(d.dia))},0)`);
+          fG.attr('cy', y(d.ganhos)); fL.attr('cy', y(d.leads));
+          const sd = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][pd(d.dia).getUTCDay()];
+          tDi.show(ev, [el('div', { class: 't', text: sd + ', ' + dm(d.dia) }), linha(ACC, 'Ganhos', num(d.ganhos)), linha(PLUM, 'Leads', num(d.leads))]);
+        })
+        .on('mouseleave', () => { foco.style('display', 'none'); tDi.hide(); });
+    } else if (diaOk) {
+      boxD.append(el('p', { class: 'sm-empty', text: 'Sem dias no período ainda.' }));
+    } else if (!leadsCarregando) {
+      falhou(boxD, 'Falta a aba Leads Simeão na planilha');
+    }
+
+    // ---- conversão por serviço ----
+    const boxCS = $('conv-barras');
+    if (convOk) {
+      const linhasCS = ORDEM.map((a) => cvRow(mes, vend, a)).filter((r) => r && (r.leads_entraram || r.ganhos));
+      const maxC = d3.max(linhasCS, (r) => (r.leads_entraram ? r.conversao_pct : 0)) || 1;
+      const totC = cvRow(mes, vend, 'Total');
+      const barra = (r, nome, c, total) => el('div', { class: 'sm-bar-row' + (A !== 'Total' && !total && A !== r.area ? ' off' : ''), 'data-area': total ? null : r.area },
+        el('span', { text: nome, style: total ? 'font-weight:600' : null }),
+        el('div', { class: 'track' }, el('i', { style: `width:${r.leads_entraram ? Math.min(100, (r.conversao_pct / maxC) * 100) : 0}%;background:${c}` })),
+        el('span', { class: 'pct' }, r.leads_entraram ? cv(r, 'conversao_pct', pctBr(r.conversao_pct)) : '–'),
+        el('small', {}, cv(r, 'ganhos', num(r.ganhos)), ' ganhos de ', cv(r, 'leads_entraram', num(r.leads_entraram)), ' leads'));
+      put(boxCS, ...linhasCS.map((r) => barra(r, nomeArea(r.area), cor(r.area))), totC ? barra(totC, 'Total', ACC, true) : null);
+      boxCS.onclick = (ev) => { const r = ev.target.closest('[data-area]'); if (r) escolherServico(r.dataset.area); };
+    } else if (leadsCarregando) {
+      boxCS.replaceChildren(el('div', { class: 'dash-skeleton', text: '—' }));
+    } else {
+      falhou(boxCS, 'Falta a aba Leads Simeão na planilha');
+    }
+
+    // ---- metas por semana (só com um mês escolhido) ----
+    $('semanas').hidden = multi;
+    if (!multi) {
+      const atual = c0.semana_atual - 1;
+      $('semanas-titulo').textContent = 'Metas por semana' + (vend === EQUIPE ? '' : ' · ' + vend);
+      $('tab-semanas').querySelector('thead').replaceChildren(el('tr', {}, el('th', { text: 'Serviço' }),
+        sem.map((s, k) => el('th', { class: k === atual ? 'now' : null }, 'S' + s.semana, el('small', {}, ca(s, 'semana_ini', dm(s.semana_ini)), ' a ', ca(s, 'semana_fim', dm(s.semana_fim))))),
+        el('th', { text: 'Meta' }), el('th', { text: 'Feito' }), el('th', { text: 'Atingido' })));
+      const mini = (r) => el('div', { class: 'sm-mini' }, el('i', { style: 'width:' + (r.meta ? Math.min(100, (r.feito / r.meta) * 100) : 0) + '%' }), el('em', { style: 'left:' + Math.min(100, c0.fracao_mes * 100) + '%' }));
+      const celula = (r, k) => {
+        const v = r['s' + (k + 1)] || 0, alvo = r['meta_s' + (k + 1)];
+        const plano = r['plano_s' + (k + 1)];
+        const metaTxt = alvo ? el('small', {}, plano != null ? 'pra bater ' : 'meta ', pa(r, 'meta_s' + (k + 1))) : null;
+        const planoTxt = plano != null && alvo != null && plano !== alvo ? el('small', { class: 'sm-plano' + (alvo >= plano * 1.5 ? ' risco' : '') }, (alvo >= plano * 1.5 ? 'meta do mês em risco · ' : '') + 'plano ' + plano) : null;
+        if (atual >= 0 && k > atual) return el('td', { class: 'muted' }, metaTxt, planoTxt);
+        let cls = '';
+        if (alvo) { const q = v / alvo; cls = q >= 1 ? 'ok' : q >= 0.7 ? 'mid' : 'low'; if (k === atual && q < 1) cls = 'mid'; }
+        if (k === atual) cls += ' now';
+        return el('td', { class: cls.trim() || null }, r._vazio ? el('span', { class: 'v', text: '0' }) : pa(r, 's' + (k + 1), null, 'v'), metaTxt, planoTxt);
+      };
+      const lin = (r, nome, cls) => el('tr', { class: cls }, el('td', { class: 'svc', text: nome }), sem.map((_, k) => celula(r, k)),
+        el('td', { class: 'muted' }, r.meta ? pa(r, 'meta') : '–'), el('td', {}, pa(r, 'feito', null, 'v')),
+        r.meta ? el('td', {}, el('b', {}, pa(r, 'atingido_pct'), '%'), mini(r)) : el('td', { class: 'muted', text: '–' }));
+      const tot = paRow(mes, vend, 'Total');
+      const corpo = A === 'Total'
+        ? [...ORDEM.map((a) => paRow(mes, vend, a)).filter((r) => !r._vazio).map((r) => lin(r, nomeArea(r.area))), lin(tot, 'Total', 'total')]
+        : [lin(paRow(mes, vend, A), nomeArea(A))];
+      $('tab-semanas').querySelector('tbody').replaceChildren(...corpo);
+    }
+
+    // ---- por vendedor ----
+    $('vendedores-titulo').textContent = 'Por vendedor' + rotServ + ' · ' + rotPeriodo;
+    $('tab-vendedores').querySelector('thead').replaceChildren(el('tr', {}, el('th', { text: 'Vendedor' }),
+      el('th', { text: 'Leads' }), el('th', { text: 'Ganhos' }), el('th', { text: 'Conversão' }), el('th', { text: 'Meta' }), el('th', { text: 'Atingido' }),
+      emAndamento ? el('th', { text: 'Ritmo' }) : null, el('th', { text: 'Valor' })));
+    const linhaV = (v, cls) => {
+      const r = paRow(mes, v, A), c = cvRow(mes, v, A);
+      return el('tr', { class: [cls, v === vend ? 'sel' : ''].join(' ').trim() || null, 'data-vendedor': v },
+        el('td', { class: 'name', text: v }),
+        c ? el('td', {}, cv(c, 'leads_entraram', num(c.leads_entraram))) : el('td', { class: 'muted', text: convOk ? '0' : '–' }),
+        el('td', {}, el('b', {}, pa(r, 'feito', num(r.feito)))),
+        c && c.leads_entraram ? el('td', {}, el('b', {}, cv(c, 'conversao_pct', pctBr(c.conversao_pct)))) : el('td', { class: 'muted', text: '–' }),
+        el('td', { class: 'muted' }, r.meta ? pa(r, 'meta', num(r.meta)) : '–'),
+        r.meta ? el('td', {}, el('b', {}, pa(r, 'atingido_pct'), '%'), el('div', { class: 'sm-mini' }, el('i', { style: 'width:' + Math.min(100, (r.feito / r.meta) * 100) + '%' }), !multi ? el('em', { style: 'left:' + Math.min(100, c0.fracao_mes * 100) + '%' }) : null)) : el('td', { class: 'muted', text: '–' }),
+        emAndamento ? (r.ritmo == null ? el('td', { class: 'muted', text: '–' }) : el('td', { class: r.ritmo >= 0 ? 'sm-pos' : 'sm-neg' }, pa(r, 'ritmo', (r.ritmo > 0 ? '+' : '') + r.ritmo))) : null,
+        el('td', {}, pa(r, 'valor', brl(r.valor))));
+    };
+    const ordemV = vendedores.slice().sort((a, b) => (paRow(mes, b, A).meta ? 1 : 0) - (paRow(mes, a, A).meta ? 1 : 0) || paRow(mes, b, A).feito - paRow(mes, a, A).feito);
+    $('tab-vendedores').querySelector('tbody').replaceChildren(...ordemV.map((v) => linhaV(v)), linhaV(EQUIPE, 'total'));
+    $('vendedores-nota').textContent = (emAndamento ? 'Ritmo é a diferença entre o feito e onde cada um deveria estar hoje. ' : '') + 'Clique num vendedor pra ver o painel só dele.';
+
+    document.querySelectorAll('.sm .sm-head .dash-skeleton, .sm #resumo .dash-skeleton, .sm #kpi-ganhos .dash-skeleton').forEach((n) => n.classList.remove('dash-skeleton'));
+  });
+})();
+</script>
+<script>
+carregar();
+setInterval(carregar, ATUALIZA_MIN * 60 * 1000);
+</script>
+</body>
+</html>

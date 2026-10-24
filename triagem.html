@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=feedaffd-28dd-4226-8595-4bcc184639e2
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Triagem | Mike Ross</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: mesa de atendimento. Perguntas à esquerda, leitura do caso fixa à direita, saídas prontas (WhatsApp, Kommo, objeções) em abas embaixo. */
+:root{
+  --bg:#EDF1EF; --surface:#FFFFFF; --surface-2:#E3E9E6; --ink:#14201B; --muted:#55625D; --line:#CBD5D0;
+  --accent:#0A6B5B; --accent-ink:#FFFFFF; --accent-soft:#D3EAE3;
+  --hot:#B42318; --hot-bg:#FBE3E0; --warm:#8F5500; --warm-bg:#FAEDD6; --cold:#4A5853; --cold-bg:#E3E9E6;
+  --block:#5A2A85; --block-bg:#EEE3F7;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1614; --surface:#17201D; --surface-2:#1F2A26; --ink:#E4ECE8; --muted:#97A6A0; --line:#2C3A35;
+  --accent:#43B9A1; --accent-ink:#06120F; --accent-soft:#163A33;
+  --hot:#F2786B; --hot-bg:#3A1B18; --warm:#E8A54A; --warm-bg:#352610; --cold:#A3B1AB; --cold-bg:#222D29;
+  --block:#C39BEA; --block-bg:#2C2038; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1614; --surface:#17201D; --surface-2:#1F2A26; --ink:#E4ECE8; --muted:#97A6A0; --line:#2C3A35;
+  --accent:#43B9A1; --accent-ink:#06120F; --accent-soft:#163A33;
+  --hot:#F2786B; --hot-bg:#3A1B18; --warm:#E8A54A; --warm-bg:#352610; --cold:#A3B1AB; --cold-bg:#222D29;
+  --block:#C39BEA; --block-bg:#2C2038; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:20px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-0.01em}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+header.top h1{font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1.05}
+header.top p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button{font:600 15px var(--f-body);border-radius:8px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.chip:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.banner{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:15px}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+form{display:grid;gap:16px;min-width:0}
+fieldset{border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0;padding:16px;display:grid;gap:14px;min-width:0}
+legend{font-family:var(--f-display);font-weight:700;font-size:17px;padding:0 6px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+label.f{display:grid;gap:4px;font-size:14px;font-weight:600;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],select,textarea{font:400 16px var(--f-body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:80px;resize:vertical}
+input:disabled{opacity:.45}
+.hint{font-weight:400;font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:15px;cursor:pointer;background:var(--bg)}
+.chip input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.chip:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:grid;gap:14px;min-width:0}
+@media (max-width:900px){aside{position:static}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.card h2{font-size:17px}
+.verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pill{font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px;border-radius:999px}
+.pill.quente{background:var(--hot-bg);color:var(--hot)}
+.pill.morno{background:var(--warm-bg);color:var(--warm)}
+.pill.frio{background:var(--cold-bg);color:var(--cold)}
+.pill.descartar{background:var(--block-bg);color:var(--block)}
+.verdict p{margin:0;color:var(--muted);font-size:15px;flex:1 1 200px}
+.signals{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sig{border-left:4px solid var(--line);padding:6px 0 6px 12px;display:grid;gap:2px}
+.sig.forte{border-color:var(--hot)}
+.sig.medio{border-color:var(--warm)}
+.sig.alerta{border-color:var(--cold)}
+.sig.bloqueio{border-color:var(--block)}
+.sig strong{font-size:15px}
+.base a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.sig .base{font-family:var(--f-mono);font-size:12.5px;color:var(--accent)}
+.sig .fala{font-size:14px;color:var(--muted)}
+.empty{color:var(--muted);font-size:15px;margin:0}
+table.est{width:100%;border-collapse:collapse;font-size:15px}
+table.est td{padding:5px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.est td.v{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:12px}
+table.est tr.tot td{border-bottom:none;font-weight:700;padding-top:9px}
+table.est .n{display:block;font-size:12.5px;color:var(--muted)}
+.fine{font-size:13px;color:var(--muted);margin:0}
+.docs{margin:0;padding-left:20px;display:grid;gap:3px;font-size:15px}
+.outputs{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:8px 8px 0;overflow-x:auto}
+.tab{border:none;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;background:none;padding:10px 14px;color:var(--muted);white-space:nowrap}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+.panel{padding:16px;display:grid;gap:12px}
+.out{white-space:pre-wrap;font-family:var(--f-body);font-size:15.5px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;margin:0;max-height:460px;overflow:auto}
+.out.mono{font-family:var(--f-mono);font-size:13.5px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toast{font-size:14px;color:var(--accent);font-weight:600}
+.obj{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.ob{border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start;background:var(--bg)}
+.ob h3{font-size:16px}
+.ob p{margin:0;font-size:15px}
+.ob .base{font-family:var(--f-mono);font-size:12.5px;color:var(--accent)}
+.ob button{justify-self:start;font-size:13.5px;padding:5px 10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.step{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.step .num{font-family:var(--f-mono);font-size:13px;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:1px 9px}
+.step h2{font-size:21px}
+.step p{margin:0;color:var(--muted);font-size:15px;flex-basis:100%}
+.intake{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:12px}
+.intake textarea{min-height:150px;font-size:15.5px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px;align-items:start}
+@media (max-width:900px){.pair{grid-template-columns:minmax(0,1fr)}}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.fact{font-size:14px;border-radius:6px;padding:4px 9px;background:var(--accent-soft);color:var(--ink)}
+.fact b{font-weight:600;color:var(--accent)}
+.fact.unsure{background:var(--warm-bg)}
+.fact.unsure b{color:var(--warm)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--accent-soft)}
+.legend span.u::before{background:var(--warm-bg)}
+.qs{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.qs label{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer;padding:6px 8px;border-radius:7px}
+.qs label:hover{background:var(--bg)}
+.qs input{accent-color:var(--accent);width:17px;height:17px;margin-top:2px;flex:none}
+.qs .why{display:block;font-size:12.5px;color:var(--muted)}
+label.f.auto input,label.f.auto select{border-color:var(--accent);background:var(--accent-soft)}
+label.f.unsure input,label.f.unsure select{border-color:var(--warm);background:var(--warm-bg)}
+.chip.auto{border-color:var(--accent)}
+.chip.unsure{border-color:var(--warm);background:var(--warm-bg)}
+.status{font-size:14px;color:var(--muted)}
+.status.err{color:var(--hot)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.two{grid-template-columns:minmax(0,1fr)}}
+.intake h3{font-size:17px}
+.intake textarea{min-height:230px}
+.fala{display:grid;gap:6px}
+.drop{display:grid;gap:4px;justify-items:center;text-align:center;border:2px dashed var(--line);border-radius:10px;padding:26px 16px;cursor:pointer;background:var(--bg)}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.drop span{font-size:14px;color:var(--muted)}
+.doclist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.docitem{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:4px;background:var(--bg);min-width:0}
+.docitem.erro{border-color:var(--hot)}
+.dtop{display:flex;align-items:center;gap:8px;min-width:0}
+.dname{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto;min-width:0}
+.badge{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 8px;white-space:nowrap}
+button.x{border:none;background:none;font-size:20px;line-height:1;padding:0 4px;color:var(--muted)}
+.dstat{font-size:13.5px;color:var(--muted)}
+.dstat.err{color:var(--hot)}
+.dinfo{font-size:13.5px;color:var(--ink)}
+.dinfo::before{content:"› ";color:var(--accent)}
+.fact.doc{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--accent)}
+.fact i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--accent);margin-left:6px;text-transform:uppercase}
+.legend span.d::before{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--accent)}
+.docs li.ok{color:var(--muted)}
+.rec{font-family:var(--f-mono);font-size:11px;color:var(--accent);text-transform:uppercase;margin-left:8px;letter-spacing:.04em}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href='/painel'>Painel</a><a href='/tarefas'>Tarefas</a><a aria-current='page' href='/triagem'>Triagem</a><a href='/procuracoes'>Procurações</a><a href='/previdenciario'>Previdenciário</a><a href='/clt'>CLT</a></div></nav>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Inside sales · Direito do Trabalho</div>
+      <h1>Triagem Trabalhista</h1>
+      <p>Cole a conversa e suba os documentos do cliente. O painel preenche a triagem, aponta os direitos prováveis com base legal e monta as perguntas para o que faltou.</p>
+    </div>
+    <div class="actions">
+      <button type="button" id="btnNovo">Novo atendimento</button>
+      <button type="button" id="btnExemplo">Carregar exemplo</button>
+    </div>
+  </header>
+
+  <div class="banner" id="banner">Exemplo carregado com uma conversa fictícia. Clique em <b>Novo atendimento</b> para começar um caso real.</div>
+
+  <div class="step"><span class="num">1</span><h2>Cole a conversa e suba os documentos</h2><p>Pode colar a conversa inteira do WhatsApp, com as mensagens do cliente, as do vendedor e os áudios transcritos. O painel separa quem falou o quê.</p></div>
+
+  <div class="two">
+    <section class="intake">
+      <h3>Conversa</h3>
+      <label class="sr" for="colado">Conversa com o cliente</label>
+      <textarea id="colado" placeholder="Cole aqui a conversa do WhatsApp ou a transcrição do áudio."></textarea>
+      <div class="fala" id="falaWrap" hidden>
+        <label class="f">Quem é o cliente nessa conversa?<select id="quemCliente"></select></label>
+        <span class="fine" id="falaInfo"></span>
+      </div>
+      <div class="bar">
+        <button type="button" class="primary" id="btnLer">Analisar</button>
+        <span class="status" id="iaStatus"></span>
+      </div>
+    </section>
+    <section class="intake">
+      <h3>Documentos</h3>
+      <label class="drop" id="drop" for="fileIn">
+        <input type="file" id="fileIn" class="sr" accept=".pdf,image/*" multiple>
+        <strong>Arraste os arquivos aqui ou clique para escolher</strong>
+        <span>CTPS Digital, termo de rescisão (TRCT), extrato do FGTS, contracheque ou atestado. PDF ou foto.</span>
+      </label>
+      <ul class="doclist" id="docList"></ul>
+      <p class="fine">Os arquivos são lidos no próprio computador e não são enviados para nenhum servidor. PDF baixado do app lê na hora. Foto e PDF escaneado levam alguns segundos e pedem conferência.</p>
+    </section>
+  </div>
+
+  <div class="pair">
+    <section class="card">
+      <h2>O que o sistema entendeu</h2>
+      <div class="legend"><span>dito na conversa</span><span class="d">veio de documento</span><span class="u">confirmar</span></div>
+      <div class="facts" id="facts"></div>
+    </section>
+    <section class="card">
+      <h2>Perguntas para o que faltou</h2>
+      <p class="fine">As cinco primeiras são as que mais mudam o caso. Marque ou desmarque antes de copiar.</p>
+      <ul class="qs" id="qs"></ul>
+      <div class="bar">
+        <button type="button" class="primary" data-copy="qMsg">Copiar perguntas para o WhatsApp</button>
+        <span class="toast" id="toast_qMsg"></span>
+      </div>
+      <pre class="out" id="qMsg" hidden></pre>
+    </section>
+  </div>
+
+  <div class="step"><span class="num">2</span><h2>Confira os dados e veja a leitura do caso</h2><p>Campos em verde vieram da conversa ou dos documentos. Em amarelo, o sistema deduziu e vale confirmar. Qualquer campo que você alterar sai da lista de perguntas.</p></div>
+
+  <div class="grid">
+    <form id="f" autocomplete="off">
+      <fieldset>
+        <legend>Atendimento</legend>
+        <div class="row">
+          <label class="f">Nome do cliente<input type="text" id="cli" placeholder="Ex.: Maria"></label>
+          <label class="f">Seu nome (vendedor)<input type="text" id="vend" placeholder="Ex.: Lucas"></label>
+        </div>
+        <label class="f">Resumo do relato <span class="hint">vai para a nota do Kommo</span><textarea id="relato" placeholder="Em duas ou três linhas, o que aconteceu."></textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Vínculo</legend>
+        <div class="row">
+          <label class="f">Função
+            <select id="funcao">
+              <option value="comum">Outra função (jornada comum)</option>
+              <option value="assistente">Assistente social</option>
+              <option value="bancario">Bancário</option>
+              <option value="telefonista">Telefonista / telemarketing</option>
+            </select>
+          </label>
+          <label class="f">Carteira assinada?
+            <select id="ctps">
+              <option value="sim">Sim, o tempo todo</option>
+              <option value="parcial">Só parte do tempo</option>
+              <option value="nao">Não</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label class="f">Data de admissão<input type="date" id="adm"></label>
+          <label class="f">Salário mensal (R$)<input type="number" id="sal" min="0" step="50" placeholder="Ex.: 2500"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Situação do contrato</legend>
+        <div class="row">
+          <label class="f">Como está hoje?
+            <select id="sit">
+              <option value="">Ainda não sabemos</option>
+              <option value="trabalha">Ainda trabalha lá</option>
+              <option value="saiu">Saiu por conta própria</option>
+              <option value="demitido">Foi demitido sem justa causa</option>
+              <option value="justa">Foi demitido por justa causa</option>
+              <option value="pediu">Pediu demissão formalmente</option>
+              <option value="acordo">Saiu em acordo com a empresa</option>
+            </select>
+          </label>
+          <label class="f">Data da saída<input type="date" id="saida"></label>
+        </div>
+        <div class="row">
+          <label class="f">Meses de salário atrasado<input type="number" id="atrasos" min="0" step="1" value="0"></label>
+          <label class="f">FGTS
+            <select id="fgts">
+              <option value="nao_sei">Não sabe</option>
+              <option value="dia">Em dia</option>
+              <option value="falhas">Com meses faltando</option>
+            </select>
+          </label>
+          <label class="f">Verbas da rescisão
+            <select id="verbas">
+              <option value="na">Não se aplica</option>
+              <option value="nao">Não recebeu nada</option>
+              <option value="parcial">Recebeu só uma parte</option>
+              <option value="pagas">Recebeu tudo</option>
+            </select>
+          </label>
+          <label class="f">Férias vencidas não tiradas<input type="number" id="ferias" min="0" step="1" value="0"><span class="hint">em períodos de 12 meses</span></label>
+        </div>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="abandono">Empresa diz que ele abandonou</label>
+          <label class="chip"><input type="checkbox" id="funcoes">Fazia tarefas fora da função</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Jornada</legend>
+        <div class="row">
+          <label class="f">Horas trabalhadas por semana<input type="number" id="horas" min="0" step="1" placeholder="Ex.: 44"><span class="hint">some de segunda a sábado</span></label>
+          <label class="f">Limite legal para a função<input type="text" id="limiteTxt" disabled></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Saúde e ambiente</legend>
+        <div class="row">
+          <label class="f">Doença ou acidente
+            <select id="doenca">
+              <option value="nao">Nada relatado</option>
+              <option value="sem">Doença sem ligação clara com o trabalho</option>
+              <option value="trabalho">Doença causada ou piorada pelo trabalho</option>
+              <option value="acidente">Acidente de trabalho</option>
+            </select>
+          </label>
+        </div>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" id="laudo">Tem atestado ou laudo</label>
+          <label class="chip"><input type="checkbox" id="assedio">Humilhação ou assédio</label>
+          <label class="chip"><input type="checkbox" id="insalubre">Ambiente insalubre ou perigoso</label>
+          <label class="chip"><input type="checkbox" id="provas">Tem provas (prints, extratos, testemunhas)</label>
+        </div>
+      </fieldset>
+    </form>
+
+    <aside>
+      <section class="card">
+        <h2>Leitura do caso</h2>
+        <div class="verdict"><span class="pill frio" id="pill">Frio</span><p id="motivo"></p></div>
+      </section>
+      <section class="card">
+        <h2>Direitos prováveis</h2>
+        <ul class="signals" id="sinais"></ul>
+      </section>
+      <section class="card">
+        <h2>Estimativa para a conversa</h2>
+        <div id="est"></div>
+        <p class="fine">Conta rápida para orientar a venda, sem reflexos, juros e correção. O valor real sai do cálculo do advogado. Nunca prometa o número ao cliente.</p>
+      </section>
+      <section class="card">
+        <h2>Documentos</h2>
+        <ul class="docs" id="docs"></ul>
+      </section>
+    </aside>
+  </div>
+
+  <section class="outputs">
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab" role="tab" aria-selected="true" data-p="pMsg" id="tMsg">Mensagem WhatsApp</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-p="pKommo" id="tKommo">Nota para o Kommo</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-p="pObj" id="tObj">Objeções</button>
+    </div>
+    <div class="panel" id="pMsg" role="tabpanel">
+      <div class="bar">
+        <label class="chip"><input type="checkbox" id="incValor">Incluir faixa de valor na mensagem</label>
+        <button type="button" class="primary" data-copy="msgOut">Copiar mensagem</button>
+        <span class="toast" id="toast_msgOut"></span>
+      </div>
+      <pre class="out" id="msgOut"></pre>
+    </div>
+    <div class="panel" id="pKommo" role="tabpanel" hidden>
+      <div class="bar">
+        <button type="button" class="primary" data-copy="kommoOut">Copiar nota</button>
+        <span class="toast" id="toast_kommoOut"></span>
+      </div>
+      <pre class="out mono" id="kommoOut"></pre>
+    </div>
+    <div class="panel" id="pObj" role="tabpanel" hidden>
+      <div class="obj" id="objList"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+
+const $ = id => document.getElementById(id);
+const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const fmtD = d => d ? d.toLocaleDateString('pt-BR',{timeZone:'UTC'}) : '-';
+const parseD = s => { if(!s) return null; const [y,m,d]=s.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)); };
+const addDays = (d,n) => new Date(d.getTime()+n*864e5);
+const addMonths = (d,m) => { const r=new Date(d.getTime()); r.setUTCMonth(r.getUTCMonth()+m); return r; };
+function fracMonths(a,b){ // meses com fração de 15 dias ou mais contando como mês cheio
+  if(!a||!b||b<a) return 0;
+  let m=(b.getUTCFullYear()-a.getUTCFullYear())*12+(b.getUTCMonth()-a.getUTCMonth());
+  let anc=addMonths(a,m); if(anc>b){m--;anc=addMonths(a,m);}
+  if((b-anc)/864e5>=14) m++;
+  return Math.max(0,m);
+}
+function fullYears(a,b){ let y=b.getUTCFullYear()-a.getUTCFullYear(); if(b.getUTCMonth()<a.getUTCMonth()||(b.getUTCMonth()===a.getUTCMonth()&&b.getUTCDate()<a.getUTCDate())) y--; return Math.max(0,y); }
+const now=new Date(); const today=new Date(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()));
+
+const LIMITES={comum:{h:44,base:'Art. 7º, XIII, CF e art. 58 da CLT (44h semanais)'},assistente:{h:30,base:'Lei 8.662/93, art. 5º-A (30h semanais)'},bancario:{h:30,base:'Art. 224 da CLT (6h diárias) e divisor 180'},telefonista:{h:36,base:'Art. 227 da CLT (6h diárias)'}};
+
+const OBJ=[
+ {t:'"Não quero briga, não quero problema."',r:'Ninguém está brigando. Cobrar o que a lei garante é receber pelo que você já trabalhou. Muitas vezes começa com uma proposta de acordo, e a Justiça só confirma para dar segurança aos dois lados.',b:'Art. 855-B da CLT (acordo extrajudicial homologado)'},
+ {t:'"Ainda trabalho lá, tenho medo."',r:'Em casos de salário ou FGTS atrasado dá para entrar com a ação e continuar trabalhando. E se a empresa demitir por vingança, isso gera indenização a mais.',b:'Art. 483, §3º da CLT; art. 5º, XXXV, CF'},
+ {t:'"Quanto vou pagar?"',r:'Explique o modelo de honorários do escritório. Se o cliente ganha até 40% do teto do INSS, tem direito à justiça gratuita e não paga custas.',b:'Art. 790, §3º da CLT. Ajuste ao contrato do escritório'},
+ {t:'"E se eu perder, pago alguma coisa?"',r:'Com justiça gratuita, a cobrança de honorários da outra parte fica suspensa. Por isso o advogado avalia as provas antes de entrar.',b:'Art. 791-A, §4º da CLT e ADI 5766 do STF'},
+ {t:'"Já faz muito tempo que saí."',r:'O prazo é de 2 anos depois da saída. Dentro dele, dá para cobrar os últimos 5 anos, contados de quando a ação entra. Cada mês parado é um mês a menos de direito.',b:'Art. 7º, XXIX, CF; art. 11 da CLT'},
+ {t:'"Assinei a rescisão, então acabou."',r:'Assinar a rescisão só quita os valores que estão nela. O que ficou de fora ou veio a menos ainda pode ser cobrado.',b:'Súmula 330 do TST'},
+ {t:'"Não tenho provas."',r:'Prints de conversa, extrato do banco, extrato do FGTS e colegas como testemunhas já ajudam muito. Em empresa com mais de 20 funcionários, quem precisa mostrar o ponto é a empresa.',b:'Art. 74, §2º da CLT; Súmula 338 do TST'},
+ {t:'"Vou pensar e te falo."',r:'Pode pensar, mas o prazo corre. Me manda pelo menos o extrato do FGTS e a carteira digital, que o advogado já consegue te dizer quanto o caso vale.',b:'Prescrição bienal e quinquenal'},
+];
+
+const EXEMPLO_TXT=`[07/10/2026 09:12] Carla Souza: Boa tarde! Vi o anúncio de vocês. Fui mandada embora em março e até hoje não me pagaram nada da rescisão
+[07/10/2026 09:14] Lucas (Simeão): Oi Carla, tudo bem? Sou o Lucas. Sinto muito por isso. Quanto tempo você trabalhou lá e qual era sua função?
+[07/10/2026 09:20] Carla Souza: Trabalhei 6 anos como auxiliar administrativo numa clínica
+[07/10/2026 09:21] Lucas (Simeão): Sua carteira era assinada?
+[07/10/2026 09:21] Carla Souza: sim
+[07/10/2026 09:22] Lucas (Simeão): E quanto era seu salário?
+[07/10/2026 09:25] Carla Souza: 2.300
+[07/10/2026 09:26] Lucas (Simeão): Qual era seu horário?
+[07/10/2026 09:30] Carla Souza: Áudio transcrito: eu entrava às 8 e saía às 18, de segunda a sábado, e nunca recebi hora extra. E ainda fazia a limpeza da recepção quando a faxineira faltava.
+[07/10/2026 09:31] Lucas (Simeão): Você tem prints ou mensagens que mostrem isso?
+[07/10/2026 09:33] Carla Souza: Tenho sim, guardei as conversas com a gerente`;
+const VAZIO={cli:'',vend:'',relato:'',funcao:'comum',ctps:'sim',adm:'',sal:'',sit:'',saida:'',atrasos:0,fgts:'nao_sei',verbas:'na',ferias:0,abandono:false,funcoes:false,horas:'',doenca:'nao',laudo:false,assedio:false,insalubre:false,provas:false,incValor:false};
+const FIELDS=Object.keys(VAZIO);
+const fromText=new Set(), edited=new Set(), unsure=new Set(); let extra={funcaoTxt:'',anos:null}; const qToggle={}; let lastQs=[]; let fonte={}; const docsUp=[];
+const SOFT=new Set(['doenca','ctps','funcao']);
+const LBL={cli:'Nome',funcao:'Função',ctps:'Carteira',adm:'Admissão',sal:'Salário',sit:'Situação',saida:'Saída',atrasos:'Salários atrasados',fgts:'FGTS',verbas:'Rescisão',ferias:'Férias vencidas',abandono:'Empresa alega abandono',funcoes:'Tarefas fora da função',horas:'Jornada',doenca:'Saúde',laudo:'Atestado ou laudo',assedio:'Humilhação ou assédio',insalubre:'Ambiente de risco',provas:'Tem provas'};
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isKnown=k=>fromText.has(k)||edited.has(k);
+function load(o){ FIELDS.forEach(k=>{const el=$(k); if(el.type==='checkbox') el.checked=!!o[k]; else el.value=o[k];}); render(); }
+
+/* ---------- Leitura da mensagem (sem IA) ---------- */
+const NUMW={um:1,uma:1,dois:2,duas:2,tres:3,quatro:4,cinco:5,seis:6,sete:7,oito:8,nove:9,dez:10,onze:11,doze:12,treze:13,quatorze:14,catorze:14,quinze:15,dezesseis:16,dezessete:17,dezoito:18,dezenove:19,vinte:20};
+const NRX='(\\d{1,2}|'+Object.keys(NUMW).join('|')+')';
+const toN=w=>/\d/.test(w)?parseInt(w,10):NUMW[w];
+const MES={janeiro:1,fevereiro:2,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12};
+const MRX='(janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)';
+const norm=x=>x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const iso=d=>d.toISOString().slice(0,10);
+const mkDate=(y,m,d)=>new Date(Date.UTC(y,m-1,d));
+
+function lerTexto(raw){
+  const t=' '+norm(raw).replace(/\s+/g,' ')+' ';
+  const v={}, u=new Set(), ex={funcaoTxt:'',anos:null};
+  let m;
+  const nm=raw.match(/(?:[Mm]eu nome [ée]|[Mm]e chamo|[Ss]ou [oa])\s+([A-ZÀ-Ý][a-zà-ÿ]+(?:\s[A-ZÀ-Ý][a-zà-ÿ]+)?)/);
+  if(nm) v.cli=nm[1];
+
+  if(/sem justa causa/.test(t)) v.sit='demitido';
+  else if(/justa causa/.test(t)) v.sit='justa';
+  else if(/pedi (as contas|demissao|pra sair|para sair|o desligamento)|pedido de demissao/.test(t)) v.sit='pediu';
+  else if(/(fiz|fizemos|fizeram|sai num|sai em|foi um|fechei um) acordo|acordo com (a empresa|o patrao|a patroa|eles)/.test(t)) v.sit='acordo';
+  else if(/(fui|me) (mandad|demitid|dispensad|desligad)|me (mandaram|demitiram|dispensaram|desligaram|botaram pra fora)/.test(t)) v.sit='demitido';
+  else if(/(resolvi|decidi|preferi|tive que) sair|sai por conta|por conta propria|larguei|abandon|nao aguentei mais|nao voltei mais|nao vou voltar/.test(t)) v.sit='saiu';
+  else if(/(ainda|continuo) (trabalh|to la|estou la)|trabalho la ainda|to trabalhando la|ainda estou (la|na empresa)/.test(t)) v.sit='trabalha';
+  else if(/\b(sai|saida)\b/.test(t)){ v.sit='saiu'; u.add('sit'); }
+
+  // datas: o papel (admissão ou saída) vem da palavra-chave mais próxima
+  const kws=rx=>{const o=[];let k;rx.lastIndex=0;while((k=rx.exec(t))) o.push([k.index,k.index+k[0].length]);return o;};
+  const ak=kws(/\b(entrei|comecei|admitid[oa]|contratad[oa]|desde|fichad[oa]|inicio|comecou)\b/g);
+  const sk=kws(/\b(sai|saida|sair|demitid[oa]|demitiram|mandad[oa]|mandaram|embora|desligad[oa]|desligaram|dispensad[oa]|dispensaram|larguei|ultimo dia|demissao|contas|acordo)\b/g);
+  const dist=(list,s,e)=>list.reduce((mn,[a,b])=>{const d=b<=s?s-b:a>=e?a-e:0;return d<=90&&d<mn?d:mn;},999);
+  const datas=[], used=[]; const overl=(s,e)=>used.some(([a,b])=>s<b&&e>a);
+  const rxs=[
+    [/\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\b/g, x=>{let y=+x[3]; if(y<100) y+=2000; return {d:mkDate(y,+x[2],+x[1]),u:false};}],
+    [new RegExp('\\b(\\d{1,2}) de '+MRX+'(?: de (\\d{4}))?','g'), x=>({d:mkDate(x[3]?+x[3]:today.getUTCFullYear(),MES[x[2]],+x[1]),u:!x[3],noY:!x[3]})],
+    [new RegExp('\\b(?:em|no mes de|mes de|desde|final de|fim de|inicio de|comeco de) '+MRX+'(?: de| do ano de)?(?: (\\d{4}))?','g'), x=>({d:mkDate(x[2]?+x[2]:today.getUTCFullYear(),MES[x[1]],15),u:true,noY:!x[2]})],
+    [/\b(?:em|desde|de|no ano de) (19[89]\d|20[0-3]\d)\b/g, x=>({d:mkDate(+x[1],6,30),u:true})],
+  ];
+  rxs.forEach(([rx,fn])=>{ rx.lastIndex=0; while((m=rx.exec(t))){ const s=m.index,e=s+m[0].length; if(overl(s,e)) continue; used.push([s,e]); const r=fn(m); if(!r.d||isNaN(r.d)) continue; if(r.noY&&r.d>today) r.d=mkDate(r.d.getUTCFullYear()-1,r.d.getUTCMonth()+1,r.d.getUTCDate()); if(r.d>today) continue; const da=dist(ak,s,e), ds=dist(sk,s,e); if(da===999&&ds===999) continue; datas.push({...r,role:da<ds?'adm':'saida',s}); }});
+  datas.sort((a,b)=>a.s-b.s);
+  const dA=datas.find(x=>x.role==='adm'), dS=datas.filter(x=>x.role==='saida').pop();
+  if(dS){ v.saida=iso(dS.d); if(dS.u) u.add('saida'); if(!v.sit){ v.sit='saiu'; u.add('sit'); } }
+  if(dA){ v.adm=iso(dA.d); if(dA.u) u.add('adm'); }
+
+  const anosRx=new RegExp('\\b'+NRX+' anos?\\b','g');
+  while((m=anosRx.exec(t))){
+    const pre=t.slice(Math.max(0,m.index-80),m.index), pre25=t.slice(Math.max(0,m.index-25),m.index), pos=t.slice(m.index+m[0].length,m.index+m[0].length+20);
+    if(/(existe|fundad|idade|tenho|filho|filha|de frente|faz)\s*\S*\s*$/.test(pre25)||/^ atras/.test(pos)) continue;
+    if(/(trabalh|fazendo|completando|completar|de casa|fiquei|estou la|to la|tava la|registrad|empresa|servico)/.test(pre)||/^ (de casa|de empresa|trabalhando|na empresa|la\b)/.test(pos)){ ex.anos=toN(m[1]); break; }
+  }
+  if(ex.anos&&!v.adm){ const base=v.saida?parseD(v.saida):(v.sit==='trabalha'?today:null); if(base){ v.adm=iso(mkDate(base.getUTCFullYear()-ex.anos,base.getUTCMonth()+1,base.getUTCDate())); u.add('adm'); } }
+
+  const sm=t.match(/(salario|ganhava|ganho|recebia|recebo|piso|pagavam|pagava)[^\d]{0,30}?(?:r\$\s*)?(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d{1,2}))?(\s*mil\b)?/);
+  if(sm){ let n=parseFloat(sm[2].replace(/\./g,'')+(sm[3]?'.'+sm[3]:'')); if(sm[4]&&n<100) n*=1000; if(n>=400&&n<=60000) v.sal=n; }
+
+  const at=t.match(new RegExp('\\b'+NRX+' (?:meses|mes|salarios|salario|pagamentos)(?: de salario)? (?:atrasad|para tras|pra tras|sem receber|sem pagamento|sem pagar|em atraso|que nao (?:me )?pagaram)'));
+  if(at) v.atrasos=toN(at[1]);
+  else if(/(salario|pagamento)s? (atrasad|em atraso|para tras|pra tras)|atrasa(va|vam|ram|ndo) (o |os )?(meu |meus )?(salario|pagamento)|nao (me )?pagaram (o|meu) salario|sem receber salario/.test(t)){ v.atrasos=1; u.add('atrasos'); }
+
+  if(/fgts/.test(t)){
+    if(/fgts.{0,60}(nao (era |foi |tava |estava )?(deposit|recolh|caia|pago)|faltando|falta |atrasad|zerad|nunca deposit|sem deposito)|nao (depositava|depositavam|depositaram|recolhia|recolhiam).{0,40}fgts/.test(t)) v.fgts='falhas';
+    else if(/fgts.{0,40}(em dia|certinho|tudo certo|todo deposit|tudo deposit|direitinho)/.test(t)) v.fgts='dia';
+  }
+  if(/nao (me )?(pagaram|pagou|recebi|deram)( ainda)? (nada|nenhum|um real|minha rescisao|a rescisao|meus direitos)|sem receber nada|nao recebi (a |minha )?rescisao|ainda nao (me )?pagaram/.test(t)) v.verbas='nao';
+  else if(/(recebi|pagaram|pagou) (so|apenas|somente) (uma parte|metade|o saldo|parte|um pouco)|pagaram (so )?metade|faltou (receber|pagar)|veio faltando/.test(t)) v.verbas='parcial';
+  else if(/(recebi|pagaram|acertaram|pagou) tudo|recebi (a |minha )?rescisao (certinho|completa|toda)/.test(t)) v.verbas='pagas';
+
+  if(/abandon/.test(t)) v.abandono=true;
+  if(/(limpeza|faxina|atender (o )?telefone|atendia (o )?telefone|fazia de tudo|fazer de tudo|desvio de funcao|acumulo de funcao|fora da (minha )?funcao|nao era (minha|da minha) funcao|fazer (o )?administrativo|fazia (o )?administrativo|outras funcoes)/.test(t)) v.funcoes=true;
+
+  if(/assistente social/.test(t)) v.funcao='assistente';
+  else if(/bancari|caixa (de|do) banco/.test(t)) v.funcao='bancario';
+  else if(/telefonista|telemarketing|call ?center|teleatendimento|central de atendimento/.test(t)) v.funcao='telefonista';
+  const ft=t.match(/(?:trabalhava|trabalho|trabalhei|atuei|atuava|fui contratad[oa]|era registrad[oa])(?: \S+ anos?)? como ([a-z ]{3,40}?)(?=[.,;!?]| em | na | no | numa | num | de carteira| por | ha | durante)/);
+  const f2=ft?null:t.match(/\b(?:era|sou|fui) (auxiliar|vendedor|vendedora|motorista|cozinheir[oa]|garcom|garconete|atendente|recepcionista|operador|operadora|tecnic[oa]|enfermeir[oa]|pedreiro|servente|porteiro|vigilante|estoquista|repositor|gerente|secretaria|diarista|domestica|cuidador|cuidadora|baba|frentista|faxineir[oa]|ajudante)( de [a-z]+| [a-z]+)?/);
+  if(ft) ex.funcaoTxt=ft[1].trim(); else if(f2) ex.funcaoTxt=(f2[1]+(f2[2]||'')).trim();
+  if(ex.funcaoTxt&&!v.funcao) v.funcao='comum';
+
+  let dias=null;
+  if(/segunda a sabado|seg a sab|6x1|seis dias por semana|6 dias por semana/.test(t)) dias=6;
+  else if(/segunda a sexta|seg a sex|5x2|cinco dias por semana|5 dias por semana/.test(t)) dias=5;
+  else if(/domingo a domingo|todos os dias|sem folga|7 dias por semana/.test(t)) dias=7;
+  const hw=t.match(/(\d{1,2}) ?(?:horas?|h) (?:por semana|na semana|semanais|semanal)/);
+  if(hw) v.horas=+hw[1];
+  else {
+    let daily=null, certo=true;
+    const hd=t.match(/(\d{1,2}) ?(?:horas?|h) (?:por dia|ao dia|no dia|diarias|diaria|direto)/);
+    const hr=t.match(/\bdas? (\d{1,2})(?::(\d{2})|h(\d{2})?)?(?: horas?)? (?:as|ate) (\d{1,2})(?::(\d{2})|h(\d{2})?)?\b/);
+    if(hd) daily=+hd[1];
+    else if(hr){ let a=+hr[1]+((+hr[2]||+hr[3]||0)/60), b=+hr[4]+((+hr[5]||+hr[6]||0)/60); if(b<=a) b+=12; let d=b-a; if(d>6) d-=1; daily=Math.round(d*10)/10; }
+    else if(/tempo integral|periodo integral|horario comercial/.test(t)){ daily=8; certo=false; }
+    if(daily){ v.horas=Math.round(daily*(dias||5)); if(!dias||!certo) u.add('horas'); }
+  }
+
+  if(/acidente (de|do|no) trabalho|me machuquei (no|trabalhando)|acidente trabalhando|cai (do|da|no) (trabalho|servico|escada|andaime)/.test(t)) v.doenca='acidente';
+  else if(/(doente|doenca|problema de saude|depress|ansiedade|burnout|sindrome|panico|hernia|tendinite|bursite|lesao|coluna|lombar|afastad|auxilio[- ]doenca|cirurgia|\bler\b|\bdort\b|estresse|psiquiatr)/.test(t)){
+    if(/(por causa do (trabalho|servico|emprego)|o trabalho (me )?(deixou|causou|piorou|adoeceu)|peguei no trabalho|culpa do trabalho|carregando peso|pegava peso|esforco repetitivo)/.test(t)) v.doenca='trabalho';
+    else { v.doenca='sem'; u.add('doenca'); }
+  }
+  if(/(atestado|laudo|relatorio medico|\bcid\b|receita medica)/.test(t)) v.laudo=true;
+  if(/(humilh|assedi|gritava|gritavam|xingava|xingavam|constrang|me tratava mal|perseguid|perseguia|ameacava|ameacavam)/.test(t)) v.assedio=true;
+  if(/(insalubr|periculos|produtos? quimicos?|ruido|inflamav|eletricidade|esgoto|camara fria|combustive|agrotox)/.test(t)){ v.insalubre=true; u.add('insalubre'); }
+  if(/(tenho|guardei|salvei)(?: tudo| todos?| todas?)?(?: os| as| uns| umas)? (prints?|mensage|conversas?|audios?|fotos?|videos?|comprovantes?|extratos?)|testemunh|colegas? (que )?(viu|viram|sabe|sabem|podem|pode|confirma)|tenho como provar|tenho provas?/.test(t)) v.provas=true;
+  const fv=t.match(new RegExp('\\b'+NRX+' (?:ferias|periodos de ferias) (?:vencid|sem tirar|atrasad|que nao tirei)'));
+  if(fv) v.ferias=toN(fv[1]); else if(/nunca (tirei|tive) ferias|ferias vencidas|ferias atrasadas|sem tirar ferias/.test(t)){ v.ferias=1; u.add('ferias'); }
+
+  if(/(assinaram|assinou|registraram) (a carteira )?(so )?depois|(primeiros?|uns|os) \S+ (meses|anos) sem (carteira|registro)/.test(t)) v.ctps='parcial';
+  else if(/sem carteira|sem registro|nunca (assinaram|assinou)|nao (assinaram|assinou|me registraram)|nao (era|tinha|tava|foi) (de )?carteira|carteira nao (era )?assinada/.test(t)) v.ctps='nao';
+  else if(/carteira assinada|de carteira|registrad[oa]|\bclt\b/.test(t)) v.ctps='sim';
+  else if(/\b(mei|pj|pessoa juridica)\b/.test(t)){ v.ctps='nao'; u.add('ctps'); }
+
+  // horário no formato "entrava às 8 e saía às 18"
+  if(v.horas===undefined){ const en=t.match(/entrava (?:as |a )?(\d{1,2})(?::(\d{2})|h(\d{2})?)?.{0,40}?sai(?:a)? (?:as |a )?(\d{1,2})(?::(\d{2})|h(\d{2})?)?/); if(en){ let a=+en[1]+((+en[2]||+en[3]||0)/60), b=+en[4]+((+en[5]||+en[6]||0)/60); if(b<=a) b+=12; let d=b-a; if(d>6) d-=1; v.horas=Math.round(d*(dias||5)); if(!dias) u.add('horas'); } }
+  // respostas negativas também contam como informação
+  if(/nao (teve|tinha|houve|tive) (nenhum )?salario atrasado|salario (sempre )?(veio )?em dia|nunca atrasou|sempre pagaram (o salario )?em dia/.test(t)){ v.atrasos=0; u.delete('atrasos'); }
+  if(/nao tenho (nenhuma |nenhum )?(prova|print|mensage|testemunh|audio)/.test(t)) v.provas=false;
+  if(/tirei ferias (todo ano|todos os anos|normal)|sempre tirei ferias/.test(t)){ v.ferias=0; u.delete('ferias'); }
+  if(/(nao tive|nunca tive|nao tenho) (nenhum )?(problema de saude|doenca|acidente)/.test(t)){ v.doenca='nao'; u.delete('doenca'); }
+  return {v,u,ex};
+}
+
+
+/* ---------- Conversa inteira: separa cliente e vendedor ---------- */
+const HEAD=/^\s*(?:\[\s*([^\]]{4,32})\]\s*|(\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s?[ap]\.?\s?m\.?)?)\s+-\s+)?([^:\n\[\]]{1,40}?):\s+(.*)$/i;
+const LIXO=/(<?m[ií]dia oculta>?|arquivo de m[ií]dia oculto|[áa]udio ocultado|imagem ocultada|esta mensagem foi apagada|mensagem apagada|<attached:[^>]*>)/gi;
+function parseConversa(raw){
+  const msgs=[]; let comTempo=0;
+  raw.split(/\r?\n/).forEach(l=>{
+    const h=l.match(HEAD); const nome=h&&h[3]?h[3].trim():null; const tempo=!!(h&&(h[1]||h[2]));
+    const valido=nome&&/[a-zA-ZÀ-ÿ0-9+]/.test(nome)&&nome.split(/\s+/).length<=6&&!/^(https?|obs|ps|ex|ok)$/i.test(nome);
+    if(valido){ if(tempo) comTempo++; msgs.push({who:nome,text:h[4],tempo}); }
+    else if(l.trim()){ if(msgs.length) msgs[msgs.length-1].text+=' '+l.trim(); else msgs.push({who:null,text:l.trim(),tempo:false}); }
+  });
+  const nomes={}; msgs.forEach((m,i)=>{ if(!m.who) return; const n=nomes[m.who]||(nomes[m.who]={name:m.who,count:0,tempo:0,first:i}); n.count++; if(m.tempo) n.tempo++; });
+  let sp=Object.values(nomes); sp=comTempo?sp.filter(x=>x.tempo>0):sp.filter(x=>x.count>=2);
+  if(sp.length<2) return null;
+  const ok=new Set(sp.map(x=>x.name)); const out=[];
+  msgs.forEach(m=>{ if(m.who&&ok.has(m.who)) out.push({who:m.who,text:m.text}); else if(out.length) out[out.length-1].text+=' '+(m.who?m.who+': ':'')+m.text; else out.push({who:null,text:(m.who?m.who+': ':'')+m.text}); });
+  out.forEach(m=>{ m.text=m.text.replace(LIXO,' ').trim(); });
+  sp.sort((a,b)=>a.first-b.first);
+  return {speakers:sp,msgs:out.filter(m=>m.text)};
+}
+function ehVendedor(n){ const x=norm(n), v=norm($('vend').value||'').split(' ')[0]; return (v.length>2&&x.includes(v))||/(vendedor|vendedora|atendente|consultor|consultora|escritorio|advoca|advog|simeao|suporte|comercial|equipe|julia|assistente virtual)/.test(x); }
+function chutarCliente(sp){ const c=sp.find(s=>/cliente/.test(norm(s.name))); if(c) return c.name; const n=sp.filter(s=>!ehVendedor(s.name)); return (n[0]||sp[0]).name; }
+let falantesKey='';
+function preencherFalantes(conv){
+  const key=conv.speakers.map(s=>s.name).join('|'); const sel=$('quemCliente');
+  if(key!==falantesKey){ falantesKey=key; sel.innerHTML=conv.speakers.map(s=>`<option value="${esc(s.name)}">${esc(s.name)} (${s.count} mensagens)</option>`).join(''); sel.value=chutarCliente(conv.speakers); }
+  $('falaWrap').hidden=false;
+  const nC=conv.msgs.filter(m=>m.who===sel.value).length;
+  $('falaInfo').textContent=`${nC} mensagens do cliente e ${conv.msgs.length-nC} dos outros. Só o que o cliente diz vira fato; as perguntas do vendedor dão contexto às respostas curtas, como "sim" ou "2.300".`;
+}
+const P2=[[/\bvoce foi\b/g,'fui'],[/\bvoce era\b/g,'eu era'],[/\bvoce tinha\b/g,'eu tinha'],[/\bvoce tem\b/g,'tenho'],[/\bvoce teve\b/g,'tive'],[/\bvoce recebeu\b/g,'recebi'],[/\bvoce recebia\b/g,'recebia'],[/\bvoce ganhava\b/g,'ganhava'],[/\bvoce saiu\b/g,'sai'],[/\bvoce trabalhava\b/g,'trabalhava'],[/\bvoce ainda trabalha\b/g,'ainda trabalho'],[/\bvoce trabalha\b/g,'trabalho'],[/\bvoce pediu\b/g,'pedi'],[/\bvoce comecou\b/g,'comecei'],[/\bvoce entrou\b/g,'entrei'],[/\bvoce fazia\b/g,'fazia'],[/\bvoce ficou\b/g,'fiquei'],[/\bte mandaram\b/g,'me mandaram'],[/\bte demitiram\b/g,'me demitiram'],[/\bte pagaram\b/g,'me pagaram'],[/\bsua carteira\b/g,'minha carteira'],[/\bseu salario\b/g,'meu salario'],[/\bseu fgts\b/g,'meu fgts'],[/\bsua rescisao\b/g,'minha rescisao'],[/\bvoce\b/g,'eu']];
+const YES=/^\s*(sim|s|ss|tive|teve|tinha|tenho|era|foi|isso|exato|exatamente|claro|aham|uhum|com certeza|correto|certo|fui|recebi|tirei)\b/;
+const NO=/^\s*(nao|n|nunca|nada|nenhum|nenhuma|nem)\b/;
+const WH=/\b(quando|quanto|quantos|quantas|qual|quais|onde|desde|que horas|que dia|que data)\b/;
+function topico(q){
+  if(/(quando|que dia|que data|em que mes|em que ano).{0,30}(comecou|entrou|admitid|contratad)|data de (admissao|entrada)|desde quando/.test(q)) return 'adm';
+  if(/(quando|que dia|que data|em que mes|em que ano).{0,30}(saiu|demitid|mandad|desligad|ultimo dia)|data (da|de) (saida|demissao)/.test(q)) return 'saida';
+  if(/atras|sem receber|deixaram de pagar/.test(q)) return 'atrasos';
+  if(/salario|quanto (voce )?(ganhava|recebia|ganha)|remuneracao/.test(q)) return 'sal';
+  if(/rescisao|seus direitos|acerto/.test(q)) return 'verbas';
+  if(/fgts/.test(q)) return 'fgts';
+  if(/carteira|registr/.test(q)) return 'ctps';
+  if(/ferias/.test(q)) return /vencid|sem tirar|acumulad/.test(q)?'ferias_venc':'ferias_tirou';
+  if(/print|prova|testemunh|audio|mensage|extrato/.test(q)) return 'provas';
+  if(/saude|doenca|doente|acidente|atestado|laudo/.test(q)) return 'saude';
+  if(/horario|que horas|jornada|quantas horas|horas por/.test(q)) return 'horas';
+  if(/funcao|cargo|o que (voce )?fazia|trabalhava de que|sua area/.test(q)) return 'funcao';
+  return null;
+}
+function contextualizar(q,a){
+  const qa=norm(q||''), an=norm(a).trim();
+  if(!qa||an.length>160) return a;
+  const perg=(qa.split(/(?<=[?.!])\s+/).filter(x=>x.includes('?')).pop()||'').replace(/\?/g,'').trim();
+  if(!perg) return a;
+  const tp=topico(perg), aberta=WH.test(perg);
+  if(!aberta&&NO.test(an)){ const neg={atrasos:'nao teve salario atrasado',ctps:'sem carteira',provas:'nao tenho prova',saude:'nao tive problema de saude',verbas:'nao recebi nada da rescisao',ferias_tirou:'nunca tirei ferias',ferias_venc:'tirei ferias todo ano'}[tp]; return neg?neg+'. '+a:a; }
+  if(!aberta&&YES.test(an)){
+    if(tp==='verbas') return (/tudo|complet|certinho/.test(an)?'recebi tudo':/parte|metade|pouco/.test(an)?'recebi so uma parte':'')+'. '+a;
+    const pos={ferias_tirou:'tirei ferias todo ano',ferias_venc:'ferias vencidas',provas:'tenho prints',atrasos:'salario atrasado',ctps:'carteira assinada',saude:'problema de saude'}[tp];
+    let p=perg; P2.forEach(([r,s])=>{ p=p.replace(r,s); });
+    return (pos||p)+'. '+a;
+  }
+  if(tp==='sal') return /salario|ganhava|recebia/.test(an)?a:'meu salario era '+a;
+  if(tp==='horas') return /^\s*\d{1,2} ?(h|horas?)\s*$/.test(an)?a+' por dia':a;
+  if(tp==='funcao') return /como/.test(an)?a:'trabalhava como '+a.replace(/[.!\s]+$/,'')+'.';
+  const pre={adm:'comecei em ',saida:'ultimo dia ',fgts:'fgts '}[tp];
+  return pre?pre+a:a;
+}
+function textoCliente(conv,cli){ const out=[]; let buf='', prevCli=false; conv.msgs.forEach(m=>{ if(m.who===cli){ out.push(contextualizar(buf,m.text)); prevCli=true; } else { if(prevCli){ buf=''; prevCli=false; } buf+=' '+m.text; } }); return out.join('\n'); }
+
+/* ---------- Documentos: PDF ou foto, lidos no próprio navegador ---------- */
+const PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', PDFW='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js', TESS='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+const libs={};
+function loadScript(src){ if(!libs[src]) libs[src]=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=()=>{ delete libs[src]; rej(new Error('Sem internet para carregar o leitor de documentos. Conecte e tente de novo.')); }; document.head.appendChild(s); }); return libs[src]; }
+let tess=null;
+async function ocr(img){ await loadScript(TESS); if(!tess) tess=await Tesseract.createWorker('por'); const r=await tess.recognize(img); return (r&&r.data&&r.data.text)||''; }
+async function textoPDF(buf,step){
+  await loadScript(PDFJS); pdfjsLib.GlobalWorkerOptions.workerSrc=PDFW;
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out='';
+  for(let i=1;i<=Math.min(pdf.numPages,15);i++){ const p=await pdf.getPage(i); const c=await p.getTextContent(); out+=c.items.map(it=>it.str+(it.hasEOL?'\n':' ')).join('')+'\n'; }
+  if(out.replace(/\s/g,'').length>80) return {text:out,ocr:false};
+  let o='';
+  for(let i=1;i<=Math.min(pdf.numPages,3);i++){ step('PDF escaneado. Lendo a página '+i+' como imagem...'); const p=await pdf.getPage(i); const vp=p.getViewport({scale:2}); const cv=document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height; await p.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; o+=await ocr(cv)+'\n'; }
+  return {text:o,ocr:true};
+}
+const DT='(\\d{2})\\s?[\\/.-]\\s?(\\d{2})\\s?[\\/.-]\\s?(\\d{4})';
+function campoData(t,labels){ const m=t.match(new RegExp('(?:'+labels+')[^0-9]{0,40}'+DT)); if(!m) return null; const d=mkDate(+m[3],+m[2],+m[1]); return (+m[2]>=1&&+m[2]<=12&&d<=today)?iso(d):null; }
+function campoValor(t,labels){ const m=t.match(new RegExp('(?:'+labels+')[^0-9]{0,40}(?:r\\$\\s*)?(\\d{1,3}(?:\\.\\d{3})*,\\d{2})')); return m?parseFloat(m[1].replace(/\./g,'').replace(',','.')):null; }
+const STOP=new Set(['data','salario','remuneracao','admissao','cbo','tipo','carga','horaria','codigo','empregador','cnpj','matricula','departamento','setor','categoria','vinculo','sindicato']);
+function parseDoc(raw,ocrUsado){
+  const t=norm(raw).replace(/[ \t]+/g,' ');
+  const v={}, u=new Set(), info=[]; let type='outro', label='Documento', funcaoTxt='';
+  if(/termo de rescisao|\btrct\b|causa do afastamento|termo de quitacao/.test(t)){ type='trct'; label='TRCT'; }
+  else if((/fgts/.test(t)&&/extrato|saldo|deposito|cred(ito)? dep/.test(t))||/fins re[cs]?c?isorios|historico de movimentacoes|credito de jam|para uso da caixa/.test(t)){ type='fgts'; label='Extrato FGTS'; }
+  else if(/\bcnis\b|extrato previdenciario|relacoes previdenciarias/.test(t)){ type='cnis'; label='CNIS'; }
+  else if(/carteira de trabalho|\bctps\b|contratos? de trabalho/.test(t)){ type='ctps'; label='CTPS'; }
+  else if(/recibo de pagamento|demonstrativo de pagamento|holerite|contracheque|contra-cheque|folha de pagamento/.test(t)){ type='holerite'; label='Contracheque'; }
+  else if(/atestado|laudo|\bcid\b/.test(t)){ type='atestado'; label='Atestado'; }
+  if(type!=='atestado'&&type!=='outro'){
+    const adm=campoData(t,'data de admissao|data admissao|admissao|admitido em'); if(adm) v.adm=adm;
+    const sai=campoData(t,'data do afastamento|data de afastamento|data de desligamento|desligamento|data de saida|data da demissao|data de demissao|afastamento'); if(sai) v.saida=sai;
+  }
+  if(type==='ctps'&&(t.match(/admissao/g)||[]).length>1){ u.add('adm'); u.add('saida'); info.push('Mais de um contrato no documento. Confira se as datas são do emprego certo.'); }
+  if(['trct','ctps','holerite'].includes(type)){
+    const sal=campoValor(t,'remuneracao mes anterior|remuneracao mes ant|remuneracao para fins rescisorios|remuneracao contratual|salario contratual|salario base|sal\\. base|salario inicial|remuneracao inicial|ultima remuneracao|remuneracao|salario');
+    if(sal&&sal>=300&&sal<=80000) v.sal=sal;
+    const cg=t.match(/(?:cargo|ocupacao|funcao)\s*[:\-]?\s*(?:\d{4}\s?-?\s?\d{2}\s*-?\s*)?([a-z][a-z ]{2,60})/);
+    if(cg){ const w=[]; for(const x of cg[1].trim().split(' ')){ if(STOP.has(x)||w.length>=5) break; w.push(x); } if(w.join(' ').length>3) funcaoTxt=w.join(' '); }
+    v.ctps='sim';
+  }
+  if(/assistente social/.test(t)) v.funcao='assistente'; else if(/bancari/.test(t)) v.funcao='bancario'; else if(/telefonista|operador de telemarketing|teleatendimento/.test(t)) v.funcao='telefonista';
+  if(type==='trct'){
+    const c=((t.match(/causa do afastamento.{0,140}/)||[''])[0]+' '+(t.match(/codigo (do )?afastamento.{0,40}/)||[''])[0]).trim()||t;
+    let sit=null;
+    if(/\bri ?2\b|rescisao indireta/.test(c)) sit='saiu';
+    else if(/\bpd ?0\b|pedido de demissao|iniciativa do empregado/.test(c)) sit='pediu';
+    else if(/\bjc ?2\b|com justa causa|por justa causa/.test(c)&&!/sem justa causa/.test(c)) sit='justa';
+    else if(/484|comum acordo|\bacordo\b/.test(c)) sit='acordo';
+    else if(/\bsj ?2\b|sem justa causa|dispensa|despedida/.test(c)) sit='demitido';
+    if(sit) v.sit=sit;
+    const liq=campoValor(t,'total liquido|valor liquido|liquido a receber'); if(liq) info.push('Valor líquido no termo: '+brl(liq)+'. Pergunte se foi pago e quando.');
+    if(/aviso previo indenizado/.test(t)) info.push('O termo traz aviso prévio indenizado.');
+  }
+  if(type==='fgts'){
+    let m; const comp=new Set(), cred=new Set();
+    const r1=/(?:dep|deposito|credito|cred|competencia|comp)[^0-9]{0,30}(\d{2})\s?[\/.-]\s?(\d{4})/g; while((m=r1.exec(t))){ const mm=+m[1]; if(mm>=1&&mm<=12) comp.add(+m[2]*12+mm-1); }
+    const r2=/(\d{2})\/(\d{2})\/(\d{4})[^0-9]{0,25}(?:cred|dep|credito|deposito)/g; while((m=r2.exec(t))){ const mm=+m[2]; if(mm>=1&&mm<=12) cred.add(+m[3]*12+mm-1); }
+    const MES={janeiro:1,fevereiro:2,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12}; const atraso=[];
+    const r3=new RegExp('deposito\\s+(em atraso\\s+)?('+Object.keys(MES).join('|')+')\\s+(\\d{4})','g'); while((m=r3.exec(t))){ comp.add(+m[3]*12+MES[m[2]]-1); if(m[1]) atraso.push(m[2]+'/'+m[3]); }
+    if(atraso.length) info.push('FGTS de '+atraso.join(', ')+' foi depositado com atraso. Pergunte se a rescisão e as verbas também atrasaram.');
+    const meses=comp.size>=3?comp:cred;
+    if(meses.size>=3){
+      const arr=[...meses].sort((a,b)=>a-b); const falt=[]; for(let x=arr[0];x<=arr[arr.length-1];x++) if(!meses.has(x)) falt.push(x);
+      const mmaa=x=>String(x%12+1).padStart(2,'0')+'/'+Math.floor(x/12);
+      if(falt.length){ v.fgts='falhas'; info.push('Meses sem depósito aparente: '+falt.slice(0,12).map(mmaa).join(', ')+(falt.length>12?' e mais '+(falt.length-12):'')+'.'); }
+      else { v.fgts='dia'; info.push(arr.length+' meses com depósito, de '+mmaa(arr[0])+' a '+mmaa(arr[arr.length-1])+', sem buraco aparente.'); }
+      u.add('fgts');
+    } else info.push('Não consegui ler os depósitos mês a mês. Confira o extrato com o cliente.');
+    const saldo=campoValor(t,'valor para fins re(?:s)?cisorios|saldo para fins rescisorios|saldo disponivel|saldo total|saldo'); if(saldo!==null) info.push('Saldo: '+brl(saldo)+'.');
+  }
+  if(type==='holerite'&&/horas? extras?/.test(t)) info.push('O contracheque mostra horas extras pagas. Compare com o horário que o cliente contou.');
+  if(type==='atestado'){ v.laudo=true; v.doenca='sem'; u.add('doenca'); const cid=t.match(/\bcid(?:-?10)?\s*[:\-]?\s*([a-z]\s?\d{2}(?:\.\d)?)/); if(cid) info.push('CID '+cid[1].toUpperCase().replace(' ','')+'. Pergunte se tem relação com o trabalho.'); }
+  if(type==='cnis'){
+    const vs=[...t.matchAll(/(?:empregado ou agente(?: publico)?|publico|domestico|avulso)\s+(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2})\/(\d{2})\/(\d{4}))?/g)];
+    const encs=vs.filter(x=>x[4]); const enc=encs[encs.length-1];
+    if(enc){ v.adm=iso(mkDate(+enc[3],+enc[2],+enc[1])); v.saida=iso(mkDate(+enc[6],+enc[5],+enc[4])); v.ctps='sim'; }
+    if(encs.length>1){ u.add('adm'); u.add('saida'); info.push('Mais de um contrato encerrado no CNIS. Usei o mais recente, confira se é o emprego certo.'); }
+    vs.filter(x=>!x[4]).forEach(x=>info.push('Vínculo ativo desde '+x[1]+'/'+x[2]+'/'+x[3]+'. O cliente já está em outro emprego.'));
+    if(!vs.length) info.push('CNIS lido, mas não achei os vínculos. Confira as datas com o cliente.');
+  }
+  if(ocrUsado) Object.keys(v).forEach(k=>u.add(k));
+  return {type,label,v,u,info,funcaoTxt};
+}
+function fmtRaw(k,val){ if(k==='adm'||k==='saida') return fmtD(parseD(val)); if(k==='sal') return brl(val); if(typeof val==='boolean') return val?'sim':'não'; const el=$(k); if(el&&el.tagName==='SELECT'){ const o=[...el.options].find(o=>o.value===val); return o?o.text:val; } return val; }
+function renderDocs(){
+  $('docList').innerHTML=docsUp.map((d,i)=>{
+    const campos=Object.entries(d.v).map(([k,val])=>LBL[k]+': '+fmtRaw(k,val)).join(' · ');
+    let corpo='';
+    if(d.status==='lendo') corpo=`<span class="dstat">${esc(d.step)}</span>`;
+    else if(d.status==='erro') corpo=`<span class="dstat err">${esc(d.err)}</span>`;
+    else corpo=`<span class="dstat">${esc(campos||'Nenhum campo reconhecido neste documento.')}${d.ocr?' (lido de imagem, confira)':''}</span>`+d.info.map(x=>`<span class="dinfo">${esc(x)}</span>`).join('');
+    return `<li class="docitem ${d.status}"><div class="dtop"><span class="dname">${esc(d.name)}</span>${d.label?`<span class="badge">${esc(d.label)}</span>`:''}<button type="button" class="x" data-rm="${i}" aria-label="Remover ${esc(d.name)}">×</button></div>${corpo}</li>`;
+  }).join('');
+}
+async function addFiles(files){
+  for(const f of [...files]){
+    const d={name:f.name,status:'lendo',step:'Lendo o arquivo...',type:null,label:'',v:{},u:new Set(),info:[]}; docsUp.push(d); renderDocs();
+    try{
+      let r;
+      if(/pdf/i.test(f.type)||/\.pdf$/i.test(f.name)) r=await textoPDF(await f.arrayBuffer(),s=>{ d.step=s; renderDocs(); });
+      else if(/^image\//.test(f.type)){ d.step='Lendo a foto. A primeira leitura do dia demora um pouco mais...'; renderDocs(); r={text:await ocr(f),ocr:true}; }
+      else throw new Error('Formato não aceito. Use PDF, JPG ou PNG.');
+      if(r.text.replace(/\s/g,'').length<40) throw new Error('Não encontrei texto. Tente uma foto mais nítida, reta e com boa luz.');
+      Object.assign(d,parseDoc(r.text,r.ocr),{status:'ok',ocr:r.ocr});
+      if(d.type==='outro') d.label='Não identificado';
+    }catch(e){ d.status='erro'; d.err=(e&&e.message)||'Falha ao ler o arquivo.'; }
+    renderDocs(); analisarTudo(); $('banner').hidden=true;
+  }
+}
+
+/* ---------- Junta conversa e documentos ---------- */
+function analisarTudo(){
+  const raw=$('colado').value.trim();
+  let r={v:{},u:new Set(),ex:{funcaoTxt:'',anos:null}}, cliTxt='';
+  if(raw){
+    const conv=parseConversa(raw);
+    if(conv){ preencherFalantes(conv); const cli=$('quemCliente').value; cliTxt=conv.msgs.filter(m=>m.who===cli).map(m=>m.text).join(' '); r=lerTexto(textoCliente(conv,cli)); if(!r.v.cli&&!/^\+?[\d\s()-]+$/.test(cli)&&!/cliente/i.test(cli)) r.v.cli=cli; }
+    else { $('falaWrap').hidden=true; falantesKey=''; cliTxt=raw; r=lerTexto(raw); }
+    const limpo=cliTxt.trim().replace(/\s+/g,' '); r.v.relato=limpo.length>420?limpo.slice(0,420)+'…':limpo;
+  } else { $('falaWrap').hidden=true; falantesKey=''; }
+  const src={}; Object.keys(r.v).forEach(k=>{ src[k]='conversa'; });
+  docsUp.filter(d=>d.status==='ok').forEach(d=>{
+    Object.entries(d.v).forEach(([k,val])=>{ if(SOFT.has(k)&&src[k]==='conversa') return; r.v[k]=val; src[k]=d.label; if(d.u.has(k)) r.u.add(k); else r.u.delete(k); });
+    if(d.funcaoTxt&&!r.ex.funcaoTxt) r.ex.funcaoTxt=d.funcaoTxt;
+  });
+  aplicar(r,src);
+}
+function aplicar(r,src){
+  fromText.clear(); unsure.clear(); fonte={}; Object.keys(qToggle).forEach(k=>delete qToggle[k]);
+  extra={funcaoTxt:r.ex.funcaoTxt||'',anos:r.ex.anos||null};
+  FIELDS.forEach(k=>{
+    if(k==='vend'||k==='incValor'||edited.has(k)) return;
+    const el=$(k); const has=(k in r.v)&&r.v[k]!==null&&r.v[k]!==undefined&&r.v[k]!=='';
+    const val=has?r.v[k]:VAZIO[k];
+    if(el.type==='checkbox') el.checked=!!val; else el.value=val;
+    if(has&&k!=='relato'){ fromText.add(k); fonte[k]=(src&&src[k])||'conversa'; }
+  });
+  r.u.forEach(k=>{ if(fromText.has(k)) unsure.add(k); });
+  render();
+}
+function dispVal(k){ const el=$(k); if(el.type==='checkbox') return el.checked?'sim':'não'; if(el.tagName==='SELECT') return el.selectedOptions[0].text; const x=el.value; if(k==='adm'||k==='saida') return fmtD(parseD(x)); if(k==='sal') return brl(+x); if(k==='horas') return x+'h por semana'; if(k==='atrasos') return x+' mês(es)'; if(k==='ferias') return x+' período(s)'; return x; }
+function renderFacts(){
+  const h=FIELDS.filter(k=>fromText.has(k)&&k!=='relato').map(k=>{
+    let val=dispVal(k); if(k==='funcao'&&extra.funcaoTxt) val=extra.funcaoTxt+($('funcao').value!=='comum'?' ('+dispVal(k)+')':'');
+    const doc=fonte[k]&&fonte[k]!=='conversa';
+    return `<span class="fact${unsure.has(k)?' unsure':''}${doc?' doc':''}"><b>${LBL[k]}:</b> ${esc(val)}${doc?`<i>${esc(fonte[k])}</i>`:''}</span>`;
+  });
+  if(extra.anos) h.unshift(`<span class="fact"><b>Tempo de casa:</b> ${extra.anos} anos</span>`);
+  $('facts').innerHTML=h.length?h.join(''):'<p class="empty">Cole a conversa ou suba um documento.</p>';
+}
+function marcar(){ FIELDS.forEach(k=>{ const lab=$(k).closest('label'); if(!lab) return; lab.classList.toggle('auto',fromText.has(k)&&!unsure.has(k)&&!edited.has(k)); lab.classList.toggle('unsure',unsure.has(k)); }); }
+
+function listarPerguntas(s,a){
+  if(a.cls==='descartar') return [{k:'saida',q:'Pode me confirmar a data exata em que você saiu? Pelo que entendi, já passaram mais de 2 anos.',w:'Prazo de 2 anos para entrar com a ação'}];
+  const L=[]; const add=(k,q,w)=>L.push({k,q,w});
+  if(!isKnown('sit')) add('sit','Você ainda trabalha lá ou já saiu? Se saiu, foi mandado embora, pediu as contas ou saiu por conta própria?','Define se é demissão, pedido ou rescisão indireta');
+  if(a.ended&&(!isKnown('saida')||unsure.has('saida'))) add('saida',unsure.has('saida')?'Qual foi o dia exato em que você saiu?':'Em que data você saiu da empresa?','Prazo de 2 anos e cálculo das verbas');
+  if(!isKnown('sal')) add('sal','Quanto era seu salário por mês?','Base de todo o cálculo');
+  if(!isKnown('adm')||unsure.has('adm')) add('adm',unsure.has('adm')?'Em que mês e ano você começou a trabalhar lá?':'Quando você começou a trabalhar lá?','Tempo de casa, aviso prévio e férias');
+  if(!isKnown('horas')||unsure.has('horas')) add('horas','Qual era seu horário? De que horas a que horas, e em quais dias da semana?','Horas extras');
+  if(a.ended&&!isKnown('verbas')) add('verbas','Você recebeu a rescisão? Recebeu tudo, só uma parte ou nada?','Multa do art. 477');
+  if(s.sit==='justa') add('justa','Qual motivo a empresa deu para a justa causa? Você tinha recebido advertência ou suspensão antes?','Chance de reverter a justa causa');
+  if(['','saiu','trabalha'].includes(s.sit)&&(!isKnown('atrasos')||unsure.has('atrasos'))) add('atrasos','Teve salário atrasado ou algum mês sem receber? Quantos meses?','Rescisão indireta');
+  if(s.fgts==='nao_sei') add('fgts','Você consegue abrir o app do FGTS e ver se os depósitos de todos os meses estão lá?','FGTS faltando fortalece o caso');
+  if(!isKnown('funcao')) add('funcao','Qual era sua função lá?','Algumas funções têm jornada menor');
+  if(!isKnown('ctps')||unsure.has('ctps')) add('ctps','Sua carteira foi assinada desde o primeiro dia de trabalho?','Período sem registro');
+  if(s.doenca==='sem'&&unsure.has('doenca')) add('relacao','Esse problema de saúde tem alguma relação com o trabalho? Você chegou a ser afastado pelo INSS?','Estabilidade e indenização');
+  if(s.doenca!=='nao'&&!s.laudo) add('laudo','Você tem atestado, laudo ou receita do médico?','Prova da doença');
+  if(s.assedio) add('assedio','Alguém presenciou como você era tratado? Tem mensagem ou áudio disso?','Prova do dano moral');
+  if(s.ferias>0&&unsure.has('ferias')) add('ferias','Quantos anos você ficou sem tirar férias?','Férias em dobro');
+  if(!s.provas) add('provas','Você tem prints, áudios, extratos ou algum colega que possa confirmar o que aconteceu?','Sem prova o caso enfraquece');
+  if(a.ended&&!isKnown('ferias')) add('ferias2','Você tirou férias todos os anos?','Férias vencidas');
+  if(s.doenca==='nao'&&!isKnown('doenca')) add('saude','Teve algum problema de saúde ou acidente por causa do trabalho?','Estabilidade e indenização');
+  if(s.insalubre&&unsure.has('insalubre')) add('risco','Que tipo de risco tinha no seu trabalho? Produto químico, barulho alto, eletricidade?','Adicional de insalubridade ou periculosidade');
+  return L;
+}
+function renderPerguntas(s,a){
+  lastQs=listarPerguntas(s,a);
+  $('qs').innerHTML=lastQs.length?lastQs.map((q,i)=>{ const on=q.k in qToggle?qToggle[q.k]:i<5; return `<li><label><input type="checkbox" id="q_${q.k}" data-q="${q.k}"${on?' checked':''}><span>${q.q}<span class="why">${q.w}</span></span></label></li>`; }).join(''):'<li class="empty">Nada importante faltando. Use a mensagem de retorno lá embaixo.</li>';
+  montarQMsg();
+}
+function montarQMsg(){
+  const sel=lastQs.filter((q,i)=>q.k in qToggle?qToggle[q.k]:i<5);
+  const nome=($('cli').value||'').trim().split(' ')[0]; const vend=$('vend').value.trim();
+  let t=`Oi${nome?', '+nome:''}! ${vend?'Aqui é '+vend+'. ':''}Obrigado por me explicar sua situação. Pra eu analisar direitinho com o advogado, me responde só mais algumas coisas:\n\n`;
+  sel.forEach((q,i)=>t+=`${i+1}. ${q.q}\n`);
+  const rec=new Set(docsUp.filter(d=>d.status==='ok').map(d=>d.type)); const falta=[]; if(!rec.has('ctps')) falta.push('o print da Carteira de Trabalho Digital'); if(!rec.has('fgts')) falta.push('o extrato do app do FGTS');
+  t+='\nPode responder por áudio, se for mais fácil.'+(falta.length?' Se conseguir, me manda também '+falta.join(' e ')+'.':'');
+  $('qMsg').textContent=sel.length?t:'';
+}
+function setStatus(msg,err){ const el=$('iaStatus'); el.textContent=msg||''; el.className='status'+(err?' err':''); }
+
+function read(){ const s={}; FIELDS.forEach(k=>{const el=$(k); s[k]= el.type==='checkbox'?el.checked:el.value;}); s.sal=parseFloat(s.sal)||0; s.atrasos=parseInt(s.atrasos)||0; s.ferias=parseInt(s.ferias)||0; s.horas=parseFloat(s.horas)||0; return s; }
+
+function analisar(s){
+  const sig=[]; const docs=new Set(['RG e CPF','Comprovante de residência','Print do contrato na Carteira de Trabalho Digital','Extrato completo do FGTS (app FGTS)','Últimos contracheques']);
+  const ended=!!s.sit && s.sit!=='trabalha';
+  const adm=parseD(s.adm); const saida=ended?parseD(s.saida):null;
+  const lim=LIMITES[s.funcao];
+  let prescrito=false;
+
+  if(ended && saida){
+    const limite2=new Date(Date.UTC(saida.getUTCFullYear()+2,saida.getUTCMonth(),saida.getUTCDate()));
+    const dias=(limite2-today)/864e5;
+    if(dias<0){prescrito=true; sig.push({n:'bloqueio',t:'Prazo de 2 anos já passou',b:'Art. 7º, XXIX, CF; art. 11 da CLT',f:'A ação não pode mais ser proposta. Confirme a data de saída antes de descartar.',l:'',p:0});}
+    else if(dias<=120){sig.push({n:'alerta',t:'Prazo perto do fim: '+Math.ceil(dias)+' dias',b:'Art. 7º, XXIX, CF; art. 11 da CLT',f:'Prioridade máxima. Passe para o advogado hoje.',l:'',p:1});}
+  }
+
+  if(s.ctps==='nao'){sig.push({n:'forte',t:'Sem carteira: reconhecimento de vínculo',b:'Arts. 2º e 3º da CLT',f:'Se tinha horário, chefe e salário, é emprego mesmo sem registro.',l:'mesmo sem carteira assinada, dá pra pedir o registro e todos os direitos do período',p:3}); docs.add('Prints de conversas com o chefe sobre horário e tarefas'); docs.add('Comprovantes dos pagamentos recebidos');}
+  else if(s.ctps==='parcial'){sig.push({n:'medio',t:'Período trabalhado sem registro',b:'Arts. 2º e 3º da CLT',f:'O tempo sem carteira também entra na conta de férias, 13º e FGTS.',l:'o tempo que você trabalhou sem carteira também conta',p:2}); docs.add('Provas do período sem registro (mensagens, pagamentos)');}
+
+  const probs=[]; if(s.atrasos>0) probs.push('d'); if(s.fgts==='falhas') probs.push('fgts'); if(s.funcoes) probs.push('a'); if(s.assedio) probs.push('b');
+  let ri=false;
+  if((s.sit==='saiu'||s.sit==='trabalha') && probs.length){
+    ri=true;
+    const bases=[]; if(probs.includes('d')) bases.push('art. 483, d'+(s.atrasos>=3?' (mora contumaz, DL 368/68)':'')); if(probs.includes('fgts')) bases.push('art. 483, d + tese vinculante do TST sobre FGTS irregular'); if(probs.includes('a')) bases.push('art. 483, a'); if(probs.includes('b')) bases.push('art. 483, b e e');
+    sig.push({n:'forte',t:'Rescisão indireta',b:'CLT, '+bases.join('; '),f:s.sit==='saiu'?'Ele não abandonou. Saiu porque a empresa descumpriu o contrato, então recebe como se tivesse sido mandado embora.':'Pode pedir a saída com todos os direitos de quem é mandado embora. Com atraso de salário ou FGTS, dá para seguir trabalhando enquanto a ação corre (art. 483, §3º).',l:s.sit==='saiu'?'você não abandonou o emprego. Saiu porque a empresa deixou de cumprir o contrato, e nesse caso recebe tudo como se tivesse sido mandado embora':'dá pra sair com todos os direitos de quem é mandado embora, porque a empresa descumpriu o contrato',p:3});
+    if(s.atrasos>0) docs.add('Extratos do banco mostrando os meses sem salário');
+  } else if(s.sit==='saiu'){
+    sig.push({n:'alerta',t:'Saída sem motivo identificado',b:'Art. 483 da CLT',f:'Sem atraso, FGTS falho ou assédio, a saída tende a valer como pedido de demissão. Investigue mais antes de seguir.',l:'',p:0});
+  }
+  if(s.abandono && s.sit==='saiu'){sig.push({n:'medio',t:'Empresa alega abandono',b:'Súmula 212 do TST; art. 818, II da CLT',f:'Abandono exige intenção de não voltar. Quem alega precisa provar.',l:'a empresa alegar abandono não te tira direito, quem alega tem que provar',p:1}); docs.add('Mensagens trocadas com a empresa na época da saída');}
+  if(s.sit==='justa'){sig.push({n:'forte',t:'Justa causa pode ser revertida',b:'Art. 482 da CLT; ônus da empresa (art. 818, II)',f:'Pergunte o motivo alegado e se houve advertência antes. Justa causa sem prova ou desproporcional cai.',l:'a justa causa pode ser anulada se a empresa não provar o motivo',p:2}); docs.add('Carta ou comunicado da justa causa e advertências anteriores');}
+  if(ended && (s.verbas==='nao'||s.verbas==='parcial')){sig.push({n:'forte',t:s.verbas==='nao'?'Rescisão não paga':'Rescisão paga a menos',b:'Art. 477, §§6º e 8º; art. 467 da CLT',f:'A empresa tinha 10 dias para pagar. Passou disso, deve multa de um salário.',l:'a empresa tinha 10 dias pra pagar a rescisão, e o atraso gera multa de mais um salário',p:3}); docs.add('Termo de rescisão (TRCT), se tiver');}
+
+  let excesso=0;
+  if(s.horas>lim.h){excesso=s.horas-lim.h; const esp=s.funcao!=='comum'; sig.push({n:esp?'forte':'medio',t:'Horas extras: '+excesso+'h por semana acima do limite',b:lim.base,f:esp?'A função tem jornada especial. O que passa do limite é hora extra com adicional de 50%.':'Confirme se havia controle de ponto e se as extras eram pagas.',l:'as horas que passaram do limite da sua função podem ser cobradas como hora extra',p:2}); docs.add('Controle de ponto ou mensagens que mostrem horários');}
+  if(s.ferias>0){sig.push({n:'medio',t:s.ferias+' período(s) de férias vencidas',b:'Arts. 137 e 146 da CLT',f:'Férias não concedidas no prazo são pagas em dobro.',l:'as férias que você não tirou entram na conta',p:1});}
+  if(s.doenca==='trabalho'||s.doenca==='acidente'){sig.push({n:'forte',t:s.doenca==='acidente'?'Acidente de trabalho':'Doença ligada ao trabalho',b:'Arts. 19 e 20 da Lei 8.213/91; art. 118 da mesma lei e Súmula 378 do TST',f:'Pode gerar estabilidade de 12 meses e indenização. Depende de laudo.',l:'o problema de saúde ligado ao trabalho pode gerar indenização',p:2}); docs.add('Atestados, laudos e exames'); if(s.doenca==='acidente') docs.add('CAT (Comunicação de Acidente de Trabalho), se emitida');
+    if(!s.laudo) sig.push({n:'alerta',t:'Sem laudo médico ainda',b:'Prova técnica',f:'Não prometa nada sobre saúde antes de ver atestados e prontuário.',l:'',p:0});}
+  else if(s.doenca==='sem'){sig.push({n:'alerta',t:'Doença sem ligação clara com o trabalho',b:'Art. 15 da Lei 8.213/91 (qualidade de segurado)',f:'Se ele não consegue trabalhar hoje, pode ter direito a benefício no INSS. Avise o advogado.',l:'',p:0}); docs.add('Atestados e laudos médicos');}
+  if(s.assedio){sig.push({n:'medio',t:'Possível dano moral',b:'Arts. 223-A a 223-G da CLT',f:'Pergunte quem, quando, como e se alguém viu. Sem prova vira só relato.',l:'a forma como você foi tratado pode gerar indenização por dano moral',p:1}); docs.add('Prints, áudios ou nomes de quem presenciou');}
+  if(s.insalubre){sig.push({n:'medio',t:'Insalubridade ou periculosidade',b:'Arts. 189, 192 e 193 da CLT; perícia (art. 195)',f:'Depende de perícia no local. Pergunte quais agentes ou riscos existiam.',l:'o ambiente de risco pode dar direito a um adicional',p:1});}
+  if(!s.provas){sig.push({n:'alerta',t:'Provas ainda não separadas',b:'Ônus da prova',f:'Antes de fechar, peça prints, extratos e nomes de testemunhas.',l:'',p:-1});}
+  if(s.fgts==='nao_sei') sig.push({n:'alerta',t:'FGTS não conferido',b:'App FGTS',f:'Peça o extrato. Se faltar depósito, o caso fica mais forte.',l:'',p:0});
+
+  const pts=sig.reduce((a,x)=>a+x.p,0);
+  let cls,mot;
+  if(prescrito){cls='descartar';mot='O prazo de 2 anos depois da saída já passou.';}
+  else if(pts>=5){cls='quente';mot='Há direitos fortes com base clara. Feche o envio de documentos hoje.';}
+  else if(pts>=3){cls='morno';mot='Há indício de direito, mas falta prova ou informação. Complete a triagem.';}
+  else {cls='frio';mot= sig.length?'Pouca base até aqui. Faça mais perguntas antes de investir tempo.':'Nada irregular identificado ainda.';}
+
+  // Estimativa
+  let est=null, estMsg='';
+  if(prescrito) estMsg='Sem estimativa: caso fora do prazo.';
+  else if(!s.sit) estMsg='Descubra se o cliente ainda trabalha lá ou já saiu.';
+  else if(!adm||!s.sal) estMsg='Preencha a data de admissão e o salário para ver a estimativa.';
+  else if(ended && !saida) estMsg='Preencha a data da saída.';
+  else if(!ended && !ri) estMsg='A estimativa aparece quando o contrato terminou ou há motivo para rescisão indireta.';
+  else {
+    const end= ended?saida:today;
+    let modal='sem_justa';
+    if(s.sit==='pediu'||(s.sit==='saiu'&&!ri)) modal='pedido';
+    if(s.sit==='acordo') modal='acordo';
+    const anos=fullYears(adm,end);
+    const mesesC=fracMonths(adm,end);
+    let avisoD= modal==='pedido'?0: Math.min(30+3*anos,90);
+    if(modal==='acordo') avisoD=Math.round(avisoD/2);
+    const proj=addDays(end,avisoD);
+    const ini13=new Date(Date.UTC(proj.getUTCFullYear(),0,1));
+    const m13=Math.min(12,fracMonths(adm>ini13?adm:ini13,proj));
+    let an=new Date(Date.UTC(proj.getUTCFullYear(),adm.getUTCMonth(),adm.getUTCDate())); if(an>proj) an=new Date(Date.UTC(proj.getUTCFullYear()-1,adm.getUTCMonth(),adm.getUTCDate())); if(an<adm) an=adm;
+    const mf=Math.min(12,fracMonths(an,proj));
+    const L=[];
+    if(s.atrasos>0) L.push(['Salários atrasados',s.atrasos*s.sal,s.atrasos+' mês(es)']);
+    if(avisoD>0) L.push(['Aviso prévio indenizado',s.sal/30*avisoD,avisoD+' dias ('+anos+' anos de casa)'+(modal==='acordo'?', metade por acordo':'')]);
+    L.push(['13º proporcional',s.sal/12*m13,m13+'/12']);
+    L.push(['Férias proporcionais + 1/3',s.sal/12*mf*4/3,mf+'/12']);
+    if(s.ferias>0) L.push(['Férias vencidas + 1/3',s.ferias*s.sal*4/3,'pode dobrar se fora do prazo']);
+    const fgtsBase=0.08*s.sal*(mesesC+avisoD/30);
+    if(modal==='sem_justa') L.push(['Multa de 40% do FGTS',0.4*fgtsBase,'sobre '+mesesC+' meses de depósitos']);
+    if(modal==='acordo') L.push(['Multa de 20% do FGTS',0.2*fgtsBase,'acordo, art. 484-A']);
+    if(ended && (s.verbas==='nao'||s.verbas==='parcial')) L.push(['Multa do art. 477',s.sal,'um salário']);
+    const semHE=L.reduce((a,x)=>a+x[1],0);
+    let he=0, heNote='';
+    if(excesso>0){
+      const desde= ended?fracMonths(saida,today):0;
+      const mHE=Math.max(0,Math.min(mesesC,60-desde));
+      he=excesso*4.33*(s.sal/(lim.h*5))*1.5*mHE;
+      heNote=mHE+' meses cobráveis'+(desde>0?' ('+desde+' já perdidos pela demora)':'');
+    }
+    est={L,semHE,he,heNote,modal, fgtsAlert:s.fgts==='falhas'};
+  }
+  const recebidos=new Set(docsUp.filter(d=>d.status==='ok').map(d=>d.type));
+  const TIPO={'Print do contrato na Carteira de Trabalho Digital':'ctps','Extrato completo do FGTS (app FGTS)':'fgts','Últimos contracheques':'holerite','Termo de rescisão (TRCT), se tiver':'trct','Atestados, laudos e exames':'atestado','Atestados e laudos médicos':'atestado'};
+  const docList=[...docs].map(t=>({t,ok:recebidos.has(TIPO[t])}));
+  return {sig,docs:docList,cls,mot,est,estMsg,ended,adm,saida,lim,excesso,ri};
+}
+
+function render(){
+  const s=read(); const a=analisar(s);
+  $('saida').disabled = !s.sit || s.sit==='trabalha';
+  marcar();
+  renderFacts();
+  renderPerguntas(s,a);
+  $('limiteTxt').value=a.lim.h+'h por semana';
+  const pill=$('pill'); pill.className='pill '+a.cls; pill.textContent={quente:'Quente',morno:'Morno',frio:'Frio',descartar:'Descartar'}[a.cls];
+  $('motivo').textContent=a.mot;
+  const ord={bloqueio:0,forte:1,medio:2,alerta:3};
+  const sorted=[...a.sig].sort((x,y)=>ord[x.n]-ord[y.n]);
+  $('sinais').innerHTML = sorted.length? sorted.map(x=>`<li class="sig ${x.n}"><strong>${x.t}</strong><span class="base">${linkBase(x.b)}</span><span class="fala">${x.f}</span></li>`).join('') : '<li class="empty">Marque as respostas do cliente para ver os direitos prováveis.</li>';
+  if(a.est){
+    const e=a.est;
+    let h='<table class="est">'+e.L.map(r=>`<tr><td>${r[0]}<span class="n">${r[2]}</span></td><td class="v">${brl(r[1])}</td></tr>`).join('');
+    h+=`<tr class="tot"><td>Total sem horas extras</td><td class="v">${brl(e.semHE)}</td></tr>`;
+    if(e.he>0) h+=`<tr><td>Horas extras + 50%<span class="n">${e.heNote}</span></td><td class="v">${brl(e.he)}</td></tr><tr class="tot"><td>Total com horas extras</td><td class="v">${brl(e.semHE+e.he)}</td></tr>`;
+    h+='</table>';
+    if(e.fgtsAlert) h+='<p class="fine">Some os depósitos de FGTS que faltam no extrato.</p>';
+    if(e.modal==='pedido') h+='<p class="fine">Calculado como pedido de demissão: sem aviso e sem multa do FGTS.</p>';
+    if(read().sit==='justa') h+='<p class="fine">Calculado como se a justa causa fosse revertida.</p>';
+    $('est').innerHTML=h;
+  } else $('est').innerHTML=`<p class="empty">${a.estMsg}</p>`;
+  $('docs').innerHTML=a.docs.map(d=>`<li${d.ok?' class="ok"':''}>${d.t}${d.ok?'<span class="rec">recebido</span>':''}</li>`).join('');
+  $('msgOut').textContent=mensagem(s,a);
+  $('kommoOut').textContent=nota(s,a);
+}
+
+function mensagem(s,a){
+  const nome=(s.cli||'').replace(/\s*\(exemplo\)/i,'').trim().split(' ')[0]||'[nome]';
+  const quem=s.vend?('Aqui é '+s.vend+', do escritório.'):'Aqui é do escritório.';
+  if(a.cls==='descartar') return `Oi, ${nome}, tudo bem? ${quem}\n\nAnalisei o que você me contou. Infelizmente, pelo que a lei prevê, o prazo de 2 anos depois da saída para entrar com a ação já passou.\n\nSe a data que você me passou estiver errada, me avisa que a gente revisa. E se tiver outra situação de trabalho mais recente, pode me contar.`;
+  const leigos=a.sig.filter(x=>x.l).sort((x,y)=>y.p-x.p).map(x=>x.l);
+  let t=`Oi, ${nome}, tudo bem? ${quem} Analisei com calma o que você me contou.\n\n`;
+  if(leigos.length){ t+='Pelo que você relatou, você tem direitos sim. '+cap(leigos[0])+'.'; if(leigos.length>1) t+=' Além disso, '+leigos.slice(1,3).join(', e ')+'.'; t+='\n\n'; }
+  else t+='Pra eu te dizer com segurança o que você tem a receber, preciso de alguns documentos.\n\n';
+  if($('incValor').checked && a.est){ const v=a.est.semHE+(a.est.he||0); const piso=Math.floor(v*0.7/1000)*1000; if(piso>0) t+=`Numa conta inicial, seu caso pode passar de ${brl(piso)}. O valor certo o advogado confirma depois de ver os documentos.\n\n`; }
+  const pedir=a.docs.filter(d=>!d.ok&&!/RG e CPF|residência/.test(d.t)).map(d=>d.t).slice(0,6);
+  if(pedir.length) t+='Pra seguir, me manda por aqui:\n';
+  pedir.forEach((d,i)=>t+=`${i+1}. ${d}\n`);
+  t+='\nPode mandar no seu tempo, por foto ou print mesmo.';
+  return t;
+}
+const OUTRA_LEI=/\b(CF|Lei|LC|DL|S[úu]mula|ADI|ADC|CPC|C[óo]digo|Decreto)\b/;
+function linkBase(b){ return b.split(';').map(seg=>{ const semPar=x=>x.replace(/\([^)]*\)/g,''); const segOutra=OUTRA_LEI.test(semPar(seg)), segCLT=/CLT/.test(seg); const rx=/(arts?\.\s*)(\d{1,3}º?(?:-[A-Z])?(?:\s*(?:,|e|a)\s*\d{1,3}º?(?:-[A-Z])?)*)/gi; const ms=[...seg.matchAll(rx)]; if(!ms.length) return seg; let out='',p=0; ms.forEach((m,k)=>{ const end=m.index+m[0].length, nxt=k+1<ms.length?ms[k+1].index:seg.length; const tail=semPar(seg.slice(end,nxt)); const ok=/CLT/.test(tail)?true:OUTRA_LEI.test(tail)?false:(segCLT||!segOutra); out+=seg.slice(p,m.index)+(ok?m[1]+m[2].replace(/(\d{1,3})º?(-[A-Z])?/g,(n,d,suf)=>`<a href="clt.html#${d}${suf||''}" target="_blank" rel="noopener" title="Abrir na Consulta CLT">${n}</a>`):m[0]); p=end; }); return out+seg.slice(p); }).join(';'); }
+const cap=x=>x.charAt(0).toUpperCase()+x.slice(1);
+function nota(s,a){
+  const sitTxt={'':'Não informado',trabalha:'Ainda trabalha',saiu:'Saiu por conta própria',demitido:'Demitido sem justa causa',justa:'Demitido por justa causa',pediu:'Pediu demissão',acordo:'Acordo'}[s.sit];
+  const fgTxt={nao_sei:'não conferido',dia:'em dia',falhas:'com falhas'}[s.fgts];
+  const vbTxt={na:'n/a',nao:'não pagas',parcial:'pagas em parte',pagas:'pagas'}[s.verbas];
+  let n=`TRIAGEM TRABALHISTA | ${fmtD(today)}${s.vend?' | '+s.vend:''}\n`;
+  n+=`Cliente: ${s.cli||'-'}\nFunção: ${extra.funcaoTxt?extra.funcaoTxt+' / ':''}${$('funcao').selectedOptions[0].text} | CTPS: ${$('ctps').selectedOptions[0].text}\n`;
+  n+=`Admissão: ${fmtD(a.adm)} | Saída: ${a.ended?fmtD(a.saida):'-'} | ${sitTxt}\n`;
+  n+=`Salário: ${s.sal?brl(s.sal):'-'} | Atrasos: ${s.atrasos} mês(es) | FGTS: ${fgTxt} | Verbas: ${vbTxt}\n`;
+  n+=`Jornada: ${s.horas||'-'}h/sem (limite ${a.lim.h}h)\n`;
+  if(s.relato) n+=`\nRelato: ${s.relato}\n`;
+  n+=`\nCLASSIFICAÇÃO: ${a.cls.toUpperCase()} | ${a.mot}\n\nSinais:\n`;
+  a.sig.forEach(x=>n+=`- ${x.t} (${x.b})\n`);
+  if(a.est) n+=`\nEstimativa: ${brl(a.est.semHE)} sem HE${a.est.he>0?' | '+brl(a.est.semHE+a.est.he)+' com HE':''}\n`;
+  const okDocs=docsUp.filter(d=>d.status==='ok');
+  if(okDocs.length){ n+=`\nDocumentos recebidos:\n`; okDocs.forEach(d=>{ n+=`- ${d.label} (${d.name})\n`; d.info.forEach(x=>{ n+=`  ${x}\n`; }); }); }
+  const pend=a.docs.filter(d=>!d.ok);
+  if(pend.length) n+=`\nDocumentos pendentes:\n`+pend.map(d=>'- '+d.t).join('\n');
+  return n;
+}
+
+$('objList').innerHTML=OBJ.map((o,i)=>`<div class="ob"><h3>${o.t}</h3><p>${o.r}</p><span class="base">${linkBase(o.b)}</span><button type="button" data-obj="${i}">Copiar resposta</button></div>`).join('');
+
+async function copyText(txt,btn,toastId){
+  try{ await navigator.clipboard.writeText(txt); flash(btn,toastId,'Copiado'); }
+  catch(e){ if(toastId){ const el=$(toastId.replace('toast_','')); el.hidden=false; const r=document.createRange(); r.selectNodeContents(el); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); flash(btn,toastId,'Texto selecionado. Use Ctrl+C.'); } else flash(btn,null,'Selecione e copie'); }
+}
+function flash(btn,toastId,msg){ if(toastId){ $(toastId).textContent=msg; setTimeout(()=>$(toastId).textContent='',2200);} else { const o=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=o,1800);} }
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-copy]'); if(c){ const id=c.dataset.copy; const tx=$(id).textContent; if(!tx){ flash(c,'toast_'+id,'Marque pelo menos uma pergunta.'); } else copyText(tx,c,'toast_'+id); }
+  const o=e.target.closest('[data-obj]'); if(o){ copyText(OBJ[+o.dataset.obj].r,o,null); }
+  const t=e.target.closest('.tab'); if(t){ document.querySelectorAll('.tab').forEach(x=>{x.setAttribute('aria-selected',x===t);$(x.dataset.p).hidden=x!==t;}); }
+});
+const marcaEdit=e=>{ const k=e.target.id; if(k&&FIELDS.includes(k)&&k!=='vend'){ edited.add(k); unsure.delete(k); } render(); };
+$('f').addEventListener('input',marcaEdit); $('f').addEventListener('change',marcaEdit); $('incValor').addEventListener('change',render);
+$('f').addEventListener('submit',e=>e.preventDefault());
+$('qs').addEventListener('change',e=>{ const k=e.target.dataset.q; if(k){ qToggle[k]=e.target.checked; montarQMsg(); } });
+$('btnLer').addEventListener('click',()=>{ if(!$('colado').value.trim()&&!docsUp.length){ setStatus('Cole a conversa ou suba um documento.',true); return; } analisarTudo(); $('banner').hidden=true; setStatus('Pronto. Confira os campos e mande as perguntas.'); });
+$('colado').addEventListener('paste',()=>setTimeout(()=>{ analisarTudo(); $('banner').hidden=true; setStatus('Conversa lida. Confira os campos.'); },60));
+$('quemCliente').addEventListener('change',()=>{ analisarTudo(); });
+$('fileIn').addEventListener('change',e=>{ addFiles(e.target.files); e.target.value=''; });
+const drop=$('drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop',e=>{ if(e.dataTransfer&&e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+$('docList').addEventListener('click',e=>{ const b=e.target.closest('[data-rm]'); if(b){ docsUp.splice(+b.dataset.rm,1); renderDocs(); analisarTudo(); } });
+function limparTudo(){ docsUp.length=0; renderDocs(); edited.clear(); falantesKey=''; }
+$('btnNovo').addEventListener('click',()=>{ limparTudo(); $('colado').value=''; analisarTudo(); $('banner').hidden=true; setStatus(''); $('colado').focus(); });
+$('btnExemplo').addEventListener('click',()=>{ limparTudo(); $('colado').value=EXEMPLO_TXT; analisarTudo(); $('banner').hidden=false; setStatus(''); });
+renderDocs(); analisarTudo();
+</script>
+</body>
+</html>

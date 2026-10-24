@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tarefas da equipe | Mike Ross</title>
+<style>:root {
+    --sm-night: #140a0e; --sm-surface: #1e1016; --sm-surface-2: #29161e; --sm-ink: #f5ebe5; --sm-muted: #b8a3a9;
+    --sm-line: #3a2129; --sm-line-strong: #55303c; --sm-accent: #d5ad95; --sm-wine: #960032; --sm-rose: #e07a8f;
+    --sm-gold: #e9c98e; --sm-plum: #9a6b93; --sm-ok: #7fd3a0; --sm-warn: #e9b45e; --sm-bad: #f08a7e;
+    }
+
+  .sm {
+    --sm-night: #140a0e; --sm-surface: #1e1016; --sm-surface-2: #29161e; --sm-ink: #f5ebe5; --sm-muted: #b8a3a9;
+    --sm-line: #3a2129; --sm-line-strong: #55303c; --sm-accent: #d5ad95; --sm-wine: #960032; --sm-rose: #e07a8f;
+    --sm-gold: #e9c98e; --sm-plum: #9a6b93; --sm-ok: #7fd3a0; --sm-warn: #e9b45e; --sm-bad: #f08a7e;
+    color: var(--sm-ink); font-family: var(--mr-sans); max-width: 1240px; margin: 0 auto;
+    display: grid; gap: 16px;
+  }
+  .sm b { font-weight: 600; }
+  .sm-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--sm-line); }
+  .sm-brand { font-family: var(--mr-serif); letter-spacing: .18em; font-size: 13px; color: var(--sm-accent); text-transform: uppercase; }
+  .sm-title { font-family: var(--mr-serif); font-weight: 400; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.1; margin: 4px 0 0; }
+  .sm-sub { margin: 6px 0 0; color: var(--sm-muted); font-size: 13px; }
+  .sm-ctrl { display: flex; flex-wrap: wrap; gap: 10px; }
+  .sm-ctrl label { display: grid; gap: 4px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--sm-muted); }
+  .sm-ctrl select { font: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--sm-ink); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 7px 10px; min-width: 10.5rem; }
+  .sm-ctrl select:focus { outline: 2px solid var(--sm-accent); outline-offset: 1px; }
+  .sm-take { margin: 0; font-size: 15px; line-height: 1.45; }
+  .sm-grid { display: grid; gap: 16px; }
+  .sm-row1 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .sm-row2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .sm-card { position: relative; background: var(--sm-surface); border: 1px solid var(--sm-line); border-radius: 12px; padding: 18px; min-width: 0; display: grid; gap: 10px; align-content: start; }
+  .sm-card.acc::before { content: ''; position: absolute; left: -1px; right: -1px; top: -1px; height: 5px; border-radius: 12px 12px 0 0; background: var(--acc); }
+  .sm-card h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .sm-card .sm-note { margin: -6px 0 0; color: var(--sm-muted); font-size: 12px; }
+  .sm-k-label { font-size: 13px; color: var(--sm-muted); }
+  .sm-big { font-family: var(--mr-serif); font-weight: 400; font-size: 38px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .sm-big small { font-size: 18px; color: var(--sm-muted); }
+  .sm-dl { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; padding-top: 10px; border-top: 1px dashed var(--sm-line-strong); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .sm-dl dt { color: var(--sm-muted); }
+  .sm-dl dd { margin: 0; text-align: right; font-weight: 600; }
+  .sm-pos { color: var(--sm-ok); } .sm-neg { color: var(--sm-bad); }
+  .sm-chart { position: relative; width: 100%; }
+  .sm-chart svg { display: block; overflow: visible; }
+  .sm-chart text { fill: var(--sm-muted); font-size: 11px; font-family: var(--mr-sans); }
+  .sm-tip { position: absolute; pointer-events: none; z-index: 5; background: #2f1a23; border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: var(--sm-ink); box-shadow: 0 8px 24px rgba(0,0,0,.45); white-space: nowrap; opacity: 0; transition: opacity .12s; }
+  .sm-tip .t { color: var(--sm-muted); margin-bottom: 2px; }
+  .sm-tip i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  .sm-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--sm-muted); }
+  .sm-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sm-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .sm-donut { display: grid; grid-template-columns: minmax(96px, 120px) 1fr; gap: 14px; align-items: center; }
+  .sm-donut ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
+  .sm-donut li { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; cursor: pointer; }
+  .sm-donut li i { width: 10px; height: 10px; border-radius: 50%; }
+  .sm-donut li .q { font-variant-numeric: tabular-nums; color: var(--sm-muted); white-space: nowrap; font-size: 12px; }
+  .sm-donut li.off { opacity: .4; }
+  .sm-evo { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 22px; }
+  @media (max-width: 760px) { .sm-evo { grid-template-columns: 1fr; } }
+  .sm-evo-side { display: grid; gap: 14px; align-content: start; }
+  .sm-meses { display: grid; gap: 10px; }
+  .sm-meses h3 { margin: 0; font-size: 13px; font-weight: 600; }
+  .sm-meses .lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .sm-meses .atalhos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sm-mbtn { font: inherit; font-size: 13px; color: var(--sm-muted); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 8px; padding: 7px 4px; cursor: pointer; text-transform: capitalize; font-variant-numeric: tabular-nums; }
+  .sm-mbtn small { display: block; font-size: 10.5px; opacity: .8; margin-top: 1px; }
+  .sm-mbtn:hover { color: var(--sm-ink); border-color: var(--sm-accent); }
+  .sm-mbtn[aria-pressed="true"] { color: #2a0f16; background: var(--sm-accent); border-color: var(--sm-accent); font-weight: 600; }
+  .sm-mbtn.at { font-size: 12px; padding: 5px 10px; border-radius: 999px; text-transform: none; }
+  .sm-meses .dica { margin: 0; font-size: 11.5px; color: var(--sm-muted); }
+  .sm-sum { font-size: 14px; line-height: 1.5; }
+  .sm-sum p { margin: 0 0 8px; }
+  .sm-sum h3 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  .sm-bars { display: grid; gap: 10px; }
+  .sm-bar-row { display: grid; grid-template-columns: 7.5rem 1fr 3.6rem; gap: 10px; align-items: center; font-size: 13px; cursor: pointer; }
+  .sm-bar-row .track { height: 10px; border-radius: 5px; background: var(--sm-surface-2); position: relative; overflow: hidden; }
+  .sm-bar-row .track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; }
+  .sm-bar-row .pct { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sm-bar-row small { grid-column: 2 / 4; margin-top: -6px; color: var(--sm-muted); font-size: 11.5px; }
+  .sm-bar-row.off { opacity: .45; }
+  .sm-scroll { overflow-x: auto; }
+  .sm-t { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+  .sm-t th { text-align: center; font-weight: 500; color: var(--sm-muted); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--sm-line-strong); white-space: nowrap; }
+  .sm-t th small { display: block; font-weight: 400; font-size: 11px; }
+  .sm-t th.now { color: var(--sm-accent); }
+  .sm-t th:first-child, .sm-t td:first-child { text-align: left; }
+  .sm-t td { text-align: center; padding: 9px 10px; border-bottom: 1px solid var(--sm-line); white-space: nowrap; }
+  .sm-t tr:last-child td { border-bottom: 0; }
+  .sm-t td.svc { font-family: var(--mr-serif); font-size: 17px; }
+  .sm-t tr.total td { font-weight: 600; background: rgba(213,173,149,.05); }
+  .sm-t td .v { display: block; font-size: 16px; font-weight: 600; }
+  .sm-t td small { display: block; color: var(--sm-muted); font-size: 11px; }
+  .sm-t td.ok { background: rgba(127,211,160,.13); }
+  .sm-t td.mid { background: rgba(233,180,94,.14); }
+  .sm-t td.low { background: rgba(240,138,126,.13); }
+  .sm-t td.now { box-shadow: inset 0 0 0 1px var(--sm-accent); }
+  .sm-t td.muted { color: var(--sm-muted); }
+  .sm-t td.name { font-weight: 500; }
+  .sm-vt tbody tr { cursor: pointer; }
+  .sm-vt tbody tr:hover td { background: rgba(245,235,229,.04); }
+  .sm-vt tbody tr.sel td { background: rgba(213,173,149,.12); }
+  .sm-mini { position: relative; height: 6px; border-radius: 3px; background: var(--sm-surface-2); margin-top: 5px; min-width: 5rem; }
+  .sm-mini i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--sm-accent); }
+  .sm-mini em { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--sm-ink); opacity: .6; }
+  .sm-legend-cells { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--sm-muted); }
+  .sm-legend-cells span::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .sm-legend-cells .ok::before { background: rgba(127,211,160,.6); } .sm-legend-cells .mid::before { background: rgba(233,180,94,.6); } .sm-legend-cells .low::before { background: rgba(240,138,126,.6); }
+  .sm-empty { color: var(--sm-muted); font-size: 13px; }
+  .sm-fail { display: flex; align-items: center; gap: 8px; color: var(--sm-muted); font-size: 12px; }
+  .sm-fail::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--sm-bad); }
+  .sm [data-dash-source-state=refreshing] { opacity: .5; transition: opacity .4s; }
+  .sm [data-dash-source-state=empty] { color: transparent; }
+  .sm [hidden] { display: none !important; }
+  .sm-alerta { display: flex; align-items: center; gap: 14px; border-radius: 12px; padding: 14px 18px; color: #2a0f16;
+    background: linear-gradient(100deg, #e9c98e 0%, #d5ad95 45%, #f3dcc0 100%); box-shadow: 0 0 0 1px rgba(233,201,142,.6), 0 10px 30px rgba(233,201,142,.18); }
+  .sm-alerta .ic { font-size: 30px; line-height: 1; }
+  .sm-alerta b { font-weight: 700; }
+  .sm-alerta .tt { font-family: var(--mr-serif); font-size: 22px; line-height: 1.1; }
+  .sm-alerta .tx { font-size: 14px; margin-top: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sm-alerta.novo { animation: sm-pop .7s cubic-bezier(.2,.7,.2,1) both, sm-brilho 2.4s ease-in-out .7s 3; }
+    @keyframes sm-pop { from { transform: scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes sm-brilho { 50% { box-shadow: 0 0 0 2px rgba(255,236,200,.9), 0 0 40px rgba(233,201,142,.55); } }
+  }
+  .sm-rec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+  .sm-recs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 12px; }
+  .sm-rec { background: var(--sm-surface-2); border: 1px solid var(--sm-line); border-radius: 10px; padding: 14px; display: grid; gap: 6px; }
+  .sm-rec.bateu { border-color: var(--sm-gold); box-shadow: inset 0 0 0 1px rgba(233,201,142,.35); }
+  .sm-rec .lb { font-size: 12px; color: var(--sm-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .sm-rec .nb { font-family: var(--mr-serif); font-size: 34px; line-height: 1; color: var(--sm-gold); font-variant-numeric: tabular-nums; }
+  .sm-rec .pr { font-size: 12px; color: var(--sm-muted); }
+  .sm-rec .at { font-size: 13px; }
+  .sm-rec .tr { height: 6px; border-radius: 3px; background: var(--sm-night); position: relative; overflow: hidden; }
+  .sm-rec .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--sm-gold); }
+
+  .mr-login[hidden], #painel[hidden] { display: none !important; }
+  .sm-big, .sm-title, .sm-rec .nb, .sm-alerta .tt, .sm-t td.svc { font-weight: 600; }
+  .sm-title { font-size: clamp(26px, 3.4vw, 36px) !important; }
+  .dash-skeleton { color: transparent !important; background: var(--sm-surface-2); border-radius: 6px; display: inline-block; min-width: 4rem; animation: mr-pulso 1.4s ease-in-out infinite; }
+  @keyframes mr-pulso { 50% { opacity: .5; } }
+  body { margin: 0; padding: 20px 16px 60px; }
+  .mr-topo { max-width: 1240px; margin: 0 auto 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; font-size: 13px; color: var(--sm-muted); }
+  .mr-topo b { color: var(--sm-ink); font-weight: 600; }
+  .mr-topo button { font: inherit; color: var(--sm-accent); background: none; border: 1px solid var(--sm-line-strong); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .mr-aviso { max-width: 1240px; margin: 0 auto 14px; padding: 10px 14px; border-radius: 10px; background: #3a2b12; color: #e9b45e; font-size: 13.5px; }
+  .mr-login { min-height: 70vh; display: grid; place-items: center; }
+  .mr-login form { box-sizing: border-box; width: min(100%, 380px); background: var(--sm-surface); border: 1px solid var(--sm-line); border-radius: 16px; padding: 28px 26px; display: grid; gap: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .mr-login .selo { display: flex; align-items: center; gap: 10px; }
+  .mr-login .selo img { width: 26px; }
+  .mr-login .selo b { font: 600 24px/1 var(--mr-serif); letter-spacing: .06em; text-transform: uppercase; }
+  .mr-login h1 { font-size: 26px !important; margin: 4px 0 0; }
+  .mr-login p { margin: 0; color: var(--sm-muted); font-size: 13.5px; }
+  .mr-login label { display: grid; gap: 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--sm-muted); }
+  .mr-login input { font: inherit; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--sm-ink); background: var(--sm-surface-2); border: 1px solid var(--sm-line-strong); border-radius: 10px; padding: 11px 12px; }
+  .mr-login input:focus { outline: 2px solid var(--sm-accent); outline-offset: 1px; }
+  .mr-login button { margin-top: 4px; padding: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .mr-login .erro { color: #f2867a; font-size: 13.5px; }
+
+  .tf-kpis { grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr)); }
+  .tf-kpis .sm-card { cursor: default; }
+  .tf-kpis .sm-big.bad { color: var(--sm-bad); }
+  .tf-kpis .sm-big.warn { color: var(--sm-warn); }
+  .tf-pct { font-weight: 600; }
+  .tf-pct.ok { color: var(--sm-ok); } .tf-pct.mid { color: var(--sm-warn); } .tf-pct.low { color: var(--sm-bad); }
+  .tf-aging { display: grid; gap: 10px; }
+  .tf-age-row { display: grid; grid-template-columns: 8.5rem 1fr 3rem; gap: 10px; align-items: center; font-size: 13px; }
+  .tf-age-row .track { height: 14px; border-radius: 4px; background: var(--sm-surface-2); display: flex; overflow: hidden; }
+  .tf-age-row .track i { display: block; height: 100%; }
+  .tf-age-row .n { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tf-espera { display: grid; gap: 8px; font-size: 14px; line-height: 1.5; }
+  .tf-espera p { margin: 0; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href='/painel'>Painel</a><a aria-current='page' href='/tarefas'>Tarefas</a><a href='/triagem'>Triagem</a><a href='/procuracoes'>Procurações</a><a href='/previdenciario'>Previdenciário</a><a href='/clt'>CLT</a></div></nav>
+
+<div class="mr-topo"><span id="atualizado">Carregando as tarefas do Kommo…</span></div>
+<div class="mr-aviso" id="aviso" role="status" hidden></div>
+<div class="sm">
+  <header class="sm-head">
+    <div>
+      <div class="sm-brand">Simeão Advogados · tarefas de cadência</div>
+      <h1 class="sm-title" id="titulo">Tarefas da equipe</h1>
+      <p class="sm-sub" id="periodo"><span class="dash-skeleton">—</span></p>
+    </div>
+    <div class="sm-ctrl" id="ctrl">
+      <label>Vendedor <select id="sel-vendedor" aria-label="Vendedor"></select></label>
+      <label>Período <select id="sel-periodo" aria-label="Período"></select></label>
+    </div>
+  </header>
+
+  <section class="sm-card" id="espera" hidden>
+    <h2>Falta ligar as tarefas ao Kommo</h2>
+    <div class="tf-espera" id="espera-txt"></div>
+  </section>
+
+  <div id="conteudo">
+    <section class="sm-grid tf-kpis" style="margin-bottom:16px">
+      <div class="sm-card acc" style="--acc: var(--sm-gold)" id="k-hoje"><span class="sm-big dash-skeleton">—</span></div>
+      <div class="sm-card acc" style="--acc: var(--sm-ok)" id="k-ontem"><span class="sm-big dash-skeleton">—</span></div>
+      <div class="sm-card acc" style="--acc: var(--sm-bad)" id="k-atrasadas"><span class="sm-big dash-skeleton">—</span></div>
+      <div class="sm-card acc" style="--acc: var(--sm-plum)" id="k-noprazo"><span class="sm-big dash-skeleton">—</span></div>
+    </section>
+
+    <section class="sm-card" id="vendedores" style="margin-bottom:16px">
+      <h2 id="tab-titulo">Tarefas de cadência por vendedor</h2>
+      <p class="sm-note" id="tab-nota">—</p>
+      <div class="sm-scroll"><table class="sm-t sm-vt" id="tab"><thead></thead><tbody></tbody></table></div>
+    </section>
+
+    <section class="sm-grid sm-row2">
+      <div class="sm-card">
+        <h2 id="dia-titulo">Vencendo e concluídas por dia</h2>
+        <p class="sm-note" id="dia-nota">—</p>
+        <div class="sm-legend"><span><i style="background:var(--sm-plum)"></i>Vencendo no dia</span><span><i style="background:var(--sm-accent)"></i>Concluídas no dia</span></div>
+        <div class="sm-chart" id="dia-chart" style="min-height:220px"></div>
+      </div>
+      <div class="sm-card">
+        <h2>Atrasadas por tempo de atraso</h2>
+        <p class="sm-note">Tarefas abertas com o prazo vencido, hoje. Quanto mais pra direita, mais velho o atraso.</p>
+        <div class="sm-legend" id="age-legenda"></div>
+        <div class="tf-aging" id="age"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+"use strict";
+/* Mesmo Apps Script do painel ("Mike Ross Painel"), na rota ?aba=tarefas.
+   Ele lê a aba "Tarefas Simeão" da planilha e devolve só números: vendedor, lead, prazo e conclusão. */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzHT8B1qAj5Jt7NyV0K_hOGanYbPhPbdFFTOuZOcE4vxb5XfGpdINoHDRgKoPO7sg6DeQ/exec?aba=tarefas';
+const ATUALIZA_MIN = 5;
+const EQUIPE = 'Equipe toda';
+const CHAVE = 'mr_tarefas_filtros';
+const lerLS = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+const gravarLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* segue sem lembrar */ } };
+const estado = { dados: null, filtros: Object.assign({ vendedor: EQUIPE, periodo: 'mes' }, lerLS(CHAVE) || {}) };
+
+const $ = (id) => document.getElementById(id);
+const el = (tag, props, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'style') e.style.cssText = v; else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat(3)) if (k != null && k !== false) e.append(k instanceof Node ? k : document.createTextNode(String(k)));
+  return e;
+};
+const num = (n) => new Intl.NumberFormat('pt-BR').format(n || 0);
+const dec = (n) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n || 0);
+const pct = (n) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n) + '%';
+const pad = (n) => String(n).padStart(2, '0');
+const diaDe = (ms) => { const d = new Date(ms); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const dm = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
+const somaDias = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return diaDe(d.getTime()); };
+const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+
+// feriados nacionais (fixos + Sexta-feira Santa), pra contar dias úteis
+const feriados = {};
+const ehFeriado = (iso) => {
+  const a = Number(iso.slice(0, 4));
+  if (!feriados[a]) {
+    const g = a % 19, c = Math.floor(a / 100), h = (c - Math.floor(c / 4) - Math.floor((8 * c + 13) / 25) + 19 * g + 15) % 30;
+    const i = h - Math.floor(h / 28) * (1 - Math.floor(29 / (h + 1)) * Math.floor((21 - g) / 11));
+    const j = (a + Math.floor(a / 4) + i + 2 - c + Math.floor(c / 4)) % 7, l = i - j;
+    const mes = 3 + Math.floor((l + 40) / 44), dia = l + 28 - 31 * Math.floor(mes / 4);
+    const pascoa = new Date(a, mes - 1, dia, 12); pascoa.setDate(pascoa.getDate() - 2);
+    feriados[a] = new Set(['01-01', '04-21', '05-01', '09-07', '10-12', '11-02', '11-15', '11-20', '12-25', diaDe(pascoa.getTime()).slice(5)]);
+  }
+  return feriados[a].has(iso.slice(5));
+};
+const util = (iso) => { const w = new Date(iso + 'T12:00:00').getDay(); return w > 0 && w < 6 && !ehFeriado(iso); };
+
+// períodos: mês fiscal vai do dia 26 ao dia 25, com o nome do mês em que fecha
+const fiscal = (hojeIso, volta) => {
+  let a = Number(hojeIso.slice(0, 4)), m = Number(hojeIso.slice(5, 7)), d = Number(hojeIso.slice(8, 10));
+  if (d >= 26) { m++; if (m > 12) { m = 1; a++; } }
+  m -= volta; while (m < 1) { m += 12; a--; }
+  const pa = m === 1 ? a - 1 : a, pm = m === 1 ? 12 : m - 1;
+  return { ini: pa + '-' + pad(pm) + '-26', fim: a + '-' + pad(m) + '-25', nome: MESES[m - 1] + ' de ' + a };
+};
+const periodos = (hojeIso) => {
+  const f0 = fiscal(hojeIso, 0), f1 = fiscal(hojeIso, 1);
+  return {
+    mes: { rot: 'Mês fiscal atual', ini: f0.ini, fim: f0.fim, desc: 'mês fiscal de ' + f0.nome },
+    anterior: { rot: 'Mês fiscal anterior', ini: f1.ini, fim: f1.fim, desc: 'mês fiscal de ' + f1.nome },
+    d7: { rot: 'Últimos 7 dias', ini: somaDias(hojeIso, -6), fim: hojeIso, desc: 'últimos 7 dias' },
+    d30: { rot: 'Últimos 30 dias', ini: somaDias(hojeIso, -29), fim: hojeIso, desc: 'últimos 30 dias' },
+    hoje: { rot: 'Hoje', ini: hojeIso, fim: hojeIso, desc: 'hoje' },
+  };
+};
+
+$('sel-vendedor').addEventListener('change', (e) => mudar({ vendedor: e.target.value }));
+$('sel-periodo').addEventListener('change', (e) => mudar({ periodo: e.target.value }));
+$('tab').addEventListener('click', (ev) => {
+  const tr = ev.target.closest('tr[data-vendedor]');
+  if (tr) mudar({ vendedor: estado.filtros.vendedor === tr.dataset.vendedor ? EQUIPE : tr.dataset.vendedor });
+});
+const mudar = (o) => { Object.assign(estado.filtros, o); gravarLS(CHAVE, estado.filtros); desenhar(); };
+
+const carregar = async () => {
+  try {
+    const r = await (await fetch(API_URL, { cache: 'no-store' })).json();
+    if (!r.tarefas) {
+      mostrarEspera(r.sem_aba ? 'aba' : 'rota');
+      return;
+    }
+    estado.dados = r;
+    const t = new Date(r.sincronizado || r.atualizado);
+    $('atualizado').textContent = 'Tarefas do Kommo, sincronizadas às ' + pad(t.getHours()) + ':' + pad(t.getMinutes()) + ' de ' + pad(t.getDate()) + '/' + pad(t.getMonth() + 1) + ' · a página atualiza sozinha a cada ' + ATUALIZA_MIN + ' min';
+    $('aviso').hidden = true;
+  } catch (e) {
+    $('aviso').hidden = false;
+    $('aviso').textContent = 'Não consegui ler as tarefas agora. ' + (estado.dados ? 'Mostrando as últimas que carreguei. ' : '') + 'Tento de novo em ' + ATUALIZA_MIN + ' minutos.';
+    if (!estado.dados) { $('atualizado').textContent = ''; return; }
+  }
+  desenhar();
+};
+
+const mostrarEspera = (motivo) => {
+  $('conteudo').hidden = true; $('espera').hidden = false; $('ctrl').hidden = true;
+  $('atualizado').textContent = '';
+  $('periodo').textContent = 'Aguardando os dados do Kommo.';
+  $('espera-txt').replaceChildren(
+    el('p', { text: motivo === 'aba'
+      ? 'O painel já está pronto pra ler as tarefas, mas a aba "Tarefas Simeão" ainda não existe na planilha. Ela é criada quando a sincronização de tarefas roda pela primeira vez no Apps Script "Dashboard Ganhos Proativa".'
+      : 'Esta página lê as tarefas pelo mesmo Apps Script do painel, mas ele ainda não tem a rota de tarefas. Falta atualizar o "Mike Ross Painel" e criar a sincronização de tarefas no "Dashboard Ganhos Proativa".' }),
+    el('p', { text: 'Assim que isso estiver feito, os números aparecem aqui sozinhos, sem precisar subir o site de novo.' }));
+};
+
+const desenhar = () => {
+  const D = estado.dados;
+  if (!D) return;
+  $('conteudo').hidden = false; $('espera').hidden = true; $('ctrl').hidden = false;
+  const agora = Date.now();
+  const hojeIso = diaDe(agora), ontemIso = somaDias(hojeIso, -1);
+  const fimHoje = new Date(hojeIso + 'T23:59:59').getTime();
+  const P = periodos(hojeIso);
+  const f = estado.filtros;
+  if (!P[f.periodo]) f.periodo = 'mes';
+  const per = P[f.periodo];
+
+  // tarefas → objetos (prazo e conclusão vêm em minutos desde 1970)
+  const T = D.tarefas.map(([v, lead, prazo, conc, concEm]) => {
+    const pz = prazo * 60000, ce = concEm ? concEm * 60000 : 0;
+    return { v: D.vendedores[v], lead, pz, dPz: diaDe(pz), conc: !!conc, ce, dCe: ce ? diaDe(ce) : '' };
+  });
+  const noPer = (iso) => iso >= per.ini && iso <= per.fim;
+
+  // por vendedor
+  const nova = () => ({ total: 0, leads: new Set(), venceu: 0, noPrazo: 0, concluidasPer: 0, abertas: 0, atrasadas: 0, hoje: 0, ontem: 0, idade: [0, 0, 0, 0] });
+  const por = {}, eq = nova();
+  for (const t of T) {
+    const r = (por[t.v] = por[t.v] || nova());
+    for (const x of [r, eq]) {
+      if (noPer(t.dPz)) {
+        x.total++; x.leads.add(t.lead);
+        if (t.pz <= agora || t.conc) { x.venceu++; if (t.conc && t.dCe <= t.dPz) x.noPrazo++; }
+      }
+      if (t.conc && t.dCe && noPer(t.dCe)) x.concluidasPer++;
+      if (t.conc && t.dCe === ontemIso) x.ontem++;
+      if (!t.conc) {
+        if (t.dPz === hojeIso) x.hoje++;
+        if (t.pz < agora) {
+          x.atrasadas++;
+          const dias = Math.round((new Date(hojeIso + 'T12:00:00') - new Date(t.dPz + 'T12:00:00')) / 864e5);
+          x.idade[dias <= 1 ? 0 : dias <= 3 ? 1 : dias <= 7 ? 2 : 3]++;
+        } else x.abertas++;
+      }
+    }
+  }
+  // dias úteis já passados no período (pra conclusão por dia)
+  let uteis = 0;
+  for (let d = per.ini; d <= per.fim && d <= hojeIso; d = somaDias(d, 1)) if (util(d)) uteis++;
+  uteis = Math.max(1, uteis);
+
+  const ativos = Object.keys(por).filter((v) => por[v].total || por[v].abertas || por[v].atrasadas).sort((a, b) => por[b].total - por[a].total || a.localeCompare(b));
+  if (f.vendedor !== EQUIPE && !por[f.vendedor]) f.vendedor = EQUIPE;
+  $('sel-vendedor').replaceChildren(new Option(EQUIPE, EQUIPE), ...ativos.slice().sort((a, b) => a.localeCompare(b)).map((v) => new Option(v, v)));
+  $('sel-vendedor').value = f.vendedor;
+  $('sel-periodo').replaceChildren(...Object.entries(P).map(([k, p]) => new Option(p.rot, k)));
+  $('sel-periodo').value = f.periodo;
+
+  const S = f.vendedor === EQUIPE ? eq : por[f.vendedor];
+  const quem = f.vendedor === EQUIPE ? 'equipe' : f.vendedor;
+  $('titulo').textContent = f.vendedor === EQUIPE ? 'Tarefas da equipe' : 'Tarefas de ' + f.vendedor;
+  $('periodo').textContent = 'Período: ' + per.desc + ' (' + dm(per.ini) + ' a ' + dm(per.fim) + '). Vencem hoje, atrasadas e abertas são a foto de agora.';
+
+  // KPIs
+  const pctNo = (x) => (x.venceu ? (x.noPrazo / x.venceu) * 100 : null);
+  const kpi = (id, rot, valor, cls, ...linhas) => $(id).replaceChildren(el('span', { class: 'sm-k-label', text: rot }), el('span', { class: 'sm-big' + (cls ? ' ' + cls : ''), text: valor }), ...linhas);
+  const dl = (...pares) => el('dl', { class: 'sm-dl' }, pares.filter(Boolean).map(([k, v]) => [el('dt', { text: k }), el('dd', { text: v })]));
+  kpi('k-hoje', 'Vencem hoje', num(S.hoje), '', dl(['Abertas em dia', num(S.abertas)]));
+  kpi('k-ontem', 'Concluídas ontem', num(S.ontem), '', dl(['Conclusão por dia útil no período', num(Math.round(S.concluidasPer / uteis))]));
+  kpi('k-atrasadas', 'Atrasadas', num(S.atrasadas), S.atrasadas ? 'bad' : '', dl(['Mais de 7 dias', num(S.idade[3])]));
+  const pn = pctNo(S);
+  kpi('k-noprazo', 'Concluídas no prazo', pn == null ? '–' : pct(pn), pn == null ? '' : pn < 50 ? 'bad' : pn < 80 ? 'warn' : '', dl(['Tarefas no período', num(S.total)], ['Tarefas por lead', S.leads.size ? dec(S.total / S.leads.size) : '–']));
+
+  // tabela por vendedor
+  $('tab').querySelector('thead').replaceChildren(el('tr', {}, ['Vendedor', 'Total', 'Abertas', 'Atrasadas', '% concluídas no prazo', 'Tarefas por lead', 'Conclusão por dia'].map((h) => el('th', { text: h }))));
+  const linha = (nome, x, cls) => {
+    const p = pctNo(x);
+    return el('tr', { class: [cls, nome === f.vendedor ? 'sel' : ''].join(' ').trim() || null, 'data-vendedor': nome },
+      el('td', { class: 'name', text: nome }),
+      el('td', {}, el('b', { text: num(x.total) })),
+      el('td', { text: num(x.abertas) }),
+      el('td', {}, x.atrasadas ? el('span', { class: 'tf-pct low', text: num(x.atrasadas) }) : '0'),
+      el('td', {}, p == null ? '–' : el('span', { class: 'tf-pct ' + (p >= 80 ? 'ok' : p >= 50 ? 'mid' : 'low'), text: pct(p) })),
+      el('td', { text: x.leads.size ? dec(x.total / x.leads.size) : '–' }),
+      el('td', { text: num(Math.round(x.concluidasPer / uteis)) }));
+  };
+  $('tab').querySelector('tbody').replaceChildren(...ativos.map((v) => linha(v, por[v])), linha(EQUIPE, eq, 'total'));
+  $('tab-nota').textContent = 'Total, % no prazo e tarefas por lead contam as tarefas com prazo no período. Conclusão por dia = concluídas no período ÷ ' + uteis + ' dia' + (uteis > 1 ? 's' : '') + ' úte' + (uteis > 1 ? 'is' : 'il') + '. Abertas (em dia) e atrasadas são de agora. Clique num vendedor pra filtrar.';
+
+  // gráfico por dia
+  const box = $('dia-chart'); box.replaceChildren();
+  const dias = [];
+  for (let d = per.ini; d <= per.fim && d <= somaDias(hojeIso, 7); d = somaDias(d, 1)) dias.push(d);
+  const serie = dias.map((d) => ({ d, vence: 0, conc: 0 }));
+  const ix = new Map(serie.map((s, i) => [s.d, i]));
+  for (const t of T) {
+    if (f.vendedor !== EQUIPE && t.v !== f.vendedor) continue;
+    if (ix.has(t.dPz)) serie[ix.get(t.dPz)].vence++;
+    if (t.conc && ix.has(t.dCe)) serie[ix.get(t.dCe)].conc++;
+  }
+  $('dia-titulo').textContent = 'Vencendo e concluídas por dia' + (f.vendedor === EQUIPE ? '' : ' · ' + f.vendedor);
+  $('dia-nota').textContent = serie.length ? 'De ' + dm(serie[0].d) + ' a ' + dm(serie[serie.length - 1].d) + ', ' + quem + '.' : '';
+  if (serie.length && window.d3) {
+    const w = box.clientWidth || 480, h = 220, mg = { t: 10, r: 8, b: 24, l: 34 };
+    const x = d3.scaleBand(serie.map((s) => s.d), [mg.l, w - mg.r]).paddingInner(0.25).paddingOuter(0.1);
+    const y = d3.scaleLinear([0, d3.max(serie, (s) => Math.max(s.vence, s.conc)) || 1], [h - mg.b, mg.t]).nice();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('height', h);
+    svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', mg.l).attr('x2', w - mg.r).attr('y1', (d) => y(d)).attr('y2', (d) => y(d)).attr('stroke', '#3a2129');
+    svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', mg.l - 6).attr('y', (d) => y(d)).attr('dy', '0.32em').attr('text-anchor', 'end').text((d) => num(d));
+    const bw = x.bandwidth() / 2;
+    const g = svg.append('g');
+    g.selectAll('rect.v').data(serie).join('rect').attr('class', 'v').attr('x', (s) => x(s.d)).attr('width', Math.max(1, bw - 0.5)).attr('y', (s) => y(s.vence)).attr('height', (s) => y(0) - y(s.vence)).attr('rx', 2).attr('fill', '#9a6b93').attr('opacity', (s) => (s.d > hojeIso ? 0.45 : 1));
+    g.selectAll('rect.c').data(serie).join('rect').attr('class', 'c').attr('x', (s) => x(s.d) + bw).attr('width', Math.max(1, bw - 0.5)).attr('y', (s) => y(s.conc)).attr('height', (s) => y(0) - y(s.conc)).attr('rx', 2).attr('fill', '#d5ad95');
+    const passo = Math.max(1, Math.ceil(serie.length / Math.max(2, Math.floor(w / 70))));
+    svg.append('g').selectAll('text').data(serie.filter((s, i) => i % passo === 0)).join('text').attr('x', (s) => x(s.d) + x.bandwidth() / 2).attr('y', h - 6).attr('text-anchor', 'middle').style('fill', (s) => (s.d === hojeIso ? '#d5ad95' : null)).text((s) => dm(s.d));
+    let tip = box.querySelector('.sm-tip'); if (!tip) { tip = el('div', { class: 'sm-tip' }); box.append(tip); }
+    svg.append('g').selectAll('rect').data(serie).join('rect').attr('x', (s) => x(s.d) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', mg.t).attr('height', h - mg.t - mg.b).attr('fill', 'transparent')
+      .on('mousemove', (ev, s) => {
+        const sd = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][new Date(s.d + 'T12:00:00').getDay()];
+        tip.replaceChildren(el('div', { class: 't', text: sd + ', ' + dm(s.d) }), el('div', {}, el('i', { style: 'background:#9a6b93' }), 'Vencendo: ', el('b', { text: num(s.vence) })), el('div', {}, el('i', { style: 'background:#d5ad95' }), 'Concluídas: ', el('b', { text: num(s.conc) })));
+        const r = box.getBoundingClientRect(); let px = ev.clientX - r.left + 14; tip.style.opacity = 1;
+        if (px + tip.offsetWidth > r.width) px = ev.clientX - r.left - tip.offsetWidth - 14;
+        tip.style.left = Math.max(4, px) + 'px'; tip.style.top = Math.max(0, ev.clientY - r.top - 10) + 'px';
+      })
+      .on('mouseleave', () => { tip.style.opacity = 0; });
+  }
+
+  // atrasadas por idade
+  const FAIXAS = [['Até 1 dia', '#e9c98e'], ['2 a 3 dias', '#e9b45e'], ['4 a 7 dias', '#e07a8f'], ['Mais de 7 dias', '#f08a7e']];
+  $('age-legenda').replaceChildren(...FAIXAS.map(([n, c]) => el('span', {}, el('i', { style: 'background:' + c }), n)));
+  const lista = f.vendedor === EQUIPE ? ativos.filter((v) => por[v].atrasadas) : [f.vendedor];
+  const maxA = Math.max(1, ...lista.map((v) => por[v].atrasadas));
+  $('age').replaceChildren(...(lista.length ? lista.map((v) => el('div', { class: 'tf-age-row' },
+    el('span', { text: v }),
+    el('div', { class: 'track', title: FAIXAS.map(([n], i) => n + ': ' + por[v].idade[i]).join(' · ') },
+      FAIXAS.map(([n, c], i) => el('i', { style: `width:${(por[v].idade[i] / maxA) * 100}%;background:${c}` }))),
+    el('span', { class: 'n', text: num(por[v].atrasadas) }))) : [el('p', { class: 'sm-empty', text: 'Nenhuma tarefa atrasada. 👏' })]));
+
+  document.querySelectorAll('.dash-skeleton').forEach((n) => n.classList.remove('dash-skeleton'));
+};
+
+let ultimaLargura = window.innerWidth;
+window.addEventListener('resize', () => { if (Math.abs(window.innerWidth - ultimaLargura) > 40) { ultimaLargura = window.innerWidth; desenhar(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) carregar(); });
+carregar();
+setInterval(carregar, ATUALIZA_MIN * 60 * 1000);
+</script>
+</body>
+</html>

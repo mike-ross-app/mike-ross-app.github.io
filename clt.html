@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Consulta CLT | Mike Ross</title>
+<style>
+:root{--bg:#fbf8f5;--surface:#fff;--surface-2:#f7efe8;--ink:#5e1624;--text:#2f2a2b;--muted:#777778;--line:#ecdccb;--accent:#9f1c37;--mark:#fde7b0;--warn:#b9470f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1214;--surface:#241a1d;--surface-2:#2d2125;--ink:#f1e2d8;--text:#ece5e2;--muted:#a9a0a0;--line:#3d2b30;--accent:#e0677f;--mark:#6b4a12;--warn:#f0a070}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px 60px}
+.wrap{max-width:860px;margin:0 auto}
+a{color:var(--accent)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:18px}
+h1{color:var(--ink);font-size:26px;margin:0}
+.top small{color:var(--muted)}
+.search{display:flex;gap:8px}
+.search input{flex:1;font:inherit;font-size:17px;padding:11px 14px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--text);min-width:0}
+.search input:focus{outline:3px solid var(--accent);outline-offset:1px}
+.hint{color:var(--muted);font-size:13.5px;margin:6px 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.chips button{font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:5px 11px;cursor:pointer}
+.chips button:hover{border-color:var(--accent)}
+.count{color:var(--muted);font-size:14px;margin:0 0 10px}
+.art{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;padding:14px 16px;margin-bottom:10px}
+.art h2{font-size:17px;margin:0;color:var(--ink);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.art .ctx{font-size:12.5px;color:var(--muted);margin:2px 0 8px}
+.art pre{white-space:pre-wrap;font:inherit;font-size:15px;margin:0}
+.art .snip{font-size:15px;margin:0}
+.art .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.art button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:7px;padding:4px 10px;cursor:pointer}
+.nota{font-size:12.5px;color:var(--warn);font-weight:600}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
+.empty{color:var(--muted)}
+.foot{margin-top:28px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href="/painel.html">Painel</a><a href="/tarefas.html">Tarefas</a><a href="/triagem.html">Triagem</a><a href="/procuracoes.html">Procurações</a><a href="/previdenciario.html">Previdenciário</a><a href="/clt.html" aria-current="page">CLT</a></div></nav>
+
+<div class="wrap">
+  <div class="top">
+    <h1>Consulta CLT</h1>
+    <small></small>
+  </div>
+  <form class="search" id="f" onsubmit="return false">
+    <input id="q" type="search" placeholder="Número do artigo (483, 484-A) ou palavras (justa causa, intervalo)" autocomplete="off" aria-label="Buscar na CLT">
+  </form>
+  <p class="hint">Só o texto em vigor: as redações revogadas e as de medidas provisórias que caducaram foram retiradas.</p>
+  <div class="chips" id="chips"></div>
+  <p class="count" id="count"></p>
+  <div id="res"><p class="empty">Carregando a CLT…</p></div>
+  <div class="foot">Fonte: <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm" target="_blank" rel="noopener">Decreto-Lei 5.452/1943, texto compilado do Planalto</a>, extraído em 08/10/2026. Antes de usar numa peça, confira a redação no Planalto.</div>
+</div>
+<script>
+const TEMAS=[["Rescisão indireta","483"],["Justa causa","482"],["Verbas rescisórias","477"],["Acordo","484-A"],["Aviso prévio","487"],["Horas extras","59"],["Intervalo","71"],["Adicional noturno","73"],["Férias","130"],["Férias em dobro","137"],["Equiparação salarial","461"],["Insalubridade","192"],["Periculosidade","193"],["Dano moral","223-C"],["Gestante","391-A"],["Prescrição","11"],["Justiça gratuita","790"],["Honorários","791-A"],["Ônus da prova","818"],["Acordo extrajudicial","855-B"]];
+const $=id=>document.getElementById(id);
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ARTS=[], BY={};
+const label=n=>'Art. '+n;
+function hl(text,words){ let h=esc(text); if(!words.length) return h; const nt=norm(text); const marks=[]; words.forEach(w=>{ let i=0; while((i=nt.indexOf(w,i))>-1){ marks.push([i,i+w.length]); i+=w.length; } }); if(!marks.length) return h; marks.sort((a,b)=>a[0]-b[0]); let out='',p=0; marks.forEach(([s,e])=>{ if(s<p) return; out+=esc(text.slice(p,s))+'<mark>'+esc(text.slice(s,e))+'</mark>'; p=e; }); return out+esc(text.slice(p)); }
+function card(a,words,full){
+  const notas=a.notas&&a.notas.length?`<span class="nota">${esc(a.notas.join(' · '))}</span>`:'';
+  let body;
+  if(a.revogado) body='<p class="snip empty">Artigo revogado.</p>';
+  else if(full) body=`<pre>${hl(a.texto,words)}</pre>`;
+  else { const nt=norm(a.texto); let i=words.length?nt.indexOf(words[0]):0; i=Math.max(0,i-120); const s=a.texto.slice(i,i+360); body=`<p class="snip">${i>0?'… ':''}${hl(s,words)}${a.texto.length>i+360?' …':''}</p>`; }
+  return `<article class="art" data-n="${esc(a.n)}"><h2>${label(a.n)} ${notas}</h2><div class="ctx">${esc(a.ctx||'')}</div>${body}<div class="acts">${full||a.revogado?'':'<button type="button" data-open="'+esc(a.n)+'">Ver artigo inteiro</button>'}<button type="button" data-copy="${esc(a.n)}">Copiar</button></div></article>`;
+}
+function search(){
+  const raw=$('q').value.trim();
+  const qn=norm(raw).replace(/^art(igo)?\.?\s*/,'').replace(/\s+/g,' ').trim();
+  history.replaceState(null,'',raw?'#'+encodeURIComponent(raw):location.pathname);
+  if(!qn){ $('count').textContent=''; $('res').innerHTML='<p class="empty">Digite um número de artigo ou um assunto.</p>'; return; }
+  const num=qn.match(/^(\d{1,3})\s*[ºo°]?\s*(?:-\s*([a-z]))?$/);
+  if(num){ const k=num[1]+(num[2]?'-'+num[2].toUpperCase():''); const a=BY[k]; $('count').textContent=a?'':'Artigo não encontrado.'; $('res').innerHTML=a?card(a,[],true):''; return; }
+  const words=qn.split(' ').filter(w=>w.length>1);
+  const phrase=qn;
+  const scored=[];
+  ARTS.forEach(a=>{ if(a.revogado) return; const t=a._n; if(!words.every(w=>t.includes(w))) return; let s=0; words.forEach(w=>{ s+=t.split(w).length-1; }); if(t.includes(phrase)) s+=20; scored.push([s,a]); });
+  scored.sort((x,y)=>y[0]-x[0]);
+  $('count').textContent=scored.length?`${scored.length} artigo(s) com ${words.length>1?'todas essas palavras':'essa palavra'}${scored.length>40?', mostrando os 40 mais relevantes':''}.`:'Nada encontrado. Tente outras palavras ou o número do artigo.';
+  $('res').innerHTML=scored.slice(0,40).map(([,a])=>card(a,words,false)).join('');
+}
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]'); if(o){ const a=BY[o.dataset.open]; const words=norm($('q').value).split(' ').filter(w=>w.length>1&&!/^\d/.test(w)); o.closest('.art').outerHTML=card(a,words,true); return; }
+  const c=e.target.closest('[data-copy]'); if(c){ const a=BY[c.dataset.copy]; const txt=a.texto+'\n(CLT, '+label(a.n)+')'; navigator.clipboard.writeText(txt).then(()=>{c.textContent='Copiado';setTimeout(()=>c.textContent='Copiar',1500);}).catch(()=>{c.textContent='Selecione e copie';}); return; }
+  const t=e.target.closest('[data-tema]'); if(t){ $('q').value=t.dataset.tema; search(); window.scrollTo({top:0}); }
+});
+$('q').addEventListener('input',()=>{ clearTimeout(search._t); search._t=setTimeout(search,180); });
+$('chips').innerHTML=TEMAS.map(([n,a])=>`<button type="button" data-tema="${a}">${n} · art. ${a}</button>`).join('');
+fetch('clt.json').then(r=>r.json()).then(d=>{ ARTS=d; d.forEach(a=>{ a._n=norm(a.texto); BY[a.n]=a; }); const h=decodeURIComponent(location.hash.slice(1)); if(h){ $('q').value=h; search(); } else { $('res').innerHTML='<p class="empty">Digite um número de artigo ou um assunto, ou use um dos atalhos acima.</p>'; } $('q').focus(); }).catch(()=>{ $('res').innerHTML='<p class="empty">Não consegui carregar a CLT. Recarregue a página.</p>'; });
+</script>
+</body>
+</html>

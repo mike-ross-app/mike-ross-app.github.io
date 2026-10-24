@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Mike Ross</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<style>
+body{margin:0;padding:20px 16px 0;overflow-x:hidden;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(150,0,50,.30),transparent 70%),var(--mr-night)}
+.sky{position:relative;overflow:hidden;margin:0 -16px;padding:0 16px}
+.hero{position:relative;max-width:1240px;margin:0 auto;min-height:770px;display:grid;place-items:start center;padding-top:56px;text-align:center}
+.hero-in{position:relative;z-index:2;width:100%;min-width:0;max-width:900px;padding:0 10px;box-sizing:border-box}
+.hero p.lead,.search{position:relative}
+.hero p.lead-top{margin:0 0 6px;font:500 15px var(--mr-sans);color:var(--mr-muted);letter-spacing:.02em}
+.hero h1{margin:0;font:600 clamp(36px,10vw,128px)/0.95 var(--mr-serif)!important;letter-spacing:.07em;text-transform:uppercase;color:var(--mr-ink);white-space:nowrap}
+.hero p.lead{margin:0 auto;max-width:52ch;font:400 16.5px/1.6 var(--mr-sans);color:var(--mr-muted)}
+.search{margin:30px auto 0;display:flex;gap:8px;max-width:520px;box-sizing:border-box;background:rgba(30,16,22,.88);border:1px solid var(--mr-line-strong);border-radius:999px;padding:6px}
+.search input{flex:1;min-width:0;background:transparent;border:0;color:var(--mr-ink);font:400 16px var(--mr-sans);padding:9px 14px}
+.search input::placeholder{color:#9d8389}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--mr-teal)}
+.search button{border:0;border-radius:999px;background:var(--mr-wine);color:#fbe9df;font:600 14.5px var(--mr-sans);padding:9px 18px;cursor:pointer;white-space:nowrap}
+.search button:hover{background:var(--mr-wine-hover)}
+/* medalhões e fachada */
+.crest{display:flex;align-items:center;justify-content:center;gap:14px;margin:22px auto 20px;color:var(--mr-teal)}
+.crest::before,.crest::after{content:"";width:64px;height:1px;background:linear-gradient(90deg,transparent,var(--mr-teal))}
+.crest::after{background:linear-gradient(90deg,var(--mr-teal),transparent)}
+.medal{position:absolute;top:250px;z-index:1;display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--mr-ink)}
+.medal .ring{width:148px;height:148px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 35%,#5a0b25 0%,#2a0a15 72%);border:1px solid rgba(213,173,149,.8);
+  box-shadow:0 0 0 7px var(--mr-night),0 0 0 8px rgba(213,173,149,.35),0 0 50px rgba(150,0,50,.45);color:var(--mr-teal)}
+.medal span{font:600 21px var(--mr-serif);letter-spacing:.12em;text-transform:uppercase;color:#ead6cb}
+.medal:hover span{color:var(--mr-teal)}
+.medal:hover .ring{box-shadow:0 0 0 7px var(--mr-night),0 0 0 8px rgba(213,173,149,.7),0 0 60px rgba(150,0,50,.65)}
+.medal.left{left:-20px}
+.medal.right{right:-20px;flex-direction:row-reverse}
+.facade{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:min(860px,118%);z-index:0;color:var(--mr-teal);opacity:.9;pointer-events:none}
+.facade svg{display:block;width:100%;height:auto;filter:drop-shadow(0 0 18px rgba(150,0,50,.7))}
+.sky::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,#1a0c12);z-index:1;pointer-events:none}
+@media (max-width:900px){.medal{top:auto;bottom:290px}.medal .ring{width:92px;height:92px}.medal .ring svg{width:40px;height:40px}.medal span{font-size:16px}.medal.left{left:-30px}.medal.right{right:-30px}.hero{min-height:700px}}
+@media (max-width:560px){.medal span{display:none}.medal{bottom:300px}}
+/* ferramentas */
+.tools{position:relative;z-index:3;background:#1a0c12;margin:0 -16px;padding:56px 16px 64px;border-top:1px solid rgba(213,173,149,.35)}
+.tools-in{max-width:960px;margin:0 auto}
+.tools h2{margin:0 0 6px;font-size:34px!important;color:var(--mr-ink)}
+.tools p.sub{margin:0 0 28px;color:var(--mr-muted);max-width:60ch}
+.area{display:grid;grid-template-columns:170px 1fr;gap:0 28px;padding:20px 0;border-top:1px solid var(--mr-line)}
+.area h3{margin:4px 0 0;font:600 22px var(--mr-serif)!important;color:var(--mr-teal)}
+.area ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.area a{display:grid;grid-template-columns:1fr auto;gap:2px 18px;align-items:center;text-decoration:none;color:var(--mr-ink);padding:12px 14px;margin:0 -14px;border-radius:10px}
+.area a:hover{background:var(--mr-surface-2)}
+.area a b{font:600 18px var(--mr-sans)}
+.area a span{grid-column:1;font-size:15px;color:var(--mr-muted)}
+.area a em{grid-column:2;grid-row:1/3;font:600 14px var(--mr-sans);font-style:normal;color:#fbe9df;background:var(--mr-wine);border-radius:999px;padding:7px 14px}
+@media (max-width:640px){.area{grid-template-columns:1fr}.area h3{margin-bottom:6px}.area a{grid-template-columns:1fr}.area a em{display:none}}
+.note{max-width:960px;margin:30px auto 0;font-size:13.5px;color:var(--mr-muted);border-top:1px solid var(--mr-line);padding-top:16px}
+</style>
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href="/painel.html">Painel</a><a href="/tarefas.html">Tarefas</a><a href="/triagem.html">Triagem</a><a href="/procuracoes.html">Procurações</a><a href="/previdenciario.html">Previdenciário</a><a href="/clt.html">CLT</a></div></nav>
+
+<div class="sky"><section class="hero">
+  <a class="medal left" href="/triagem.html"><div class="ring"><svg width="56" height="56" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="16" width="34" height="23" rx="2.5"/><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M7 26h34M21 26v3h6v-3"/></svg></div><span>Trabalhista</span></a>
+  <a class="medal right" href="/previdenciario.html"><div class="ring"><svg width="56" height="56" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7h22M13 41h22M16 7c0 9 8 11 8 17s-8 8-8 17M32 7c0 9-8 11-8 17s8 8 8 17"/><path d="M20 37c1.5-2 6.5-2 8 0"/></svg></div><span>Previdenciário</span></a>
+  <div class="hero-in">
+    <p class="lead-top">Simeão Advogados e Escolha Certa</p>
+    <h1>Mike Ross</h1>
+    <div class="crest" aria-hidden="true"><img src="simbolo.png" alt="" width="30" style="height:auto"></div>
+    <p class="lead">Lê a conversa do cliente, faz a conta, acha o artigo e diz o que perguntar. A palavra final é sempre do advogado.</p>
+    <form class="search" action="/clt.html" onsubmit="event.preventDefault(); const q=this.q.value.trim(); location.href='/clt.html'+(q?'#'+encodeURIComponent(q):'');">
+      <input name="q" type="search" placeholder="Buscar na CLT: 483, justa causa, intervalo" aria-label="Buscar na CLT" autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
+<div class="facade" aria-hidden="true"><svg viewBox="0 0 960 330" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M480 18L110 96h740z"/><path d="M180 90L480 30l300 60" opacity=".45"/><circle cx="480" cy="68" r="12" opacity=".7"/><path d="M96 96h768v14H96zM110 110h740"/><rect x="148" y="118" width="26" height="150" rx="2"/><path d="M144 118h34M144 268h34"/><rect x="238" y="118" width="26" height="150" rx="2"/><path d="M234 118h34M234 268h34"/><rect x="328" y="118" width="26" height="150" rx="2"/><path d="M324 118h34M324 268h34"/><rect x="418" y="118" width="26" height="150" rx="2"/><path d="M414 118h34M414 268h34"/><rect x="508" y="118" width="26" height="150" rx="2"/><path d="M504 118h34M504 268h34"/><rect x="598" y="118" width="26" height="150" rx="2"/><path d="M594 118h34M594 268h34"/><rect x="688" y="118" width="26" height="150" rx="2"/><path d="M684 118h34M684 268h34"/><rect x="778" y="118" width="26" height="150" rx="2"/><path d="M774 118h34M774 268h34"/><path d="M80 274h800v14H80zM60 288h840v14H60zM40 302h880v14H40z"/></svg></div>
+</section></div>
+
+<section class="tools">
+  <div class="tools-in">
+    <h2>Ferramentas</h2>
+    <p class="sub">Tudo roda no seu navegador. Nenhum dado de cliente sai do seu computador.</p>
+    <div class="area">
+      <h3>Equipe</h3>
+      <ul>
+        <li><a href="/painel.html"><b>Painel da equipe</b><span>O quadro da sala: meta do mês por serviço, semana a semana, e o ritmo que falta.</span><em>Abrir</em></a></li>
+        <li><a href="/tarefas.html"><b>Tarefas</b><span>Tarefas de cadência do Kommo: o que vence hoje, o que atrasou e quem conclui no prazo.</span><em>Abrir</em></a></li>
+      </ul>
+    </div>
+    <div class="area">
+      <h3>Trabalhista</h3>
+      <ul>
+        <li><a href="/triagem.html"><b>Triagem</b><span>Cole a conversa do WhatsApp e veja direitos prováveis, prazo, perguntas e a nota pro Kommo.</span><em>Abrir</em></a></li>
+        <li><a href="/procuracoes.html"><b>Procurações</b><span>Preencha os dados do cliente e baixe o pacote de procuração, contrato e declarações.</span><em>Abrir</em></a></li>
+      </ul>
+    </div>
+    <div class="area">
+      <h3>Previdenciário</h3>
+      <ul>
+        <li><a href="/previdenciario.html"><b>Raio-X</b><span>Suba o CNIS e veja as regras de aposentadoria, a qualidade de segurado e o BPC.</span><em>Abrir</em></a></li>
+      </ul>
+    </div>
+    <div class="area">
+      <h3>Consulta</h3>
+      <ul>
+        <li><a href="/clt.html"><b>CLT</b><span>A lei inteira em vigor, por número do artigo ou por assunto, com aviso do que o STF derrubou.</span><em>Abrir</em></a></li>
+      </ul>
+    </div>
+    <p class="note">Uso interno do time comercial. Não repasse este link para fora. Valores e prazos são estimativas para orientar o atendimento e nunca devem ser prometidos ao cliente.</p>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Procurações | Mike Ross</title>
+<meta name="description" content="Ferramenta interna para os vendedores emitirem o pacote de procuração e contrato do cliente." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+
+<style>
+  :root{
+    /* identidade Simeão Advogados: carmim #9F1C37, vinho #711A28, cinza #777778, pêssego #ECDCCB (extraídos do timbrado) */
+    --paper:#fbf8f5;
+    --surface:#ffffff;
+    --surface-2:#f7efe8;
+    --ink:#5e1624;
+    --text:#2f2a2b;
+    --muted:#777778;
+    --line:#ecdccb;
+    --line-strong:#dcc7b2;
+    --brass:#9f1c37;
+    --brass-soft:#c06a77;
+    --accent-solid:#9f1c37;
+    --accent-solid-hover:#711a28;
+    --ok:#3f7d52;
+    --ok-bg:#e6efe6;
+    --err:#b9470f;
+    --err-bg:#fbeadf;
+    --focus:#2f6f8f;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(94,22,36,.06), 0 8px 24px rgba(94,22,36,.07);
+    --maxw:1120px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#1a1214;
+      --surface:#241a1d;
+      --surface-2:#2d2125;
+      --ink:#f1e2d8;
+      --text:#ece5e2;
+      --muted:#a9a0a0;
+      --line:#3d2b30;
+      --line-strong:#58424a;
+      --brass:#e0677f;
+      --brass-soft:#b5545a;
+      --ok:#79b98d;
+      --ok-bg:#1e2a22;
+      --err:#f0a070;
+      --err-bg:#3a2418;
+      --focus:#6fb7d6;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1a1214;
+    --surface:#241a1d;
+    --surface-2:#2d2125;
+    --ink:#f1e2d8;
+    --text:#ece5e2;
+    --muted:#a9a0a0;
+    --line:#3d2b30;
+    --line-strong:#58424a;
+    --brass:#e0677f;
+    --brass-soft:#b5545a;
+    --ok:#79b98d;
+    --ok-bg:#1e2a22;
+    --err:#f0a070;
+    --err-bg:#3a2418;
+    --focus:#6fb7d6;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Fraunces", Georgia, "Times New Roman", serif; font-weight:600; color:var(--ink); text-wrap:balance; margin:0}
+  a{color:var(--focus)}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:6px}
+
+  .page{max-width:var(--maxw); margin:0 auto; padding:28px 20px 160px}
+
+  /* ---- masthead ---- */
+  .masthead{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; border-bottom:2px solid var(--brass); padding-bottom:14px; margin-bottom:22px}
+  .masthead .lede{display:flex; align-items:center; gap:12px}
+  .seal{width:30px; height:30px; border-radius:50%; border:2px solid var(--brass); display:grid; place-items:center; color:var(--brass); font-family:"Fraunces",serif; font-size:15px; flex:0 0 auto}
+  .masthead h1{font-size:24px; letter-spacing:.01em}
+  .masthead p{margin:2px 0 0; color:var(--muted); font-size:13px}
+  .office-tag{font-size:12px; color:var(--muted); text-align:right; line-height:1.5}
+  .office-tag b{color:var(--text); font-weight:600}
+
+  /* ---- type picker ---- */
+  .picker-intro{margin:0 0 16px; color:var(--muted); max-width:60ch}
+  .types{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  @media (max-width:820px){ .types{grid-template-columns:1fr} }
+  .type-card{
+    display:flex; flex-direction:column; text-align:left; gap:10px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 18px 16px; cursor:pointer; color:inherit; box-shadow:var(--shadow);
+    transition:border-color .15s, transform .15s;
+  }
+  .type-card:hover{border-color:var(--brass); transform:translateY(-2px)}
+  .type-card .eyebrow{font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--brass)}
+  .type-card h3{font-size:19px}
+  .type-card .docs{list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:5px; font-size:13px; color:var(--muted)}
+  .type-card .docs li{padding-left:16px; position:relative}
+  .type-card .docs li::before{content:"§"; position:absolute; left:0; color:var(--brass-soft); font-family:"Fraunces",serif}
+  .type-card .go{margin-top:auto; padding-top:12px; font-size:13px; font-weight:600; color:var(--ink)}
+  .type-card .go span{color:var(--brass)}
+
+  /* ---- workspace ---- */
+  .workspace{display:grid; grid-template-columns:300px 1fr; gap:26px; align-items:start}
+  @media (max-width:900px){ .workspace{grid-template-columns:1fr} }
+
+  .rail{position:sticky; top:20px; display:flex; flex-direction:column; gap:14px}
+  @media (max-width:900px){ .rail{position:static} }
+  .chip{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:linear-gradient(90deg,#711a28,#9f1c37); color:#fbf3ee; border-radius:var(--radius); padding:12px 14px;
+  }
+  .chip .k{font-size:11px; text-transform:uppercase; letter-spacing:.12em; opacity:.7}
+  .chip .v{font-family:"Fraunces",serif; font-size:17px; font-weight:600}
+  .chip button{background:transparent; border:1px solid rgba(246,243,236,.4); color:#f6f3ec; border-radius:6px; padding:4px 9px; font-size:12px; cursor:pointer}
+  .chip button:hover{border-color:#f6f3ec}
+
+  .locked{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px 15px}
+  .locked h2{font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); display:flex; align-items:center; gap:7px; margin-bottom:10px}
+  .locked h2 .lk{color:var(--brass)}
+  .locked .grp{font-size:12.5px; line-height:1.5; margin:0 0 10px}
+  .locked .grp:last-child{margin-bottom:0}
+  .locked .grp b{color:var(--ink); font-weight:600; display:block; font-family:"IBM Plex Sans",sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:2px}
+  .locked .grp span{color:var(--muted)}
+  .locked .note{font-size:12px; color:var(--brass); border-top:1px dashed var(--line-strong); padding-top:9px; margin-top:4px}
+
+  /* ---- form ---- */
+  .form{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+  fieldset{border:0; border-top:1px solid var(--line); margin:0; padding:20px 22px}
+  fieldset:first-of-type{border-top:0}
+  legend{font-family:"Fraunces",serif; font-size:16px; color:var(--ink); font-weight:600; padding:0; margin-bottom:2px; display:table}
+  .fs-hint{color:var(--muted); font-size:12.5px; margin:0 0 14px}
+  .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px 14px}
+  .field{display:flex; flex-direction:column; gap:5px; grid-column:span 12}
+  .col-8{grid-column:span 8} .col-7{grid-column:span 7} .col-6{grid-column:span 6} .col-5{grid-column:span 5}
+  .col-4{grid-column:span 4} .col-3{grid-column:span 3} .col-2{grid-column:span 2}
+  @media (max-width:620px){ .field[class*="col-"]{grid-column:span 12} }
+  label{font-size:12px; font-weight:600; color:var(--text); letter-spacing:.02em}
+  label .opt{color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0}
+  input[type=text], input[type=date], select, textarea{
+    font-family:inherit; font-size:14px; color:var(--text);
+    background:var(--surface); border:1px solid var(--line-strong); border-radius:8px;
+    padding:9px 11px; width:100%; transition:border-color .12s;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--focus); outline:none}
+  textarea{resize:vertical; min-height:62px; line-height:1.5}
+  input.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; letter-spacing:.02em}
+  .radio-row{display:flex; gap:8px}
+  .radio-row label{display:flex; align-items:center; gap:6px; border:1px solid var(--line-strong); border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:500; flex:1}
+  .radio-row input{accent-color:var(--brass)}
+  .radio-row label:has(input:checked){border-color:var(--brass); background:var(--surface-2)}
+  .err-msg{font-size:11.5px; color:var(--err); min-height:0}
+  .field.invalid input, .field.invalid select, .field.invalid textarea{border-color:var(--err); background:var(--err-bg)}
+
+  .ocr{display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:var(--surface-2); border:1px dashed var(--line-strong); border-radius:8px; padding:10px 12px; margin-bottom:14px}
+  .ocr p{margin:0; font-size:12.5px; color:var(--muted); flex:1; min-width:180px}
+  .btn-ghost{background:var(--surface); border:1px solid var(--line-strong); color:var(--ink); border-radius:8px; padding:8px 13px; font-size:13px; font-weight:600; cursor:pointer}
+  .btn-ghost:hover{border-color:var(--brass)}
+  .btn-ghost:disabled{opacity:.55; cursor:progress}
+
+  /* ---- action bar ---- */
+  .actionbar{
+    position:fixed; left:0; right:0; bottom:0; z-index:20;
+    background:var(--surface);
+    background:color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter:blur(8px); border-top:1px solid var(--line-strong);
+  }
+  .actionbar .inner{max-width:var(--maxw); margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+  .fname{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); word-break:break-all}
+  .fname b{color:var(--text); font-weight:500}
+  .btn-primary{
+    background:var(--accent-solid); color:#fff; border:0; border-radius:8px;
+    padding:11px 22px; font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(159,28,55,.3);
+  }
+  .btn-primary:hover{background:var(--accent-solid-hover)}
+  .btn-primary:disabled{opacity:.6; cursor:not-allowed; box-shadow:none}
+
+  .toast{
+    position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(12px);
+    background:#5e1624; color:#fbf3ee; padding:11px 18px; border-radius:9px; font-size:13.5px;
+    box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; max-width:90vw; text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--err)}
+
+  /* ---- result ---- */
+  .result{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px}
+  .result h2{font-size:19px; margin-bottom:6px; display:flex; align-items:center; gap:9px}
+  .result h2 .dot{width:9px; height:9px; border-radius:50%; background:var(--ok)}
+  .result p{color:var(--muted); margin:0 0 14px}
+  .result ol{margin:0 0 18px; padding-left:20px; display:flex; flex-direction:column; gap:5px}
+  .result .row{display:flex; gap:10px; flex-wrap:wrap}
+  .btn-line{background:var(--surface); border:1px solid var(--line-strong); color:var(--ink); border-radius:8px; padding:9px 15px; font-size:13px; font-weight:600; cursor:pointer}
+  .btn-line:hover{border-color:var(--brass)}
+
+  .hidden{display:none !important}
+  .foot{margin-top:26px; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--muted); line-height:1.6}
+
+  @media (prefers-reduced-motion:reduce){ *{transition:none !important} }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<nav class="mr-bar"><a class="mr-brand" href="/"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href="/painel.html">Painel</a><a href="/tarefas.html">Tarefas</a><a href="/triagem.html">Triagem</a><a href="/procuracoes.html" aria-current="page">Procurações</a><a href="/previdenciario.html">Previdenciário</a><a href="/clt.html">CLT</a></div></nav>
+
+<div class="page">
+  <header class="masthead">
+    <div class="lede">
+      <div class="seal">§</div>
+      <div>
+        <h1>Gerador de Procurações</h1>
+        <p>Emissão do pacote de documentos do cliente — uso interno dos vendedores</p>
+      </div>
+    </div>
+    <div class="office-tag" id="officeTag">
+      <b>Simeão Advogados</b><br />
+      <span>Escolha Certa Assessoria</span>
+    </div>
+  </header>
+
+  <!-- STEP 1 -->
+  <section id="step1">
+    <p class="picker-intro">Escolha o tipo de procuração. Os dados do escritório entram automaticamente e travados; você preenche apenas os dados do cliente.</p>
+    <div class="types" id="typeCards"></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section id="step2" class="workspace hidden">
+    <aside class="rail">
+      <div class="chip">
+        <div>
+          <div class="k">Pacote</div>
+          <div class="v" id="chipTipo">—</div>
+        </div>
+        <button type="button" id="trocar">Trocar</button>
+      </div>
+      <div class="locked" id="lockedPanel"></div>
+    </aside>
+
+    <div>
+      <form class="form" id="form" novalidate>
+        <fieldset>
+          <legend>Identificação do cliente</legend>
+          <p class="fs-hint">Como vai aparecer na qualificação do outorgante em todos os documentos.</p>
+          <div class="ocr hidden" id="ocrBox">
+            <p>Tem foto do RG ou CNH? Extraia nome, CPF e RG automaticamente.</p>
+            <input type="file" id="ocrFile" accept="image/*" class="hidden" />
+            <button type="button" class="btn-ghost" id="ocrBtn">Preencher com foto do documento</button>
+          </div>
+          <div class="grid">
+            <div class="field col-8"><label for="nome">Nome completo</label><input type="text" id="nome" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-4">
+              <label>Sexo <span class="opt">(p/ concordância)</span></label>
+              <div class="radio-row">
+                <label><input type="radio" name="sexo" value="M" /> Masc.</label>
+                <label><input type="radio" name="sexo" value="F" /> Fem.</label>
+              </div><span class="err-msg"></span>
+            </div>
+            <div class="field col-4"><label for="nacionalidade">Nacionalidade <span class="opt">(opcional)</span></label><input type="text" id="nacionalidade" placeholder="brasileiro(a)" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-4">
+              <label for="estadoCivil">Estado civil</label>
+              <select id="estadoCivil">
+                <option value="">Selecione…</option>
+                <option value="solteiro">Solteiro(a)</option>
+                <option value="casado">Casado(a)</option>
+                <option value="divorciado">Divorciado(a)</option>
+                <option value="viuvo">Viúvo(a)</option>
+                <option value="separado">Separado(a) judicialmente</option>
+                <option value="uniao">União estável</option>
+              </select><span class="err-msg"></span>
+            </div>
+            <div class="field col-4"><label for="profissao">Profissão <span class="opt">(opcional)</span></label><input type="text" id="profissao" autocomplete="off" /><span class="err-msg"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Documentos</legend>
+          <div class="grid">
+            <div class="field col-4"><label for="rg">RG <span class="opt">(opcional)</span></label><input type="text" id="rg" class="mono" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-4"><label for="orgao">Órgão expedidor / UF <span class="opt">(opcional)</span></label><input type="text" id="orgao" placeholder="SSP/RJ" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-4"><label for="cpf">CPF</label><input type="text" id="cpf" class="mono" inputmode="numeric" placeholder="000.000.000-00" autocomplete="off" /><span class="err-msg"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Endereço</legend>
+          <div class="grid">
+            <div class="field col-7"><label for="logradouro">Logradouro</label><input type="text" id="logradouro" placeholder="Rua / Avenida" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-2"><label for="numero">Número</label><input type="text" id="numero" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-3"><label for="complemento">Complemento <span class="opt">(opcional)</span></label><input type="text" id="complemento" placeholder="apto, bloco, casa" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-5"><label for="bairro">Bairro</label><input type="text" id="bairro" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-4"><label for="cidade">Cidade</label><input type="text" id="cidade" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-3"><label for="uf">UF</label><select id="uf"><option value="">—</option></select><span class="err-msg"></span></div>
+            <div class="field col-3"><label for="cep">CEP</label><input type="text" id="cep" class="mono" inputmode="numeric" placeholder="00000-000" autocomplete="off" /><span class="err-msg"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Contato</legend>
+          <div class="grid">
+            <div class="field col-4"><label for="telefone">Telefone <span class="opt">(opcional)</span></label><input type="text" id="telefone" class="mono" placeholder="(00) 00000-0000" autocomplete="off" /><span class="err-msg"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset id="fsAcao">
+          <legend id="acaoLegend">Dados da ação</legend>
+          <div class="grid" id="acaoGrid"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Local e data da assinatura</legend>
+          <div class="grid">
+            <div class="field col-6"><label for="local">Local</label><input type="text" id="local" autocomplete="off" /><span class="err-msg"></span></div>
+            <div class="field col-3"><label for="data">Data</label><input type="date" id="data" /><span class="err-msg"></span></div>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="foot">
+        Gera <b>um único arquivo Word</b> (.docx) com todos os documentos do pacote, um por página, prontos para conferência e assinatura.
+        Confira sempre os dados antes de enviar ao cliente.
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section id="step3" class="hidden">
+    <div class="result">
+      <h2><span class="dot"></span> Pacote gerado</h2>
+      <p id="resultSub">O download foi oferecido pelo navegador.</p>
+      <ol id="resultList"></ol>
+      <div class="row">
+        <button type="button" class="btn-line" id="again">Gerar novamente</button>
+        <button type="button" class="btn-line" id="novo">Novo cliente</button>
+        <button type="button" class="btn-line" id="trocar2">Trocar tipo de procuração</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="actionbar hidden" id="actionbar">
+  <div class="inner">
+    <div class="fname">Arquivo: <b id="fnamePreview">—</b></div>
+    <button type="button" class="btn-primary" id="gerar">Gerar pacote .docx</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DADOS FIXOS DO ESCRITÓRIO  —  nunca editáveis pelo vendedor
+   ============================================================ */
+const SIMEAO_ADDR = "Praça da Mantiqueira, nº 18, sala 24, Xerém, Duque de Caxias/RJ, CEP: 25245-350";
+
+const OUTORGADOS_TRAB =
+  "JOYCE DE OLIVEIRA SANTOS TEIXEIRA, brasileira, advogada inscrita na OAB/RJ sob o nº 210.628, "
+  + "NATALINO SIMEÃO DA SILVA, brasileiro, advogado inscrito na OAB/RJ sob o nº 135.658, "
+  + "THALES DA SILVA NASCIMENTO, brasileiro, advogado inscrito na OAB/RJ sob o nº 256.311 e "
+  + "SIMEÃO ADVOGADOS ASSOCIADOS, pessoa jurídica inscrita no CNPJ sob o nº 59.216.769/0001-94, "
+  + "todos com endereço profissional na " + SIMEAO_ADDR + ".";
+
+const OUTORGADOS_JUROS =
+  "JOYCE DE OLIVEIRA SANTOS TEIXEIRA, brasileira, advogada inscrita na OAB/RJ sob o nº 210.628, "
+  + "NATALINO SIMEÃO DA SILVA, brasileiro, advogado inscrito na OAB/RJ sob o nº 135.658 e "
+  + "SIMEÃO ADVOGADOS ASSOCIADOS, pessoa jurídica inscrita no CNPJ sob o nº 59.216.769/0001-94, "
+  + "todos com endereço profissional na " + SIMEAO_ADDR + ".";
+
+const CONTRATADAS_SIMEAO =
+  "JOYCE DE OLIVEIRA SANTOS TEIXEIRA, brasileira, advogada inscrita na OAB/RJ sob o nº 210.628, "
+  + "NATALINO SIMEÃO DA SILVA, brasileiro, advogado inscrito na OAB/RJ sob o nº 135.658 e "
+  + "SIMEÃO ADVOGADOS ASSOCIADOS, inscrito no CNPJ sob o nº 59.216.769/0001-94, "
+  + "com endereço profissional situado à " + SIMEAO_ADDR;
+
+const OUTORGADO_PREV =
+  "ESCOLHA CERTA ASSESSORIA, inscrita no CNPJ sob o nº 68.634.272/0001-87, "
+  + "com sede na Av. Nóbrega Ribeiro, nº 10, Loja 03, Xerém, Duque de Caxias/RJ, CEP 25250-050.";
+
+const PODERES_JUDICIAIS =
+  "Pelo presente instrumento particular, o(a) outorgante nomeia e constitui seus bastante procuradores os outorgados, "
+  + "com poderes das cláusulas ad judicia et extra, em geral para patrocinar e defender seus interesses em qualquer "
+  + "instância, juízo ou tribunal, bem como perante repartições públicas e entidades privadas, e em especial, para "
+  + "judicial ou extrajudicialmente, acordar, discordar, transigir, desistir, receber e dar quitação, receber alvarás "
+  + "e mandados de pagamento, assinar termos e substabelecer.";
+
+const AVISO_619 = "CUMPRE INFORMAR, QUE A PRESENTE PROCURAÇÃO, ENCONTRA-SE NOS TERMOS DA GERAL DE JUSTIÇA, AVISO Nº 619.";
+
+/* ---------- textos revisados, usados só no card TEA ---------- */
+const PODERES_JUDICIAIS_TEA = PODERES_JUDICIAIS.replace("seus bastante procuradores", "seus bastantes procuradores");
+const AVISO_619_TEA = "Cumpre informar que a presente procuração encontra-se nos termos do Aviso nº 619 da Corregedoria Geral da Justiça.";
+
+const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const ESTADO_CIVIL = {
+  solteiro:["solteiro","solteira"],
+  casado:["casado","casada"],
+  divorciado:["divorciado","divorciada"],
+  viuvo:["viúvo","viúva"],
+  separado:["separado judicialmente","separada judicialmente"],
+  uniao:["convivente em união estável","convivente em união estável"],
+};
+
+const TIPOS = {
+  trabalhista:{
+    label:"Trabalhista", eyebrow:"Simeão Advogados",
+    docs:["Procuração ad judicia et extra","Contrato de honorários (ação trabalhista)","Declaração de hipossuficiência","Declaração de residência"],
+  },
+  juros:{
+    label:"Juros / Bancária", eyebrow:"Simeão Advogados",
+    docs:["Procuração ad judicia et extra","Termo de responsabilidade","Declaração de hipossuficiência","Contrato de honorários (ação bancária)","Declaração de residência"],
+  },
+  tea:{
+    label:"TEA", eyebrow:"Simeão Advogados",
+    docs:["Procuração (representação do menor)","Termo de responsabilidade","Declaração de hipossuficiência","Contrato de honorários (R$ 2.500 + êxito)","Declaração de residência"],
+  },
+  previdenciario:{
+    label:"Previdenciário", eyebrow:"Escolha Certa Assessoria",
+    docs:["Procuração administrativa","Contrato de honorários (Simeão)","Declaração de hipossuficiência","Declaração de residência"],
+  },
+};
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const state = { tipo:null };
+let downloads = null;
+let sampleApi = null;
+let sampleImages = null;
+
+/* ============================================================
+   HELPERS DE QUALIFICAÇÃO / TEXTO
+   ============================================================ */
+function digits(s){ return (s||"").replace(/\D+/g,""); }
+function fmtCPF(s){ const d=digits(s).padStart(11,"0").slice(0,11); return d.slice(0,3)+"."+d.slice(3,6)+"."+d.slice(6,9)+"-"+d.slice(9); }
+function fmtCEP(s){ const d=digits(s).slice(0,8); return d.slice(0,5)+"-"+d.slice(5); }
+function maskCPF(s){ const d=digits(s).slice(0,11); let o=d.slice(0,3); if(d.length>3) o+="."+d.slice(3,6); if(d.length>6) o+="."+d.slice(6,9); if(d.length>9) o+="-"+d.slice(9); return o; }
+function maskCEP(s){ const d=digits(s).slice(0,8); return d.length>5 ? d.slice(0,5)+"-"+d.slice(5) : d; }
+function validCPF(s){
+  const d=digits(s); if(d.length!==11||/^(\d)\1{10}$/.test(d)) return false;
+  let sum=0; for(let i=0;i<9;i++) sum+=+d[i]*(10-i);
+  let r=(sum*10)%11; if(r===10) r=0; if(r!==+d[9]) return false;
+  sum=0; for(let i=0;i<10;i++) sum+=+d[i]*(11-i);
+  r=(sum*10)%11; if(r===10) r=0; return r===+d[10];
+}
+
+function qualificacao(c){
+  const fem = c.sexo === "F";
+  const a = fem ? "a" : "o";
+  const nac = c.nacionalidade.trim() || (fem ? "brasileira" : "brasileiro");
+  const ec = (ESTADO_CIVIL[c.estadoCivil] || ["",""])[fem?1:0];
+  const parts = [c.nome.toUpperCase().trim(), nac, ec];
+  if (c.profissao.trim()) parts.push(c.profissao.trim().toLowerCase());
+  if (c.rg.trim()){
+    parts.push("portador"+a+" da cédula de identidade RG nº "+c.rg.trim()
+      + (c.orgao.trim() ? " "+c.orgao.trim() : "")
+      + " e inscrit"+a+" no CPF sob o nº "+fmtCPF(c.cpf));
+  } else {
+    parts.push("inscrit"+a+" no CPF sob o nº "+fmtCPF(c.cpf));
+  }
+  let end = "residente e domiciliad"+a+" na "+c.logradouro.trim()+", nº "+c.numero.trim();
+  if (c.complemento.trim()) end += ", "+c.complemento.trim();
+  end += ", "+c.bairro.trim()+", "+c.cidade.trim()+"/"+c.uf+", CEP "+fmtCEP(c.cep);
+  parts.push(end);
+  let s = parts.join(", ") + ".";
+  if (c.telefone.trim()) s = s.slice(0,-1) + ", telefone " + c.telefone.trim() + ".";
+  return s;
+}
+function dataExtenso(iso){
+  const [y,m,d] = iso.split("-").map(Number);
+  return d + " de " + MESES[m-1] + " de " + y;
+}
+
+/* ============================================================
+   CONSTRUÇÃO DOS DOCUMENTOS  (blocos -> WordprocessingML)
+   ============================================================ */
+function T(text, opts){ return Object.assign({ text:String(text) }, opts||{}); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function xmlRun(r){
+  let rpr = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="'+(r.size||24)+'"/><w:szCs w:val="'+(r.size||24)+'"/>';
+  if (r.bold) rpr += "<w:b/>";
+  if (r.italic) rpr += "<w:i/>";
+  const segs = String(r.text).split("\n");
+  let t = "";
+  segs.forEach((seg,i)=>{ if(i) t += "<w:br/>"; t += '<w:t xml:space="preserve">'+esc(seg)+"</w:t>"; });
+  return "<w:r><w:rPr>"+rpr+"</w:rPr>"+t+"</w:r>";
+}
+function xmlPara(content, o){
+  o = o || {};
+  const align = o.align || "both";
+  const after = o.after==null ? 200 : o.after;
+  const before = o.before || 0;
+  const line = o.line || 360;
+  const runs = Array.isArray(content) ? content.map(xmlRun).join("") : xmlRun(T(content));
+  return '<w:p><w:pPr><w:spacing w:before="'+before+'" w:after="'+after+'" w:line="'+line+'" w:lineRule="auto"/>'
+    + '<w:jc w:val="'+align+'"/></w:pPr>'+runs+"</w:p>";
+}
+const PAGE_BREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+
+function bTitle(text){ return xmlPara([T(text.toUpperCase(),{bold:true,size:28})], {align:"center", after:320}); }
+function bHead(text){ return xmlPara([T(text,{bold:true})], {align:"both", after:200}); }
+function bPara(text){ return xmlPara(text, {align:"both"}); }
+function bJust(runs){ return xmlPara(runs, {align:"both"}); }
+function bClause(tag, rest){ return xmlPara([T(tag+" ",{bold:true}), T(rest)], {align:"both"}); }
+function bDate(local, iso){ return xmlPara(local + ", " + dataExtenso(iso) + ".", {align:"both", before:200, after:200}); }
+function bGap(){ return xmlPara("", {after:0}); }
+function bSign(name, role){
+  return bGap()
+    + xmlPara("_____________________________________________", {align:"center", after:0, before:360})
+    + xmlPara([T(name.toUpperCase(),{bold:true})], {align:"center", after:0})
+    + (role ? xmlPara([T(role)], {align:"center", after:0}) : "");
+}
+function bWitnesses(){
+  return bGap()
+    + xmlPara([T("Testemunhas:",{bold:true})], {align:"both", before:240, after:120})
+    + xmlPara("1. ____________________________________   Nome:                                CPF:", {align:"both", after:80})
+    + xmlPara("2. ____________________________________   Nome:                                CPF:", {align:"both", after:0});
+}
+
+/* ---------- PROCURAÇÕES ---------- */
+function docProcTrabOuJuros(c, outorgados){
+  const q = qualificacao(c);
+  return { blocks:[
+    bTitle("Procuração"),
+    bJust([T("OUTORGANTE: ",{bold:true}), T(q)]),
+    bJust([T("OUTORGADOS: ",{bold:true}), T(outorgados)]),
+    bPara(PODERES_JUDICIAIS),
+    bPara(AVISO_619),
+    bDate(c.local, c.data),
+    bSign(c.nome, "OUTORGANTE"),
+  ]};
+}
+function docProcPrev(c){
+  const q = qualificacao(c);
+  let fim = "Especialmente para propor requerimento administrativo previdenciário e/ou ação judicial previdenciária";
+  if (c.beneficio && c.beneficio.trim()) fim += ", com o objetivo de obter " + c.beneficio.trim();
+  fim += ".";
+  return { blocks:[
+    bTitle("Procuração"),
+    bJust([T("OUTORGANTE: ",{bold:true}), T(q)]),
+    bJust([T("OUTORGADO(A): ",{bold:true}), T(OUTORGADO_PREV)]),
+    bHead("PODERES"),
+    bPara("A presente autorização confere à ASSESSORIA CONTRATADA poderes para representar e acompanhar os interesses do CONTRATANTE perante instituições financeiras, órgãos públicos e privados, empresas, entidades e demais órgãos competentes, podendo, em seu nome, realizar requerimentos administrativos, solicitar e acompanhar documentos, informações, contratos, extratos e demais registros necessários à análise e acompanhamento da demanda."),
+    bPara("A ASSESSORIA poderá ainda realizar diligências, protocolos, solicitações, tratativas e acompanhamentos administrativos, bem como receber documentos e informações, prestar esclarecimentos e praticar os atos necessários ao regular desenvolvimento dos serviços contratados."),
+    bPara("Fica expressamente estabelecido que os poderes ora conferidos não abrangem a prática de atos privativos de advogado, tais como representação judicial, propositura de ações, apresentação de defesa em processos judiciais, interposição de recursos ou demais atos sujeitos à representação por profissional regularmente inscrito na OAB, os quais, quando necessários, serão realizados por advogado habilitado, mediante instrumento próprio."),
+    bPara("A presente autorização poderá ser substabelecida ou compartilhada, total ou parcialmente, exclusivamente para a realização dos atos administrativos e de assessoria previstos neste instrumento, sempre respeitando os limites legais da atuação da ASSESSORIA CONTRATADA."),
+    bPara("O CONTRATANTE declara, para todos os fins, que está ciente e de acordo com os poderes administrativos ora concedidos, dando por válidos e eficazes os atos praticados pela ASSESSORIA dentro dos limites desta autorização."),
+    bHead("FINALIDADE"),
+    bPara(fim),
+    bDate(c.local, c.data),
+    bSign(c.nome, "OUTORGANTE"),
+  ]};
+}
+
+/* ---------- TERMO / DECLARAÇÃO ---------- */
+function docTermoResp(c){
+  return { blocks:[
+    bTitle("Termo de Responsabilidade de Informações Prestadas"),
+    bJust([T(qualificacao(c))]),
+    bPara("Declaro para os devidos fins de direito, sob as penas da lei, que as informações prestadas e documentos que apresentei aos advogados constituídos para a finalidade de ajuizar " + (c.objeto || "a demanda cabível") + " são verdadeiros e autênticos (fiéis à verdade e condizentes com a realidade dos fatos à época)."),
+    bPara("Sendo assim, declaro nesta oportunidade que tive acesso a minha petição inicial e concordo com todos os pedidos elencados."),
+    bPara("Por fim, fico ciente através deste documento que a falsidade dessa declaração configura crime previsto no Código Penal Brasileiro e passível de apuração na forma da Lei. Além da ciência de responsabilidade sob todos os efeitos e danos causados pelas minhas declarações."),
+    bPara("Por ser verdade, dou fé."),
+    bDate(c.local, c.data),
+    bSign(c.nome, ""),
+  ]};
+}
+function docHipossuficiencia(c){
+  return { blocks:[
+    bTitle("Declaração de Hipossuficiência"),
+    bJust([T(qualificacao(c))]),
+    bPara("DECLARO para os devidos fins, que não tenho como arcar com as despesas processuais e demais encargos do processo, sem prejuízo do meu sustento e de minha família. Necessitando, portanto, da GRATUIDADE DA JUSTIÇA, prevista na Lei nº 1.060/50 e nos termos do art. 98 e seguintes da Lei 13.105/2015 (Código de Processo Civil). Requeiro, ainda, que o benefício abranja a todos os atos do processo."),
+    bPara("DECLARO sob pena da lei, que as informações prestadas e documentos que apresento para finalidade processual, são verdadeiros e autênticos. Fico ciente através deste documento que as informações prestadas eximem a patrona contratada acerca dos mesmos, de qualquer responsabilidade."),
+    bPara("Nada mais a declarar, e ciente das responsabilidades pelas declarações prestadas, por ser verdade, firmo o presente sob as penas da Lei para que surta os seus efeitos jurídicos legais necessários."),
+    bDate(c.local, c.data),
+    bSign(c.nome, ""),
+  ]};
+}
+
+function enderecoCliente(c){
+  let end = c.logradouro.trim()+", nº "+c.numero.trim();
+  if (c.complemento.trim()) end += ", "+c.complemento.trim();
+  return end + ", "+c.bairro.trim()+", "+c.cidade.trim()+"/"+c.uf+", CEP "+fmtCEP(c.cep);
+}
+function docResidencia(c){
+  const a = c.sexo === "F" ? "a" : "o";
+  return { blocks:[
+    bTitle("Declaração de Residência"),
+    bJust([T(qualificacao(c))]),
+    bPara("DECLARO, para os devidos fins de comprovação de residência e sob as penas da lei, nos termos da Lei nº 7.115/83, que resido e sou domiciliad"+a+" no seguinte endereço: "+enderecoCliente(c)+"."),
+    bPara("Declaro, ainda, estar ciente de que a falsidade desta declaração poderá configurar o crime previsto no art. 299 do Código Penal, sem prejuízo das demais sanções cabíveis."),
+    bPara("Por ser expressão da verdade, firmo a presente declaração."),
+    bDate(c.local, c.data),
+    bSign(c.nome, ""),
+  ]};
+}
+
+/* ---------- CONTRATOS DE HONORÁRIOS ---------- */
+function docContratoTrab(c){
+  const finalidade = "AÇÃO TRABALHISTA" + (c.reclamada && c.reclamada.trim() ? " EM FACE DE " + c.reclamada.trim().toUpperCase() : "");
+  return { blocks:[
+    bTitle("Contrato de Honorários Advocatícios"),
+    bJust([T("CONTRATANTE: ",{bold:true}), T(qualificacao(c))]),
+    bJust([T("CONTRATADAS: ",{bold:true}), T(CONTRATADAS_SIMEAO + ", têm entre si, justo e contratado o seguinte:")]),
+    bClause("CLÁUSULA PRIMEIRA –", "O(a) CONTRATANTE requer os serviços profissionais da CONTRATADA para a realização dos serviços advocatícios, que tem por finalidade, a condução de " + finalidade + "."),
+    bClause("CLÁUSULA SEGUNDA –", "Pelos serviços que a CONTRATADA prestar a parte CONTRATANTE, na forma da cláusula anterior, receberá a título de honorários advocatícios contratuais, o percentual de 30% (trinta por cento) sobre o valor bruto de tudo o que vier a perceber em decorrência do processo, seja a que título for, incluindo, mas não se limitando a, verbas trabalhistas, rescisórias, indenizatórias, diferenças salariais, FGTS (depositado ou liberado), multa de 40% do FGTS, seguro-desemprego, valores oriundos de acordos, sentenças ou execuções, bem como quaisquer outras verbas ou vantagens econômicas obtidas decorrente do processo."),
+    bClause("CLÁUSULA TERCEIRA –", "Todas as despesas relacionadas ao presente contrato, incluindo, mas não se limitando a honorários contábeis, custas judiciais, taxas, emolumentos e quaisquer outros encargos necessários à execução dos serviços, serão de responsabilidade exclusiva do(a) CONTRATANTE. A CONTRATADA poderá adiantar tais despesas, sendo este obrigado a reembolsá-la no prazo de 1 dia útil, a contar da apresentação do comprovante de pagamento."),
+    bClause("CLÁUSULA QUARTA –", "O presente contrato permanecerá válido até o encerramento da demanda. Caso o(a) CONTRATANTE desista da ação, revogue o mandato ou substitua as CONTRATADAS sem que esta tenha dado motivo, serão devidos honorários pelos serviços realizados até a data do encerramento da contratação, observados os seguintes valores:"),
+    bPara("I – Rescisão após elaboração da petição inicial: um salário-mínimo nacional vigente no momento do encerramento do contrato;"),
+    bPara("II – Rescisão em fase de sentença ou fase de recurso: 30% (trinta por cento) sobre o valor reconhecido na sentença;"),
+    bPara("III – Rescisão em fase de cálculo ou execução: 30% (trinta por cento) sobre o valor da liquidação ou execução."),
+    bClause("Parágrafo Primeiro:", "os honorários previstos nesta cláusula são devidos pelos serviços realizados até a rescisão contratual, incluindo atendimentos, análise de documentos, elaboração de petições, participação em audiências, acompanhamento do processo e demais providências adotadas na defesa dos interesses do(a) CONTRATANTE."),
+    bClause("Parágrafo Segundo:", "caso o CONTRATANTE faça acordo diretamente com a outra parte, durante ou após o encerramento do contrato, os honorários continuarão devidos sempre que o acordo estiver relacionado aos fatos, pedidos ou valores discutidos no processo acompanhado pela CONTRATADA."),
+    bClause("CLÁUSULA QUINTA –", "A CONTRATANTE é o(a) único(a) responsável por fornecer à CONTRATADA todos os documentos e informações necessários e relevantes para o adequado desenvolvimento do processo. Caso a ausência ou a incorreção de tais documentos e informações causem prejuízos ao processo, a responsabilidade pelo resultado recairá exclusivamente sobre a CONTRATANTE."),
+    bClause("CLÁUSULA SEXTA –", "A CONTRATADA se compromete a empregar todos os esforços e a utilizar de todos os meios legais disponíveis para a adequada condução do processo, pautando-se pela ética e pelo profissionalismo, porém não garante o resultado da demanda, uma vez que este depende de fatores alheios à sua atuação, como as decisões judiciais."),
+    bClause("CLÁUSULA SÉTIMA –", "Cabe à CONTRATADA manter a CONTRATANTE informada dos atos pertinentes ao processo."),
+    bClause("CLÁUSULA OITAVA –", "Não há prazo previsto para a conclusão do processo. Ambas as partes estão cientes de que o serviço prestado pela CONTRATADA é um trabalho de meio."),
+    bClause("CLÁUSULA NONA –", "As partes elegem o Foro da Comarca de Duque de Caxias/RJ para dirimir possíveis questões oriundas deste Contrato."),
+    bClause("CLÁUSULA DÉCIMA –", "O(a) CONTRATANTE declara que leu e compreendeu todas as cláusulas deste contrato, especialmente aquelas que tratam dos honorários advocatícios, do percentual contratado, da forma de cálculo, dos valores sobre os quais serão cobrados, das despesas necessárias ao andamento do processo, como honorários contábeis, custas judiciais, taxas e demais encargos, bem como dos honorários previstos na Cláusula Quarta para os casos de encerramento do contrato por desistência do processo, substituição da CONTRATADA ou ausência injustificada à audiência. A CONTRATANTE declara, ainda, que recebeu todas as explicações necessárias, não possui dúvidas sobre o conteúdo do contrato e concorda com todas as suas condições, assinando-o de forma livre, consciente e espontânea."),
+    bDate("Duque de Caxias/RJ", c.data),
+    bSign(c.nome, "CONTRATANTE"),
+    bSign("Simeão Advogados Associados", "CONTRATADAS"),
+  ]};
+}
+function docContratoJuros(c){
+  return { blocks:[
+    bTitle("Contrato de Honorários Advocatícios"),
+    bJust([T("CONTRATANTE: ",{bold:true}), T(qualificacao(c))]),
+    bJust([T("CONTRATADAS: ",{bold:true}), T(OUTORGADOS_JUROS)]),
+    bClause("CLÁUSULA PRIMEIRA –", "O CONTRATANTE requer os serviços profissionais da CONTRATADA para a realização dos serviços advocatícios, que tem por finalidade, a condução de AÇÃO BANCÁRIA."),
+    bClause("CLÁUSULA SEGUNDA –", "Pelos serviços que a CONTRATADA prestar a parte CONTRATANTE, na forma da cláusula anterior, receberá a título de honorários advocatícios, o percentual de 30% (trinta por cento) do que vier a perceber de cada um dos processos + 10% em fase de recurso + 1 salário mínimo vigente da época."),
+    bClause("CLÁUSULA TERCEIRA –", "Todas as despesas relacionadas ao presente contrato, incluindo, mas não se limitando a honorários contábeis, custas judiciais, taxas, emolumentos e quaisquer outros encargos necessários à execução dos serviços, serão de responsabilidade exclusiva do CONTRATANTE. A CONTRATADA poderá adiantar tais despesas, sendo este obrigado a reembolsá-la no prazo de 1 dia útil, a contar da apresentação do comprovante de pagamento."),
+    bClause("CLÁUSULA QUARTA –", "O presente contrato é feito por prazo indeterminado, ou seja, até o fim da demanda, todavia, será permitida a sua rescisão, por consentimento mútuo, salvo exceções quando o CONTRATANTE desejar substituir a CONTRATADA, sem justo motivo, pois dessa forma, serão devidos os honorários ajustados, ou quando realizar acordo extrajudicial com a demanda já em trâmite."),
+    bClause("CLÁUSULA QUINTA –", "O CONTRATANTE é o único responsável por fornecer à CONTRATADA todos os documentos e informações necessários e relevantes para o adequado desenvolvimento do processo. Caso a ausência ou a incorreção de tais documentos e informações causem prejuízos ao processo, a responsabilidade pelo resultado recairá exclusivamente sobre o CONTRATANTE."),
+    bClause("CLÁUSULA SEXTA –", "A CONTRATADA se compromete a empregar todos os esforços e a utilizar de todos os meios legais disponíveis para a adequada condução do processo, pautando-se pela ética e pelo profissionalismo, porém, não garante o resultado final da demanda, uma vez que este depende de fatores alheios à sua atuação, como as decisões judiciais."),
+    bClause("CLÁUSULA SÉTIMA –", "Cabe à CONTRATADA manter o CONTRATANTE informado dos atos pertinentes ao processo."),
+    bClause("CLÁUSULA OITAVA –", "Não há prazo previsto para a conclusão do processo. Ambas as partes estão cientes de que o serviço prestado pela CONTRATADA é um trabalho de meio."),
+    bClause("CLÁUSULA NONA –", "As partes elegem o Foro da Comarca de Duque de Caxias para dirimir possíveis questões oriundas deste Contrato."),
+    bDate(c.local, c.data),
+    bSign(c.nome, "CONTRATANTE"),
+    bSign("Simeão Advogados", "CONTRATADAS"),
+  ]};
+}
+function docContratoPrev(c){
+  return { blocks:[
+    bTitle("Contrato de Honorários Advocatícios"),
+    bJust([T("CONTRATANTE: ",{bold:true}), T(qualificacao(c))]),
+    bJust([T("CONTRATADAS: ",{bold:true}), T(CONTRATADAS_SIMEAO + ", em face do INSS – Instituto Nacional do Seguro Social, têm entre si, justo e contratado o seguinte:")]),
+    bClause("1ª CLÁUSULA:", "Por este instrumento particular, CONTRATANTE E CONTRATADAS, têm, entre si, justo e contratado, o presente contrato de prestação de serviços profissionais advocatícios (REQUERIMENTO ADMINISTRATIVO PREVIDENCIÁRIO e/ou AÇÃO JUDICIAL PREVIDENCIÁRIA e/ou PLANEJAMENTO PREVIDENCIÁRIO), que se regerá pelos seguintes termos:"),
+    bClause("2ª CLÁUSULA:", "As CONTRATADAS prestarão Serviços ao CONTRATANTE na forma de Assessoria Jurídica;"),
+    bClause("3ª CLÁUSULA:", "Para execução dos serviços ora contratado, o CONTRATANTE pagará às CONTRATADAS o valor equivalente aos 04 (quatro) primeiros salários de benefício quando da procedência da ação, o correspondente à 30% (trinta por cento) dos valores atrasados que vier a receber, bem como o valor de R$ 2.000,00 (dois mil reais) referentes ao planejamento previdenciário se ainda não foi pago, e em caso de desistência da presente ação, deverá o CONTRATANTE pagar às CONTRATADAS o valor equivalente a R$ 1.000,00 (um mil reais)."),
+    bClause("4ª CLÁUSULA:", "A impossibilidade no pagamento das verbas acima mencionadas importará na rescisão do presente contrato, a critério das CONTRATADAS, independentemente de aviso prévio ou interpelação judicial ou extrajudicial, sujeitando-se a CONTRATANTE ao pagamento dos meses restantes ao término do contrato, conforme valor constante na cláusula 3ª retro, acrescido de juros de mora e atualização monetária."),
+    bClause("5ª CLÁUSULA:", "Ocorrendo rescisão por parte do CONTRATANTE, este se obriga a pagar às CONTRATADAS o valor estipulado."),
+    bClause("6ª CLÁUSULA:", "Se a rescisão ocorrer por culpa das CONTRATADAS, estas receberão os honorários indicados na cláusula 3ª normalmente."),
+    bClause("7ª CLÁUSULA:", "Fica eleito o Foro desta Comarca, como competente para qualquer ação judicial oriunda do presente contrato, ainda que seja diverso, ou venha a ser o da CONTRATANTE e das CONTRATADAS."),
+    bPara("E por estarem assim justos e contratados, CONTRATANTE E CONTRATADAS assinam o presente, juntamente com as testemunhas, em duas vias de igual teor e forma."),
+    bDate(c.local, c.data),
+    bSign(c.nome, "CONTRATANTE"),
+    bSign("Simeão Advogados Associados", "CONTRATADAS"),
+    bWitnesses(),
+  ]};
+}
+
+
+/* ---------- PACOTE TEA ---------- */
+function docProcTEA(c){
+  const q = qualificacao(c);
+  const o = c.sexo === "F" ? "a" : "o";
+  const nasc = c.menorNasc ? c.menorNasc.split("-").reverse().join("/") : "";
+  return { blocks:[
+    bTitle("Procuração"),
+    bJust([T("OUTORGANTE: ",{bold:true}), T(q)]),
+    bJust([T("Na qualidade de " + (c.qualidade || "representante legal") + " e representante legal do(a) menor "),
+           T(c.menorNome.toUpperCase().trim(),{bold:true}),
+           T(", nascido(a) em " + nasc + ", inscrito(a) no CPF nº " + fmtCPF(c.menorCpf) + ", nomeia e constitui como seus procuradores:")]),
+    bJust([T("OUTORGADOS: ",{bold:true}), T(OUTORGADOS_JUROS)]),
+    bJust([T("PODERES: ",{bold:true}), T("Pelo presente instrumento, " + o + " outorgante confere aos outorgados poderes para representar o(a) menor perante "
+      + c.perante.trim().replace(/[.;,\s]+$/,"")
+      + ", podendo praticar os atos necessários ao cumprimento deste mandato, apresentar requerimentos, assinar documentos e acompanhar procedimentos relacionados à finalidade acima indicada.")]),
+    bDate(c.local, c.data),
+    bGap(),
+    xmlPara("_____________________________________________", {align:"center", after:0, before:360}),
+    xmlPara([T("Assinatura do pai, mãe ou responsável legal",{bold:true})], {align:"center", after:120}),
+    xmlPara("Nome: " + c.nome.toUpperCase().trim(), {align:"center", after:0}),
+    xmlPara("CPF: " + fmtCPF(c.cpf), {align:"center", after:0}),
+  ]};
+}
+function docTermoRespTEA(c){
+  return { blocks:[
+    bTitle("Termo de Responsabilidade de Informações Prestadas"),
+    bJust([T(qualificacao(c))]),
+    bPara("Declaro, para os devidos fins de direito, sob as penas da lei, que as informações prestadas e os documentos que apresentei aos advogados constituídos para a finalidade de ajuizar " + (c.objeto || "a demanda cabível") + " são verdadeiros e autênticos (fiéis à verdade e condizentes com a realidade dos fatos à época)."),
+    bPara("Sendo assim, declaro nesta oportunidade que tive acesso à minha petição inicial e concordo com todos os pedidos elencados."),
+    bPara("Por fim, fico ciente, através deste documento, de que a falsidade desta declaração configura crime previsto no Código Penal Brasileiro, passível de apuração na forma da lei, e de que respondo por todos os efeitos e danos causados pelas minhas declarações."),
+    bPara("Por ser verdade, firmo a presente."),
+    bDate(c.local, c.data),
+    bSign(c.nome, ""),
+  ]};
+}
+function docHipossuficienciaTEA(c){
+  return { blocks:[
+    bTitle("Declaração de Hipossuficiência"),
+    bJust([T(qualificacao(c))]),
+    bPara("DECLARO, para os devidos fins, que não tenho como arcar com as despesas processuais e demais encargos do processo sem prejuízo do meu sustento e de minha família, necessitando, portanto, da GRATUIDADE DA JUSTIÇA, nos termos do art. 98 e seguintes da Lei nº 13.105/2015 (Código de Processo Civil). Requeiro, ainda, que o benefício abranja todos os atos do processo."),
+    bPara("DECLARO, sob as penas da lei, que as informações prestadas e os documentos que apresento para finalidade processual são verdadeiros e autênticos, ficando ciente de que tais informações eximem os patronos constituídos de qualquer responsabilidade acerca delas."),
+    bPara("Nada mais a declarar, e ciente das responsabilidades pelas declarações prestadas, por ser verdade, firmo a presente sob as penas da lei, para que surta os seus efeitos jurídicos e legais."),
+    bDate(c.local, c.data),
+    bSign(c.nome, ""),
+  ]};
+}
+function docContratoTEA(c){
+  return { blocks:[
+    bTitle("Contrato de Honorários Advocatícios"),
+    bJust([T("CONTRATANTE: ",{bold:true}), T(qualificacao(c))]),
+    bJust([T("CONTRATADOS: ",{bold:true}), T(OUTORGADOS_JUROS.replace(/\.$/, "") + ", doravante denominados, em conjunto, CONTRATADA.")]),
+    bClause("CLÁUSULA PRIMEIRA –", "O CONTRATANTE requer os serviços profissionais da CONTRATADA para a realização dos serviços advocatícios que têm por finalidade a condução de AÇÃO BANCÁRIA."),
+    bClause("CLÁUSULA SEGUNDA –", "Pelos serviços que a CONTRATADA prestar à parte CONTRATANTE, na forma da cláusula anterior, receberá a título de honorários advocatícios:"),
+    bPara("a) honorários iniciais no valor de R$ 2.500,00 (dois mil e quinhentos reais), cuja cobrança terá início somente a partir da efetiva cessação dos descontos indevidos no benefício ou na remuneração do CONTRATANTE, seja por decisão judicial, seja por acordo, seja por qualquer outro meio decorrente da atuação da CONTRATADA. O valor poderá ser pago à vista ou parcelado em até 10 (dez) parcelas mensais e sucessivas, sem juros, vencendo-se a primeira em até 30 (trinta) dias contados da cessação dos descontos e as demais no mesmo dia dos meses subsequentes;"),
+    bPara("b) honorários de êxito no percentual de 30% (trinta por cento) do que o CONTRATANTE vier a perceber em cada um dos processos."),
+    bClause("Parágrafo único.", "Uma vez iniciada a cobrança nos termos da alínea \"a\", os honorários iniciais não serão restituídos, ainda que a demanda seja julgada improcedente ao final. O atraso no pagamento de qualquer parcela por mais de 30 (trinta) dias implicará o vencimento antecipado das parcelas restantes."),
+    bClause("CLÁUSULA TERCEIRA –", "Todas as despesas relacionadas ao presente contrato, incluindo, mas não se limitando a honorários periciais e de cálculos contábeis, custas judiciais, taxas, emolumentos e quaisquer outros encargos necessários à execução dos serviços, serão de responsabilidade exclusiva do CONTRATANTE. A CONTRATADA poderá adiantar tais despesas, ficando o CONTRATANTE obrigado a reembolsá-la no prazo de 1 (um) dia útil, a contar da apresentação do comprovante de pagamento."),
+    bClause("CLÁUSULA QUARTA –", "O presente contrato é feito por prazo indeterminado, ou seja, até o fim da demanda, sendo permitida a sua rescisão por consentimento mútuo. Serão devidos os honorários ajustados quando o CONTRATANTE substituir a CONTRATADA sem justo motivo ou quando realizar acordo extrajudicial com a demanda já em trâmite."),
+    bClause("CLÁUSULA QUINTA –", "O CONTRATANTE é o único responsável por fornecer à CONTRATADA todos os documentos e informações necessários e relevantes para o adequado desenvolvimento do processo. Caso a ausência ou a incorreção de tais documentos e informações cause prejuízos ao processo, a responsabilidade pelo resultado recairá exclusivamente sobre o CONTRATANTE."),
+    bClause("CLÁUSULA SEXTA –", "A CONTRATADA se compromete a empregar todos os esforços e a utilizar todos os meios legais disponíveis para a adequada condução do processo, pautando-se pela ética e pelo profissionalismo, porém não garante o resultado final da demanda, uma vez que este depende de fatores alheios à sua atuação, como as decisões judiciais."),
+    bClause("CLÁUSULA SÉTIMA –", "Cabe à CONTRATADA manter o CONTRATANTE informado dos atos pertinentes ao processo."),
+    bClause("CLÁUSULA OITAVA –", "Não há prazo previsto para a conclusão do processo. Ambas as partes estão cientes de que o serviço prestado pela CONTRATADA é um trabalho de meio."),
+    bClause("CLÁUSULA NONA –", "As partes elegem o Foro da Comarca de Duque de Caxias/RJ para dirimir possíveis questões oriundas deste Contrato."),
+    bDate(c.local, c.data),
+    bSign(c.nome, "CONTRATANTE"),
+    bSign("Simeão Advogados Associados", "CONTRATADA"),
+  ]};
+}
+
+/* ---------- MONTAGEM DO PACOTE ---------- */
+function buildPacote(tipo, c){
+  if (tipo === "trabalhista"){
+    return [ docProcTrabOuJuros(c, OUTORGADOS_TRAB), docContratoTrab(c), docHipossuficiencia(c), docResidencia(c) ];
+  }
+  if (tipo === "juros"){
+    return [ docProcTrabOuJuros(c, OUTORGADOS_JUROS), docTermoResp(c), docHipossuficiencia(c), docContratoJuros(c), docResidencia(c) ];
+  }
+  if (tipo === "tea"){
+    return [ docProcTEA(c), docTermoRespTEA(c), docHipossuficienciaTEA(c), docContratoTEA(c), docResidencia(c) ];
+  }
+  return [ docProcPrev(c), docContratoPrev(c), docHipossuficiencia(c), docResidencia(c) ];
+}
+
+/* ============================================================
+   .DOCX  (zip "store" + WordprocessingML, sem dependências)
+   ============================================================ */
+function crc32(buf){
+  let t = crc32._t;
+  if (!t){
+    t = crc32._t = new Uint32Array(256);
+    for (let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); t[n]=c>>>0; }
+  }
+  let c = 0xFFFFFFFF;
+  for (let i=0;i<buf.length;i++) c = (c>>>8) ^ t[(c ^ buf[i]) & 0xFF];
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function zipStore(files){
+  const enc = new TextEncoder();
+  const u16 = n => [n & 255, (n>>>8) & 255];
+  const u32 = n => [n & 255, (n>>>8) & 255, (n>>>16) & 255, (n>>>24) & 255];
+  const DT = 0, DD = (45<<9) | (1<<5) | 1;
+  const locals = [], centrals = [];
+  let offset = 0;
+  for (const f of files){
+    const name = enc.encode(f.name);
+    const data = f.data;
+    const crc = crc32(data);
+    const lh = [].concat(u32(0x04034b50), u16(20), u16(0x0800), u16(0), u16(DT), u16(DD),
+      u32(crc), u32(data.length), u32(data.length), u16(name.length), u16(0));
+    const local = new Uint8Array(lh.length + name.length + data.length);
+    local.set(lh, 0); local.set(name, lh.length); local.set(data, lh.length + name.length);
+    locals.push(local);
+    const ch = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0), u16(DT), u16(DD),
+      u32(crc), u32(data.length), u32(data.length),
+      u16(name.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(offset));
+    const central = new Uint8Array(ch.length + name.length);
+    central.set(ch, 0); central.set(name, ch.length);
+    centrals.push(central);
+    offset += local.length;
+  }
+  const cdSize = centrals.reduce((s,c)=>s + c.length, 0);
+  const cdStart = offset;
+  const eocd = new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0),
+    u16(files.length), u16(files.length), u32(cdSize), u32(cdStart), u16(0)));
+  const out = new Uint8Array(offset + cdSize + eocd.length);
+  let p = 0;
+  for (const l of locals){ out.set(l, p); p += l.length; }
+  for (const c of centrals){ out.set(c, p); p += c.length; }
+  out.set(eocd, p);
+  return out;
+}
+const CONTENT_TYPES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+  + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+  + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+  + '<Default Extension="xml" ContentType="application/xml"/>'
+  + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+  + '</Types>';
+const RELS = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+  + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+  + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+  + '</Relationships>';
+
+function renderDocx(docs){
+  const SECT = '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'
+    + '<w:pgMar w:top="1418" w:right="1418" w:bottom="1418" w:left="1701" w:header="709" w:footer="709" w:gutter="0"/></w:sectPr>';
+  const body = docs.map((d,i)=> (i ? PAGE_BREAK : "") + d.blocks.join("")).join("");
+  const documentXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+    + body + SECT + '</w:body></w:document>';
+  const enc = new TextEncoder();
+  return zipStore([
+    { name:"[Content_Types].xml", data: enc.encode(CONTENT_TYPES) },
+    { name:"_rels/.rels", data: enc.encode(RELS) },
+    { name:"word/document.xml", data: enc.encode(documentXml) },
+  ]);
+}
+
+/* ============================================================
+   UI
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const step1 = $("#step1"), step2 = $("#step2"), step3 = $("#step3"), actionbar = $("#actionbar");
+
+function toast(msg, isErr){
+  const el = $("#toast");
+  el.textContent = msg;
+  el.classList.toggle("err", !!isErr);
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> el.classList.remove("show"), 3600);
+}
+
+/* ---- type picker ---- */
+function renderTypeCards(){
+  $("#typeCards").innerHTML = Object.entries(TIPOS).map(([k,v])=>`
+    <button class="type-card" data-tipo="${k}">
+      <span class="eyebrow">${v.eyebrow}</span>
+      <h3>${v.label}</h3>
+      <ul class="docs">${v.docs.map(d=>`<li>${d}</li>`).join("")}</ul>
+      <span class="go">Selecionar <span>&rarr;</span></span>
+    </button>`).join("");
+  $("#typeCards").querySelectorAll(".type-card").forEach(b=>{
+    b.addEventListener("click", ()=> selectTipo(b.dataset.tipo));
+  });
+}
+
+const ACAO_FIELDS = {
+  trabalhista:[{ id:"reclamada", label:"Reclamada (empresa)", opt:true, ph:"deixe em branco para “AÇÃO TRABALHISTA” genérica", col:"col-8" }],
+  juros:[{ id:"objeto", label:"Objeto da ação", ta:true, col:"col-8",
+    def:"ação declaratória cumulada com obrigação de fazer, repetição de indébito e reparação de danos materiais e morais, com pedido de tutela de urgência, referente a créditos consignados/empréstimos não reconhecidos" }],
+  tea:[
+    { id:"qualidade", label:"O cliente é", sel:["mãe","pai","tutora","tutor","responsável legal"], col:"col-3" },
+    { id:"menorNome", label:"Nome completo do menor", col:"col-5" },
+    { id:"menorNasc", label:"Nascimento do menor", type:"date", col:"col-4" },
+    { id:"menorCpf", label:"CPF do menor", ph:"000.000.000-00", mono:true, col:"col-4" },
+    { id:"perante", label:"Representar o menor perante", ta:true, col:"col-8",
+      ph:"órgão, instituição ou finalidade. Ex.: o plano de saúde X e o Poder Judiciário, para garantir o tratamento multidisciplinar do menor" },
+    { id:"objeto", label:"Objeto da ação (termo de responsabilidade)", ta:true, col:"col-8",
+    def:"ação declaratória cumulada com obrigação de fazer, repetição de indébito e reparação de danos materiais e morais, com pedido de tutela de urgência, referente a créditos consignados/empréstimos não reconhecidos" }],
+  previdenciario:[{ id:"beneficio", label:"Benefício pretendido", opt:true, col:"col-8", ph:"ex.: aposentadoria por idade, auxílio-doença, BPC/LOAS…" }],
+};
+
+function selectTipo(tipo){
+  state.tipo = tipo;
+  const v = TIPOS[tipo];
+  $("#chipTipo").textContent = v.label;
+  $("#officeTag").innerHTML = tipo === "previdenciario"
+    ? '<b>Escolha Certa Assessoria</b><br /><span>Contrato: Simeão Advogados &middot; OAB/RJ</span>'
+    : '<b>Simeão Advogados Associados</b><br /><span>OAB/RJ &middot; Duque de Caxias</span>';
+
+  /* locked panel */
+  let html = "";
+  if (tipo === "previdenciario"){
+    html = `
+      <h2><span class="lk">&#128274;</span> Dados fixos — outorgado</h2>
+      <div class="grp"><b>Procuração (outorgado)</b><span>Escolha Certa Assessoria · CNPJ 68.634.272/0001-87 · Av. Nóbrega Ribeiro, 10, Loja 03, Xerém, Duque de Caxias/RJ · CEP 25250-050</span></div>
+      <div class="grp"><b>Contrato de honorários (contratadas)</b><span>Joyce (OAB/RJ 210.628) e Natalino (135.658) · Simeão Advogados Associados · CNPJ 59.216.769/0001-94 · em face do INSS</span></div>
+      <div class="note">Procuração em nome da Escolha Certa; contrato em nome da Simeão.</div>`;
+  } else {
+    const thales = tipo === "trabalhista"
+      ? "Joyce (OAB/RJ 210.628), Natalino (135.658) e Thales (256.311)"
+      : "Joyce (OAB/RJ 210.628) e Natalino (135.658) — sem Thales";
+    html = `
+      <h2><span class="lk">&#128274;</span> Dados fixos — outorgados</h2>
+      <div class="grp"><b>Advogados</b><span>${thales}</span></div>
+      <div class="grp"><b>Sociedade</b><span>Simeão Advogados Associados · CNPJ 59.216.769/0001-94</span></div>
+      <div class="grp"><b>Endereço profissional</b><span>Praça da Mantiqueira, 18, sala 24, Xerém, Duque de Caxias/RJ · CEP 25245-350</span></div>
+      <div class="grp"><b>Foro</b><span>Comarca de Duque de Caxias/RJ</span></div>`;
+  }
+  $("#lockedPanel").innerHTML = html;
+
+  /* conditional "dados da ação" */
+  const fields = ACAO_FIELDS[tipo] || [];
+  $("#acaoGrid").innerHTML = fields.map(f=>{
+    const ctrl = f.ta
+      ? `<textarea id="${f.id}" placeholder="${f.ph || ""}">${f.def || ""}</textarea>`
+      : f.sel
+      ? `<select id="${f.id}"><option value="">—</option>${f.sel.map(o=>`<option value="${o}">${o}</option>`).join("")}</select>`
+      : `<input type="${f.type || "text"}" id="${f.id}" value="${f.def || ""}" placeholder="${f.ph || ""}" ${f.mono?'class="mono" inputmode="numeric"':""} autocomplete="off" />`;
+    return `<div class="field ${f.col||"col-8"}"><label for="${f.id}">${f.label}${f.opt?' <span class="opt">(opcional)</span>':""}</label>${ctrl}<span class="err-msg"></span></div>`;
+  }).join("");
+  $("#fsAcao").classList.toggle("hidden", fields.length === 0);
+  $("#acaoLegend").textContent = tipo === "tea" ? "Dados do menor e da ação" : "Dados da ação";
+  if ($("#menorCpf")) $("#menorCpf").addEventListener("input", e=>{ e.target.value = maskCPF(e.target.value); });
+
+  /* default local */
+  $("#local").value = tipo === "trabalhista" ? "Duque de Caxias/RJ" : "";
+  syncLocalFromCidade._lock = tipo === "trabalhista";
+
+  step1.classList.add("hidden");
+  step3.classList.add("hidden");
+  step2.classList.remove("hidden");
+  actionbar.classList.remove("hidden");
+  updateFname();
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function backToTypes(){
+  state.tipo = null;
+  $("#officeTag").innerHTML = '<b>Simeão Advogados</b><br /><span>Escolha Certa Assessoria</span>';
+  step2.classList.add("hidden");
+  step3.classList.add("hidden");
+  actionbar.classList.add("hidden");
+  step1.classList.remove("hidden");
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+/* ---- form plumbing ---- */
+function initUFs(){
+  $("#uf").insertAdjacentHTML("beforeend", UFS.map(u=>`<option value="${u}">${u}</option>`).join(""));
+}
+function initDate(){
+  const t = new Date();
+  const iso = t.getFullYear() + "-" + String(t.getMonth()+1).padStart(2,"0") + "-" + String(t.getDate()).padStart(2,"0");
+  $("#data").value = iso;
+}
+function maskField(id, fmt){
+  const el = $("#" + id);
+  el.addEventListener("input", ()=>{
+    const pos = el.value.length;
+    el.value = fmt(el.value);
+    if (pos >= el.value.length) el.setSelectionRange(el.value.length, el.value.length);
+    updateFname();
+  });
+}
+function syncLocalFromCidade(){
+  if (syncLocalFromCidade._lock) return;
+  const cidade = $("#cidade").value.trim(), uf = $("#uf").value;
+  if (cidade && uf) $("#local").value = cidade + "/" + uf;
+}
+
+function collect(){
+  const g = id => (($("#"+id) && $("#"+id).value) || "").trim();
+  return {
+    nome:g("nome"),
+    sexo:(document.querySelector('input[name="sexo"]:checked')||{}).value || "",
+    nacionalidade:g("nacionalidade"),
+    estadoCivil:g("estadoCivil"),
+    profissao:g("profissao"),
+    rg:g("rg"), orgao:g("orgao"), cpf:g("cpf"),
+    logradouro:g("logradouro"), numero:g("numero"), complemento:g("complemento"),
+    bairro:g("bairro"), cidade:g("cidade"), uf:g("uf"), cep:g("cep"),
+    telefone:g("telefone"),
+    local:g("local"), data:g("data") || $("#data").value,
+    reclamada:g("reclamada"), objeto:g("objeto"), beneficio:g("beneficio"),
+    qualidade:g("qualidade"), menorNome:g("menorNome"), menorNasc:g("menorNasc"), menorCpf:g("menorCpf"), perante:g("perante"),
+  };
+}
+
+const REQUIRED = ["nome","sexo","estadoCivil","cpf","logradouro","numero","bairro","cidade","uf","cep","local","data"];
+function fieldWrap(id){
+  const el = $("#"+id);
+  if (!el) return null;
+  return el.closest(".field");
+}
+function setError(id, msg){
+  const w = fieldWrap(id) || (id === "sexo" ? document.querySelector('input[name="sexo"]').closest(".field") : null);
+  if (!w) return;
+  w.classList.toggle("invalid", !!msg);
+  const m = w.querySelector(".err-msg");
+  if (m) m.textContent = msg || "";
+}
+function validate(){
+  let ok = true, firstBad = null;
+  const c = collect();
+  REQUIRED.forEach(id=>{
+    const bad = !c[id];
+    setError(id, bad ? "Obrigatório" : "");
+    if (bad && !firstBad) firstBad = id;
+    if (bad) ok = false;
+  });
+  if (c.cpf && !validCPF(c.cpf)){ setError("cpf","CPF inválido"); if(!firstBad) firstBad="cpf"; ok=false; }
+  if (c.cep && digits(c.cep).length !== 8){ setError("cep","CEP incompleto"); if(!firstBad) firstBad="cep"; ok=false; }
+  if (state.tipo === "tea"){
+    ["qualidade","menorNome","menorNasc","menorCpf","perante"].forEach(id=>{
+      const bad = !c[id]; setError(id, bad ? "Obrigatório" : "");
+      if (bad){ ok = false; if(!firstBad) firstBad = id; }
+    });
+    if (c.menorCpf && !validCPF(c.menorCpf)){ setError("menorCpf","CPF inválido"); if(!firstBad) firstBad="menorCpf"; ok=false; }
+  }
+  if (!ok && firstBad){
+    const w = fieldWrap(firstBad) || document.querySelector('input[name="sexo"]').closest(".field");
+    if (w) w.scrollIntoView({ behavior:"smooth", block:"center" });
+    toast("Confira os campos destacados.", true);
+  }
+  return ok;
+}
+
+function sanitizeName(s){ return (s || "cliente").replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g," ").trim() || "cliente"; }
+function fnameFor(){
+  const c = collect();
+  const nome = sanitizeName(c.nome).split(" ").slice(0,3).join(" ");
+  const tipo = state.tipo ? TIPOS[state.tipo].label.replace(/\s*\/\s*/g,"-") : "";
+  return `Pacote ${tipo} - ${nome || "cliente"} - ${c.data || ""}.docx`;
+}
+function updateFname(){ $("#fnamePreview").textContent = fnameFor(); }
+
+/* ---- generate ---- */
+async function gerar(){
+  if (!validate()) return;
+  const c = collect();
+  const docs = buildPacote(state.tipo, c);
+  let bytes;
+  try {
+    bytes = renderDocx(docs);
+  } catch (e){
+    toast("Erro ao montar o documento: " + (e && e.message || e), true);
+    return;
+  }
+  const blob = new Blob([bytes], { type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+  const filename = fnameFor();
+
+  if (downloads){
+    try {
+      await downloads.save({ filename, data: blob });
+      showResult(docs, true);
+    } catch (e){
+      if (e && e.code === "declined") toast("Download cancelado.");
+      else toast("Não foi possível salvar (" + (e && (e.code || e.message) || "erro") + ").", true);
+    }
+    return;
+  }
+  // fallback (página aberta fora do visualizador)
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 4000);
+    showResult(docs, true);
+  } catch (e){
+    toast("Este navegador bloqueou o download. Abra a ferramenta pelo link publicado.", true);
+  }
+}
+
+function showResult(docs, saved){
+  const names = {
+    trabalhista:["Procuração","Contrato de honorários (trabalhista)","Declaração de hipossuficiência","Declaração de residência"],
+    juros:["Procuração","Termo de responsabilidade","Declaração de hipossuficiência","Contrato de honorários (bancária)","Declaração de residência"],
+    tea:["Procuração (representação do menor)","Termo de responsabilidade","Declaração de hipossuficiência","Contrato de honorários (R$ 2.500 + êxito)","Declaração de residência"],
+    previdenciario:["Procuração administrativa","Contrato de honorários (Simeão)","Declaração de hipossuficiência","Declaração de residência"],
+  }[state.tipo] || [];
+  $("#resultSub").textContent = saved
+    ? "Arquivo: " + fnameFor()
+    : "Não foi possível baixar automaticamente.";
+  $("#resultList").innerHTML = names.map(n=>`<li>${n}</li>`).join("");
+  step2.classList.add("hidden");
+  actionbar.classList.add("hidden");
+  step3.classList.remove("hidden");
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+function backToForm(){
+  step3.classList.add("hidden");
+  step2.classList.remove("hidden");
+  actionbar.classList.remove("hidden");
+}
+function resetCliente(){
+  $("#form").reset();
+  $("#form").querySelectorAll(".field.invalid").forEach(w=>w.classList.remove("invalid"));
+  initDate();
+  selectTipo(state.tipo);
+  backToForm();
+}
+
+/* ---- OCR opcional (capability: sample) ---- */
+async function runOCR(file){
+  if (!sampleApi || !file) return;
+  const btn = $("#ocrBtn");
+  btn.disabled = true; btn.textContent = "Lendo documento…";
+  try {
+    const prompt =
+      "A imagem é um documento de identidade brasileiro (RG ou CNH). "
+      + "Extraia os campos e responda SOMENTE um objeto JSON com as chaves: "
+      + "nome, cpf, rg, orgaoExpedidor, sexo (\"M\" ou \"F\"), nacionalidade. "
+      + "Use string vazia para o que não aparecer. Não invente dados.";
+    const data = await sampleApi.json(prompt, { images:[file], modelTier:"default" });
+    if (data && typeof data === "object"){
+      if (data.nome) $("#nome").value = String(data.nome).toUpperCase();
+      if (data.cpf) $("#cpf").value = fmtCPF(data.cpf);
+      if (data.rg) $("#rg").value = String(data.rg);
+      if (data.orgaoExpedidor) $("#orgao").value = String(data.orgaoExpedidor);
+      if (data.nacionalidade) $("#nacionalidade").value = String(data.nacionalidade).toLowerCase();
+      const sx = String(data.sexo || "").toUpperCase().trim();
+      if (sx === "M" || sx === "F"){
+        const r = document.querySelector('input[name="sexo"][value="'+sx+'"]');
+        if (r) r.checked = true;
+      }
+      updateFname();
+      toast("Dados extraídos. Confira antes de gerar.");
+    } else {
+      toast("Não consegui ler o documento. Preencha manualmente.", true);
+    }
+  } catch (e){
+    const code = e && (e.code || e.message) || "erro";
+    toast(code === "rate_limited" ? "Muitas leituras seguidas. Tente em instantes." : "Leitura indisponível. Preencha manualmente.", true);
+  } finally {
+    btn.disabled = false; btn.textContent = "Preencher com foto do documento";
+  }
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+function boot(){
+  renderTypeCards();
+  initUFs();
+  initDate();
+  maskField("cpf", maskCPF);
+  maskField("cep", maskCEP);
+
+  ["nome","data"].forEach(id=> $("#"+id).addEventListener("input", updateFname));
+  $("#uf").addEventListener("change", ()=>{ syncLocalFromCidade(); updateFname(); });
+  $("#cidade").addEventListener("input", syncLocalFromCidade);
+
+  $("#trocar").addEventListener("click", backToTypes);
+  $("#trocar2").addEventListener("click", backToTypes);
+  $("#again").addEventListener("click", ()=>{ backToForm(); });
+  $("#novo").addEventListener("click", resetCliente);
+  $("#gerar").addEventListener("click", gerar);
+
+  const ocrFile = $("#ocrFile");
+  $("#ocrBtn").addEventListener("click", ()=> ocrFile.click());
+  ocrFile.addEventListener("change", ()=>{ if (ocrFile.files[0]) runOCR(ocrFile.files[0]); ocrFile.value=""; });
+
+  // capabilities (resolvem depois; a página funciona sem elas)
+  if (window.claude && typeof window.claude.use === "function"){
+    window.claude.use("downloads").then(d=>{ downloads = d || null; }).catch(()=>{});
+    window.claude.use("sample").then(async s=>{
+      if (!s) return;
+      try {
+        const lim = await s.limits();
+        if (lim && lim.images){ sampleApi = s; sampleImages = lim.images; $("#ocrBox").classList.remove("hidden"); }
+      } catch(_){}
+    }).catch(()=>{});
+  }
+}
+boot();
+</script>
+</body>
+</html>
