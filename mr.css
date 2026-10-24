@@ -69,11 +69,8 @@ button.primary:hover,.btn-primary:hover{background:var(--mr-wine-hover)!importan
 .mr-lado.dir .mr-links a{padding:6px 0 6px 18px}
 .mr-lado .mr-links a[aria-current="page"]{color:var(--mr-teal);box-shadow:none;text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:2px}
 @media (max-width:980px){
-  .mr-bar{grid-template-columns:1fr 1fr;gap:14px 20px}
-  .mr-bar .mr-brand{grid-column:1/-1;grid-row:1;flex-direction:row}
-}
-@media (max-width:560px){
-  .mr-bar{grid-template-columns:1fr}
+  .mr-bar{grid-template-columns:1fr;gap:12px}
+  .mr-bar .mr-brand{grid-row:1;flex-direction:row}
   .mr-lado.dir{justify-items:start;text-align:left}
   .mr-lado.dir .mr-grupo::before{display:none}
   .mr-lado.dir .mr-grupo::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--mr-line-strong),transparent)}
