@@ -95,3 +95,5 @@ button.primary:hover,.btn-primary:hover{background:var(--mr-wine-hover)!importan
   .sm-t.sm-cards td .sm-mini{display:none}
 }
 @media (max-width:640px){#tab-semanas.sm-cards tr{grid-template-columns:1fr}}
+.mr-bar .mr-brand img{width:40px}
+@media (max-width:980px){.mr-bar .mr-brand img{width:34px}}

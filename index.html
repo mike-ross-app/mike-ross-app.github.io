@@ -43,6 +43,7 @@ body{margin:0;padding:20px 16px 0;overflow-x:hidden;background:radial-gradient(e
 .sky::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,#1a0c12);z-index:1;pointer-events:none}
 @media (max-width:900px){.medal{top:auto;bottom:290px}.medal .ring{width:92px;height:92px}.medal .ring svg{width:40px;height:40px}.medal span{font-size:16px}.medal.left{left:-30px}.medal.right{right:-30px}.hero{min-height:700px}}
 @media (max-width:560px){.medal span{display:none}.medal{bottom:300px}}
+@media (min-width:901px) and (max-width:1250px){.medal span{display:none}}
 /* ferramentas */
 .tools{position:relative;z-index:3;background:#1a0c12;margin:0 -16px;padding:56px 16px 64px;border-top:1px solid rgba(213,173,149,.35)}
 .tools-in{max-width:960px;margin:0 auto}
@@ -62,11 +63,12 @@ body{margin:0;padding:20px 16px 0;overflow-x:hidden;background:radial-gradient(e
 .atalhos a{font:600 14px var(--mr-sans);text-decoration:none;color:var(--mr-ink);background:var(--mr-surface-2);border:1px solid var(--mr-line-strong);border-radius:999px;padding:8px 16px}
 .atalhos a:hover{border-color:var(--mr-teal)}
 .atalhos a.destaque{background:var(--mr-wine);border-color:var(--mr-wine);color:#fbe9df}
+@media (max-width:980px){.atalhos{display:none}}
 </style>
 <link rel="icon" href="favicon.png">
 </head>
 <body>
-<nav class="mr-bar"><div class="mr-lado esq"><span class="mr-grupo">Resultados</span><div class="mr-links"><a href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a href="tarefas.html">Tarefas</a><a href="tv.html">Modo TV</a></div></div><a class="mr-brand" href="./"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-lado dir"><span class="mr-grupo">Ferramentas</span><div class="mr-links"><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="clt.html">CLT</a></div></div></nav>
+<nav class="mr-bar"><div class="mr-lado esq"><span class="mr-grupo">Resultados</span><div class="mr-links"><a href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a href="tarefas.html">Tarefas</a><a href="tv.html">Modo TV</a></div></div><a class="mr-brand" href="./" aria-label="Início" title="Início"><img src="simbolo.png" alt="Simeão Advogados"></a><div class="mr-lado dir"><span class="mr-grupo">Ferramentas</span><div class="mr-links"><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="clt.html">CLT</a></div></div></nav>
 <div class="atalhos" aria-label="Atalhos"><a class="destaque" href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="tv.html">Modo TV</a></div>
 
 <div class="sky"><section class="hero">
