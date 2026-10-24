@@ -352,13 +352,15 @@ const calcPorArea = (ganhos, metas, calendario) => {
   // Feito e meta por mês fiscal, vendedor e área do direito ("Equipe toda" soma todos; área "Total" soma as áreas).
   // Metas do funil Simeão, pelo mês em que o período fecha. Meta da semana = meta do mês × dias úteis da semana ÷ dias úteis do mês, arredondada pra cima.
   const EQUIPE = 'Equipe toda', FUNIL = 'Simeão';
-  const ORDEM = ['Trabalhista', 'Previdenciário', 'Juros', 'Civil', 'Consumidor', 'Não informado'];
+  const ORDEM = ['Trabalhista', 'Previdenciário', 'Juros Empréstimo menor', 'Juros RMC', 'Juros', 'Civil', 'Consumidor', 'Não informado'];
   const area = (a) => {
     const s = String(a || '').trim();
     if (!s) return 'Não informado';
     const k = s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     if (k.startsWith('trabalh')) return 'Trabalhista';
     if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') && k.includes('rmc')) return 'Juros RMC';
+    if (k.startsWith('juros') && k.includes('emprest')) return 'Juros Empréstimo menor';
     if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
     if (k.startsWith('civ')) return 'Civil';
     if (k.startsWith('consum')) return 'Consumidor';
@@ -456,6 +458,8 @@ const calcConversao = (leads, por_area, calendario) => {
     const k = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (k.startsWith('trabalh')) return 'Trabalhista';
     if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') && k.includes('rmc')) return 'Juros RMC';
+    if (k.startsWith('juros') && k.includes('emprest')) return 'Juros Empréstimo menor';
     if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
     if (k.startsWith('civ')) return 'Civil';
     if (k.startsWith('consum')) return 'Consumidor';
@@ -491,6 +495,8 @@ const calcDiario = (ganhos, leads, calendario) => {
     const k = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (k.startsWith('trabalh')) return 'Trabalhista';
     if (k.startsWith('previd')) return 'Previdenciário';
+    if (k.startsWith('juros') && k.includes('rmc')) return 'Juros RMC';
+    if (k.startsWith('juros') && k.includes('emprest')) return 'Juros Empréstimo menor';
     if (k.startsWith('juros') || k.startsWith('banc') || k === 'tea') return 'Juros';
     if (k.startsWith('civ')) return 'Civil';
     if (k.startsWith('consum')) return 'Consumidor';
@@ -544,7 +550,16 @@ const calcRecordes = (ganhos) => {
 const montarPainel = (bruto) => {
   const ganhos = bruto.ganhos.map(([dia, vendedor, area, n, valor]) => ({ data_ganho: dia, vendedor, area, n, valor }));
   const leads = (bruto.leads || []).map(([dia, vendedor, area, n]) => ({ data_criacao: dia, vendedor, area, n }));
-  const metas = bruto.metas.map(([funil, vendedor, area, mes, meta]) => ({ funil, vendedor, area, mes, meta }));
+  // A partir de outubro/2026, Juros virou dois serviços: a meta de Juros vale 80% pra Empréstimo menor e 20% pra RMC.
+  const DIVISAO_JUROS = [['Juros Empréstimo menor', 0.8], ['Juros RMC', 0.2]];
+  const dividirJuros = (mes) => new Date().getFullYear() > 2026 || mes >= 10;
+  const metas = [];
+  for (const [funil, vendedor, area, mes, meta] of bruto.metas) {
+    if (String(area).trim().toLowerCase() === 'juros' && dividirJuros(mes)) {
+      const emp = Math.round(meta * DIVISAO_JUROS[0][1]);
+      metas.push({ funil, vendedor, area: DIVISAO_JUROS[0][0], mes, meta: emp }, { funil, vendedor, area: DIVISAO_JUROS[1][0], mes, meta: meta - emp });
+    } else metas.push({ funil, vendedor, area, mes, meta });
+  }
   const calendario = calcCalendario(ganhos);
   const por_area = calcPorArea(ganhos, metas, calendario);
   const temLeads = bruto.tem_leads !== false && leads.length > 0;
@@ -608,9 +623,9 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
 <script>
 (() => {
   const EQUIPE = 'Equipe toda', TODOS_SERV = 'Todos os serviços', TODOS_MESES = 'todos';
-  const ORDEM = ['Juros', 'Trabalhista', 'Previdenciário', 'Civil', 'Consumidor', 'Não informado'];
+  const ORDEM = ['Juros Empréstimo menor', 'Juros RMC', 'Juros', 'Trabalhista', 'Previdenciário', 'Civil', 'Consumidor', 'Não informado'];
   const NOME = { Juros: 'Juros/TEA' };
-  const COR = { Juros: '#9a6b93', Trabalhista: '#e07a8f', 'Previdenciário': '#e9c98e', Civil: '#c9a2f0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
+  const COR = { 'Juros Empréstimo menor': '#b98ab0', 'Juros RMC': '#6fa8c9', Juros: '#9a6b93', Trabalhista: '#e07a8f', 'Previdenciário': '#e9c98e', Civil: '#c9a2f0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
   const ACC = '#d5ad95', PLUM = '#9a6b93', INK = '#f5ebe5', MUTED = '#b8a3a9', LINE = '#3a2129';
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const nomeArea = (a) => NOME[a] || a;
