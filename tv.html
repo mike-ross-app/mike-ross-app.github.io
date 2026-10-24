@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Modo TV | Mike Ross</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="mr.css">
+<link rel="icon" href="favicon.png">
+<style>
+html, body { height: 100%; }
+body { margin: 0; overflow: hidden; font-size: clamp(14px, 1.15vw, 26px); }
+.tv { box-sizing: border-box; height: 100vh; padding: 2.2vh 2.4vw; display: grid; grid-template-rows: auto 1fr auto; gap: 2vh; }
+.tv-top { display: flex; align-items: center; justify-content: space-between; gap: 2vw; }
+.tv-marca { display: flex; align-items: center; gap: .8em; }
+.tv-marca img { width: 2.2em; }
+.tv-marca b { font: 600 2.2em/1 var(--mr-serif); letter-spacing: .08em; text-transform: uppercase; }
+.tv-titulo { font: 600 2.4em/1.1 var(--mr-serif); text-align: center; }
+.tv-titulo small { display: block; font: 500 .45em var(--mr-sans); color: var(--mr-muted); letter-spacing: .06em; text-transform: uppercase; margin-top: .3em; }
+.tv-hora { text-align: right; font: 600 2.4em/1 var(--mr-serif); font-variant-numeric: tabular-nums; }
+.tv-hora small { display: block; font: 500 .4em var(--mr-sans); color: var(--mr-muted); margin-top: .4em; }
+.tv-corpo { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2vw; min-height: 0; }
+.tv-card { background: var(--mr-surface); border: 1px solid var(--mr-line); border-radius: 1.2em; padding: 1.6em 1.8em; display: grid; gap: 1em; align-content: start; min-height: 0; }
+.tv-card h2 { margin: 0; font: 600 .95em var(--mr-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mr-muted); }
+.tv-num { font: 600 9em/0.9 var(--mr-serif); font-variant-numeric: tabular-nums; }
+.tv-num small { font-size: .32em; color: var(--mr-muted); font-weight: 500; }
+.tv-pct { font: 600 2.2em var(--mr-serif); }
+.tv-bar { height: 1.1em; border-radius: .55em; background: var(--mr-surface-2); position: relative; overflow: hidden; }
+.tv-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: .55em; background: var(--mr-teal); transition: width 1s ease; }
+.tv-bar em { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--mr-ink); opacity: .7; }
+.tv-frase { font-size: 1.35em; line-height: 1.35; }
+.tv-pos { color: #7fd3a0; } .tv-neg { color: #f08a7e; }
+.tv-rank { display: grid; gap: 1.4em; }
+.tv-linha { display: grid; grid-template-columns: 2.2em 1fr auto; gap: .4em 1em; align-items: center; }
+.tv-linha .pos { font: 600 2em var(--mr-serif); color: var(--mr-muted); }
+.tv-linha .nome { font: 600 1.9em var(--mr-serif); }
+.tv-linha .val { font: 600 1.9em var(--mr-serif); font-variant-numeric: tabular-nums; text-align: right; }
+.tv-linha .val small { font: 500 .5em var(--mr-sans); color: var(--mr-muted); display: block; }
+.tv-linha .tv-bar { grid-column: 2 / -1; height: .8em; }
+.tv-linha.lider .pos, .tv-linha.lider .nome { color: #e9c98e; }
+.tv-serv { display: flex; flex-wrap: wrap; gap: 1em 2.4em; font-size: 1.1em; color: var(--mr-muted); }
+.tv-serv b { color: var(--mr-ink); font: 600 1.6em var(--mr-serif); margin-right: .2em; }
+.tv-pontos { display: flex; justify-content: center; gap: .6em; }
+.tv-pontos i { width: .6em; height: .6em; border-radius: 50%; background: var(--mr-line-strong); }
+.tv-pontos i.on { background: var(--mr-teal); }
+.tv-full { position: fixed; right: 1.2em; bottom: 1.2em; font: 600 .9em var(--mr-sans); color: #fbe9df; background: var(--mr-wine); border: 0; border-radius: 999px; padding: .7em 1.3em; cursor: pointer; }
+.tv-sair { position: fixed; right: 9.5em; bottom: 1.9em; font-size: .85em; color: var(--mr-muted); }
+:fullscreen .tv-full, :fullscreen .tv-sair { display: none; }
+.tv-ganho { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(20,10,14,.82); z-index: 10; opacity: 0; pointer-events: none; transition: opacity .5s; }
+.tv-ganho.on { opacity: 1; }
+.tv-ganho div { text-align: center; padding: 2em 4em; border-radius: 1.4em; background: linear-gradient(100deg, #e9c98e 0%, #d5ad95 45%, #f3dcc0 100%); color: #2a0f16; box-shadow: 0 0 80px rgba(233,201,142,.45); }
+.tv-ganho b { display: block; font: 600 6em/1 var(--mr-serif); }
+.tv-ganho span { font: 600 2em var(--mr-serif); }
+.tv-ganho.on div { animation: tv-pop .8s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes tv-pop { from { transform: scale(.8); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .tv-ganho.on div { animation: none; } .tv-bar i { transition: none; } }
+.tv-aviso { color: #e9b45e; font-size: 1em; text-align: center; }
+@media (max-width: 900px) { body { overflow: auto; } .tv { height: auto; } .tv-corpo { grid-template-columns: 1fr; } .tv-num { font-size: 6em; } }
+</style>
+</head>
+<body>
+<div class="tv">
+  <div class="tv-top">
+    <div class="tv-marca"><img src="simbolo.png" alt=""><b>Mike Ross</b></div>
+    <div class="tv-titulo" id="titulo">Painel da equipe<small id="subtitulo">Carregando os números do Kommo…</small></div>
+    <div class="tv-hora" id="hora">--:--<small id="atualizado"></small></div>
+  </div>
+  <div class="tv-corpo">
+    <section class="tv-card" id="principal"></section>
+    <section class="tv-card"><h2 id="rank-titulo">Ranking</h2><div class="tv-rank" id="rank"></div></section>
+  </div>
+  <div>
+    <div class="tv-serv" id="serv"></div>
+    <div class="tv-pontos" id="pontos" style="margin-top:1.4vh"><i></i><i></i></div>
+    <div class="tv-aviso" id="aviso" hidden></div>
+  </div>
+</div>
+<a class="tv-sair" href="painel.html">Voltar ao painel</a>
+<button class="tv-full" id="full" type="button">Tela cheia</button>
+<div class="tv-ganho" id="ganho" role="status" aria-live="polite"><div><b id="ganho-n">+1</b><span id="ganho-txt">Novo ganho</span></div></div>
+<script src="motor.js"></script>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const num = (n) => new Intl.NumberFormat('pt-BR').format(n || 0);
+const h = (tag, props, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) { if (v == null || v === false) continue; if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'style') e.style.cssText = v; else e.setAttribute(k, v); }
+  for (const k of kids.flat(3)) if (k != null && k !== false) e.append(k instanceof Node ? k : document.createTextNode(String(k)));
+  return e;
+};
+const dm = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
+const barra = (feito, meta, marca) => h('div', { class: 'tv-bar' }, h('i', { style: 'width:' + (meta ? Math.min(100, (feito / meta) * 100) : 0) + '%' }), marca != null ? h('em', { style: 'left:' + Math.min(100, marca * 100) + '%' }) : null);
+const EQUIPE = 'Equipe toda', TROCA_S = 30, ATUALIZA_MIN = 2;
+let painel = null, visao = 0, anterior = null;
+
+$('full').addEventListener('click', () => { (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || (() => {})).call(document.documentElement); });
+const relogio = () => { const d = new Date(); $('hora').firstChild.nodeValue = pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
+setInterval(relogio, 10000); relogio();
+
+const desenhar = () => {
+  if (!painel) return;
+  const R = resumoDe(painel, EQUIPE);
+  if (!R) return;
+  const semana = visao === 1, T = R.T;
+  document.querySelectorAll('#pontos i').forEach((p, i) => p.classList.toggle('on', i === visao));
+  $('titulo').firstChild.nodeValue = semana ? 'Semana ' + (R.at + 1) + ' de ' + R.c0.semanas : 'Painel da equipe';
+  $('subtitulo').textContent = semana ? dm(R.sem.semana_ini) + ' a ' + dm(R.sem.semana_fim) + ' · ' + R.c0.nome_mes : 'Mês fiscal de ' + R.c0.nome_mes + ' · ' + dm(R.c0.ini) + ' a ' + dm(R.c0.fim);
+
+  const feito = semana ? R.feitoSem : T.feito, meta = semana ? R.metaSem : T.meta;
+  const falta = meta ? Math.max(0, meta - feito) : 0;
+  const frase = semana
+    ? (meta ? (falta ? 'Faltam ' + num(falta) + (R.restSem ? ' em ' + R.restSem + (R.restSem === 1 ? ' dia útil.' : ' dias úteis.') : '.') : 'Semana batida. Agora é recorde.') : '')
+    : (T.meta ? (T.ritmo >= 0 ? (T.ritmo ? num(T.ritmo) + ' à frente do ritmo.' : 'No ritmo da meta.') : num(-T.ritmo) + ' atrás do ritmo.') + (falta ? ' Faltam ' + num(falta) + (T.por_dia_util ? ', ' + num(Math.ceil(T.por_dia_util)) + ' por dia útil.' : '.') : ' Meta do mês batida.') : '');
+  $('principal').replaceChildren(
+    h('h2', { text: semana ? 'Ganhos na semana' : 'Ganhos no mês' }),
+    h('div', { class: 'tv-num' }, num(feito), meta ? h('small', { text: ' de ' + num(meta) }) : null),
+    meta ? h('div', { class: 'tv-pct' + (feito >= meta ? ' tv-pos' : '') }, Math.round((feito / meta) * 100) + '% da meta') : null,
+    meta ? barra(feito, meta, semana ? null : R.c0.fracao_mes) : null,
+    h('div', { class: 'tv-frase' + (!semana && T.ritmo < 0 ? ' tv-neg' : '') }, frase),
+    h('div', { class: 'tv-frase', style: 'color:var(--mr-muted)' }, 'Hoje: ', h('b', { style: 'color:var(--mr-ink)', text: num(R.feitoHoje) }), R.feitoHoje === 1 ? ' ganho' : ' ganhos',
+      !semana && R.metaSem ? [' · Semana: ', h('b', { style: 'color:var(--mr-ink)', text: num(R.feitoSem) }), ' de ' + num(R.metaSem)] : null));
+
+  // ranking
+  const k = 's' + (R.at + 1), mk = 'meta_' + k;
+  const linhas = VENDEDORES.map((v) => { const r = painel.por_area.find((x) => x.mes === R.mes && x.vendedor === v && x.area === 'Total') || {}; return { v, feito: semana ? (r[k] || 0) : (r.feito || 0), meta: semana ? r[mk] : r.meta }; })
+    .sort((a, b) => b.feito - a.feito);
+  const topo = Math.max(1, ...linhas.map((l) => l.meta || l.feito));
+  $('rank-titulo').textContent = semana ? 'Ranking da semana' : 'Ranking do mês';
+  $('rank').replaceChildren(...linhas.map((l, i) => h('div', { class: 'tv-linha' + (i === 0 && l.feito ? ' lider' : '') },
+    h('span', { class: 'pos', text: (i + 1) + 'º' }), h('span', { class: 'nome', text: l.v }),
+    h('span', { class: 'val' }, num(l.feito), l.meta ? h('small', { text: Math.round((l.feito / l.meta) * 100) + '% de ' + num(l.meta) }) : h('small', { text: 'sem meta' })),
+    barra(l.feito, l.meta || topo))));
+
+  // serviços
+  const servs = painel.por_area.filter((r) => r.mes === R.mes && r.vendedor === EQUIPE && r.area !== 'Total' && (r.feito || r.meta)).sort((a, b) => b.feito - a.feito);
+  $('serv').replaceChildren(...servs.map((r) => h('span', {}, h('b', { text: num(semana ? (r[k] || 0) : r.feito) }), r.area + (semana ? (r[mk] ? ' / ' + num(r[mk]) : '') : (r.meta ? ' / ' + num(r.meta) : '')))));
+};
+
+const avisarGanho = (n, quem) => {
+  $('ganho-n').textContent = '+' + n;
+  $('ganho-txt').textContent = n === 1 ? 'Novo ganho' + (quem ? ' · ' + quem : '') : 'Novos ganhos' + (quem ? ' · ' + quem : '');
+  $('ganho').classList.add('on');
+  setTimeout(() => $('ganho').classList.remove('on'), 9000);
+};
+
+const totaisPorVendedor = (p, mes) => Object.fromEntries(VENDEDORES.map((v) => [v, (p.por_area.find((x) => x.mes === mes && x.vendedor === v && x.area === 'Total') || {}).feito || 0]));
+
+const carregar = async () => {
+  try {
+    const r = await (await fetch(MR_API, { cache: 'no-store' })).json();
+    if (!r.ok) throw new Error('erro');
+    const novo = montarPainel(r);
+    const R = resumoDe(novo, EQUIPE);
+    if (R) {
+      const agora = totaisPorVendedor(novo, R.mes);
+      if (anterior && anterior.mes === R.mes) {
+        const dif = Object.entries(agora).map(([v, n]) => [v, n - (anterior.t[v] || 0)]).filter(([, d]) => d > 0);
+        const total = dif.reduce((s, [, d]) => s + d, 0);
+        if (total > 0) avisarGanho(total, dif.map(([v]) => v.split(' ')[0]).join(', '));
+      }
+      anterior = { mes: R.mes, t: agora };
+    }
+    painel = novo;
+    const t = new Date(r.atualizado);
+    $('atualizado').textContent = 'Kommo às ' + pad2(t.getHours()) + ':' + pad2(t.getMinutes());
+    $('aviso').hidden = true;
+  } catch (e) {
+    $('aviso').hidden = false;
+    $('aviso').textContent = 'Sem conexão com o Kommo agora. Tentando de novo.';
+  }
+  desenhar();
+};
+carregar();
+setInterval(carregar, ATUALIZA_MIN * 60 * 1000);
+setInterval(() => { visao = (visao + 1) % 2; desenhar(); }, TROCA_S * 1000);
+</script>
+</body>
+</html>

@@ -177,7 +177,7 @@
 <link rel="icon" href="favicon.png">
 </head>
 <body>
-<nav class="mr-bar"><a class="mr-brand" href="./"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><a href='painel.html'>Painel</a><a aria-current='page' href='tarefas.html'>Tarefas</a><a href='triagem.html'>Triagem</a><a href='procuracoes.html'>Procurações</a><a href='previdenciario.html'>Previdenciário</a><a href='clt.html'>CLT</a></div></nav>
+<nav class="mr-bar"><a class="mr-brand" href="./"><img src="simbolo.png" alt=""><b>Mike Ross</b></a><div class="mr-links"><span class="mr-grupo">Resultados</span><a href="meu-dia.html">Meu dia</a><a href="painel.html">Painel</a><a aria-current="page" href="tarefas.html">Tarefas</a><a href="tv.html">Modo TV</a><span class="mr-grupo">Atender</span><a href="triagem.html">Triagem</a><a href="procuracoes.html">Procurações</a><a href="previdenciario.html">Previdenciário</a><a href="clt.html">CLT</a></div></nav>
 
 <div class="mr-topo"><span id="atualizado">Carregando as tarefas do Kommo…</span></div>
 <div class="mr-aviso" id="aviso" role="status" hidden></div>
@@ -210,7 +210,7 @@
     <section class="sm-card" id="vendedores" style="margin-bottom:16px">
       <h2 id="tab-titulo">Tarefas de cadência por vendedor</h2>
       <p class="sm-note" id="tab-nota">—</p>
-      <div class="sm-scroll"><table class="sm-t sm-vt" id="tab"><thead></thead><tbody></tbody></table></div>
+      <div class="sm-scroll"><table class="sm-t sm-vt sm-cards" id="tab"><thead></thead><tbody></tbody></table></div>
     </section>
 
     <section class="sm-grid sm-row2">
@@ -238,6 +238,14 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzHT8B1qAj5Jt7NyV0K_hOGanYbPhPbdFFTOuZOcE4vxb5XfGpdINoHDRgKoPO7sg6DeQ/exec?aba=tarefas';
 const ATUALIZA_MIN = 5;
 const EQUIPE = 'Equipe toda';
+// Time de vendas: tarefas no nome do Daniel são da Julia (IA); quem não é do time entra em "Outros".
+const VENDEDORES = ['Lucas Wilker', 'Wilton Araújo', 'Gustavo Campos', 'Julia IA'];
+const vendedorDe = (v) => { const n = ({ 'Daniel Figueiredo': 'Julia IA' })[String(v || '').trim()] || String(v || '').trim(); return VENDEDORES.includes(n) ? n : 'Outros'; };
+const rotularTabelas = () => document.querySelectorAll('table.sm-cards').forEach((t) => {
+  const ths = [...t.querySelectorAll('thead th')].map((th) => [...th.childNodes].map((n) => n.textContent.trim()).filter(Boolean).join(' '));
+  t.querySelectorAll('tbody tr').forEach((tr) => [...tr.children].forEach((td, i) => { if (ths[i]) td.setAttribute('data-label', ths[i]); }));
+});
+
 const CHAVE = 'mr_tarefas_filtros';
 const lerLS = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
 const gravarLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* segue sem lembrar */ } };
@@ -356,7 +364,7 @@ const desenhar = () => {
   // tarefas → objetos (prazo e conclusão vêm em minutos desde 1970)
   const T = D.tarefas.map(([v, lead, prazo, conc, concEm]) => {
     const pz = prazo * 60000, ce = concEm ? concEm * 60000 : 0;
-    return { v: D.vendedores[v], lead, pz, dPz: diaDe(pz), conc: !!conc, ce, dCe: ce ? diaDe(ce) : '' };
+    return { v: vendedorDe(D.vendedores[v]), lead, pz, dPz: diaDe(pz), conc: !!conc, ce, dCe: ce ? diaDe(ce) : '' };
   });
   const noPer = (iso) => iso >= per.ini && iso <= per.fim;
 
@@ -422,7 +430,8 @@ const desenhar = () => {
       el('td', { text: x.leads.size ? dec(x.total / x.leads.size) : '–' }),
       el('td', { text: num(Math.round(x.concluidasPer / uteis)) }));
   };
-  $('tab').querySelector('tbody').replaceChildren(...ativos.map((v) => linha(v, por[v])), linha(EQUIPE, eq, 'total'));
+  $('tab').querySelector('tbody').replaceChildren(...ativos.sort((a, b) => (a === 'Outros') - (b === 'Outros')).map((v) => linha(v, por[v])), linha(EQUIPE, eq, 'total'));
+  rotularTabelas();
   $('tab-nota').textContent = 'Total, % no prazo e tarefas por lead contam as tarefas com prazo no período. Conclusão por dia = concluídas no período ÷ ' + uteis + ' dia' + (uteis > 1 ? 's' : '') + ' úte' + (uteis > 1 ? 'is' : 'il') + '. Abertas (em dia) e atrasadas são de agora. Clique num vendedor pra filtrar.';
 
   // gráfico por dia
