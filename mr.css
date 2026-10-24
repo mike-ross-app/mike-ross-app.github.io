@@ -43,7 +43,6 @@ button.primary:hover,.btn-primary:hover{background:var(--mr-wine-hover)!importan
 .mr-links a{font:500 14.5px var(--mr-sans);color:var(--mr-muted);text-decoration:none;padding:7px 12px;white-space:nowrap}
 .mr-links a:hover{color:var(--mr-ink)}
 .mr-links a[aria-current="page"]{color:var(--mr-ink);box-shadow:inset 0 -2px 0 var(--mr-teal)}
-@media (max-width:640px){.mr-bar{flex-wrap:wrap;gap:4px}.mr-links{margin-left:0;width:100%}}
 
 /* ajustes por ferramenta */
 .rail .chip{background:var(--mr-surface-2)!important;border:1px solid var(--mr-line-strong)}
@@ -55,11 +54,32 @@ button.primary:hover,.btn-primary:hover{background:var(--mr-wine-hover)!importan
 .type-card,.form,.locked,.result,fieldset,.card,.intake,.outputs,.art{box-shadow:none!important}
 .actionbar{background:rgba(20,10,14,.94)!important;border-top-color:var(--mr-line)!important}
 
-/* menu em dois grupos: resultados e atendimento */
-.mr-grupo{font:600 10.5px var(--mr-sans);letter-spacing:.12em;text-transform:uppercase;color:#8a7178;align-self:center;padding:0 4px 0 14px;white-space:nowrap}
-.mr-grupo:first-child{padding-left:0}
-.mr-links{align-items:center}
-@media (max-width:640px){.mr-links{flex-wrap:wrap;overflow:visible;row-gap:0}.mr-grupo{width:100%;padding:8px 0 0}.mr-links a{padding:6px 10px 6px 0;margin-right:6px}}
+/* menu: resultados à esquerda, Mike Ross no centro, ferramentas à direita */
+.mr-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:24px;padding:4px 0 12px}
+.mr-bar .mr-brand{justify-self:center;flex-direction:column;align-items:center;gap:6px}
+.mr-bar .mr-brand img{width:26px;align-self:center}
+.mr-lado{display:grid;gap:6px;min-width:0}
+.mr-lado.dir{justify-items:end;text-align:right}
+.mr-grupo{font:600 10.5px var(--mr-sans);letter-spacing:.16em;text-transform:uppercase;color:#8a7178;display:flex;align-items:center;gap:10px;width:100%}
+.mr-lado.esq .mr-grupo::after,.mr-lado.dir .mr-grupo::before{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--mr-line-strong),transparent)}
+.mr-lado.dir .mr-grupo::before{background:linear-gradient(270deg,var(--mr-line-strong),transparent)}
+.mr-lado .mr-links{margin:0;gap:0;overflow:visible;flex-wrap:wrap}
+.mr-lado.esq .mr-links a{padding:6px 18px 6px 0}
+.mr-lado.dir .mr-links{justify-content:flex-end}
+.mr-lado.dir .mr-links a{padding:6px 0 6px 18px}
+.mr-lado .mr-links a[aria-current="page"]{color:var(--mr-teal);box-shadow:none;text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:2px}
+@media (max-width:980px){
+  .mr-bar{grid-template-columns:1fr 1fr;gap:14px 20px}
+  .mr-bar .mr-brand{grid-column:1/-1;grid-row:1;flex-direction:row}
+}
+@media (max-width:560px){
+  .mr-bar{grid-template-columns:1fr}
+  .mr-lado.dir{justify-items:start;text-align:left}
+  .mr-lado.dir .mr-grupo::before{display:none}
+  .mr-lado.dir .mr-grupo::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--mr-line-strong),transparent)}
+  .mr-lado.dir .mr-links{justify-content:flex-start}
+  .mr-lado.dir .mr-links a{padding:6px 18px 6px 0}
+}
 
 /* tabelas viram cartões no celular */
 @media (max-width:640px){
