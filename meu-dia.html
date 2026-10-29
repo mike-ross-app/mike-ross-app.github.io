@@ -66,7 +66,7 @@ body { margin: 0; padding: 20px 16px 60px; }
     <section class="md-card" id="c-ranking" style="margin-top:14px"></section>
   </div>
 </main>
-<script src="motor.js?v=3"></script>
+<script src="motor.js?v=4"></script>
 <script>
 "use strict";
 const $ = (id) => document.getElementById(id);
@@ -131,7 +131,7 @@ const desenhar = () => {
 
   // serviços
   $('c-servicos').replaceChildren(h('h2', { text: 'Por serviço no mês' }),
-    R.servicos.length ? h('ul', { class: 'md-lista' }, R.servicos.sort((a, b) => (b.meta || 0) - (a.meta || 0) || b.feito - a.feito).map((r) => h('li', {}, h('span', { text: r.area }), h('b', { text: num(r.feito) + (r.meta ? ' / ' + num(r.meta) : '') }), r.meta ? barra(r.feito, r.meta) : null)))
+    R.servicos.length ? h('ul', { class: 'md-lista' }, R.servicos.sort((a, b) => (b.meta || 0) - (a.meta || 0) || b.feito - a.feito).map((r) => h('li', {}, h('span', { text: rotuloArea(r.area) }), h('b', { text: num(r.feito) + (r.meta ? ' / ' + num(r.meta) : '') }), r.meta ? barra(r.feito, r.meta) : null)))
       : h('div', { class: 'md-vazio', text: 'Nenhum ganho ainda neste mês.' }));
 
   // ranking

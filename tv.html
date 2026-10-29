@@ -79,7 +79,7 @@ body { margin: 0; overflow: hidden; font-size: clamp(14px, 1.15vw, 26px); }
 <a class="tv-sair" href="painel.html">Voltar ao painel</a>
 <button class="tv-full" id="full" type="button">Tela cheia</button>
 <div class="tv-ganho" id="ganho" role="status" aria-live="polite"><div><b id="ganho-n">+1</b><span id="ganho-txt">Novo ganho</span></div></div>
-<script src="motor.js?v=3"></script>
+<script src="motor.js?v=4"></script>
 <script>
 "use strict";
 const $ = (id) => document.getElementById(id);
@@ -134,8 +134,8 @@ const desenhar = () => {
     barra(l.feito, l.meta || topo))));
 
   // serviços
-  const servs = painel.por_area.filter((r) => r.mes === R.mes && r.vendedor === EQUIPE && r.area !== 'Total' && (r.feito || r.meta)).sort((a, b) => b.feito - a.feito);
-  $('serv').replaceChildren(...servs.map((r) => h('span', {}, h('b', { text: num(semana ? (r[k] || 0) : r.feito) }), r.area + (semana ? (r[mk] ? ' / ' + num(r[mk]) : '') : (r.meta ? ' / ' + num(r.meta) : '')))));
+  const servs = painel.por_area.filter((r) => r.mes === R.mes && r.vendedor === EQUIPE && r.area !== 'Total' && (r.feito || r.meta)).sort((a, b) => ehCampanha(a.area) - ehCampanha(b.area) || b.feito - a.feito);
+  $('serv').replaceChildren(...servs.map((r) => h('span', {}, h('b', { text: num(semana ? (r[k] || 0) : r.feito) }), rotuloArea(r.area) + (semana ? (r[mk] ? ' / ' + num(r[mk]) : '') : (r.meta ? ' / ' + num(r.meta) : '')))));
 };
 
 const avisarGanho = (n, quem) => {

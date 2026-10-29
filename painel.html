@@ -93,6 +93,7 @@
   .sm-t tr:last-child td { border-bottom: 0; }
   .sm-t td.svc { font-family: var(--mr-serif); font-size: 17px; }
   .sm-t tr.total td { font-weight: 600; background: rgba(213,173,149,.05); }
+  .sm-t tr.campanha td { color: var(--mr-muted, #b8a3a9); font-style: italic; border-top: 1px dashed #3a2129; }
   .sm-t td .v { display: block; font-size: 16px; font-weight: 600; }
   .sm-t td small { display: block; color: var(--sm-muted); font-size: 11px; }
   .sm-t td.ok { background: rgba(127,211,160,.13); }
@@ -255,7 +256,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="motor.js?v=3"></script>
+<script src="motor.js?v=4"></script>
 <script>
 "use strict";
 const rotularTabelas = () => document.querySelectorAll('table.sm-cards').forEach((t) => {
@@ -317,7 +318,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
   const COR = { 'Juros Empréstimo menor': '#e0905a', 'Juros RMC': '#6fa8c9', Juros: '#9a6b93', Trabalhista: '#e06b86', 'Previdenciário': '#f0d58c', Civil: '#b49af0', Consumidor: '#7fd3a0', 'Não informado': '#6f5a62' };
   const ACC = '#d5ad95', PLUM = '#9a6b93', INK = '#f5ebe5', MUTED = '#b8a3a9', LINE = '#3a2129';
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-  const nomeArea = (a) => NOME[a] || a;
+  const nomeArea = (a) => NOME[a] || rotuloArea(a);
+  const META = ORDEM.filter((a) => !ehCampanha(a)), CAMP = ORDEM.filter(ehCampanha); // serviços que contam pra meta / campanhas sem meta
   const cor = (a) => COR[a] || '#8c7a80';
   const brl = (n) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(n || 0);
   const num = (n) => new Intl.NumberFormat('pt-BR').format(n || 0);
@@ -631,7 +633,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
     }
 
     // ---- donut ganhos por serviço ----
-    const fatias = ORDEM.map((a) => paRow(mes, vend, a)).filter((r) => r.feito > 0);
+    const fatias = (A === 'Total' ? META : ORDEM).map((a) => paRow(mes, vend, a)).filter((r) => r.feito > 0);
     const totalF = d3.sum(fatias, (r) => r.feito);
     const donut = $('donut');
     donut.replaceChildren();
@@ -655,7 +657,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
     $('donut-legenda').onclick = (ev) => { const li = ev.target.closest('li[data-area]'); if (li) escolherServico(li.dataset.area); };
 
     // ---- evolução mês a mês ----
-    const areasEvo = A === 'Total' ? ORDEM.filter((a) => meses.some(([m]) => paRow(m, vend, a).feito > 0)) : [A];
+    const areasEvo = A === 'Total' ? META.filter((a) => meses.some(([m]) => paRow(m, vend, a).feito > 0)) : [A];
     const dadosEvo = meses.map(([m, n]) => {
       const c = cvRow(m, vend, A) || {};
       const o = { mes: m, rotulo: MES_CURTO[Number(m.slice(5)) - 1], nome: n, total: paRow(m, vend, A).feito, conv: c.leads_entraram ? c.conversao_pct : null, leads: c.leads_entraram };
@@ -779,15 +781,16 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
     // ---- conversão por serviço ----
     const boxCS = $('conv-barras');
     if (convOk) {
-      const linhasCS = ORDEM.map((a) => cvRow(mes, vend, a)).filter((r) => r && (r.leads_entraram || r.ganhos));
-      const maxC = d3.max(linhasCS, (r) => (r.leads_entraram ? r.conversao_pct : 0)) || 1;
+      const comMov = (a) => { const r = cvRow(mes, vend, a); return r && (r.leads_entraram || r.ganhos) ? r : null; };
+      const linhasCS = META.map(comMov).filter(Boolean), campCS = CAMP.map(comMov).filter(Boolean);
+      const maxC = d3.max([...linhasCS, ...campCS], (r) => (r.leads_entraram ? r.conversao_pct : 0)) || 1;
       const totC = cvRow(mes, vend, 'Total');
       const barra = (r, nome, c, total) => el('div', { class: 'sm-bar-row' + (A !== 'Total' && !total && A !== r.area ? ' off' : ''), 'data-area': total ? null : r.area },
         el('span', { text: nome, style: total ? 'font-weight:600' : null }),
         el('div', { class: 'track' }, el('i', { style: `width:${r.leads_entraram ? Math.min(100, (r.conversao_pct / maxC) * 100) : 0}%;background:${c}` })),
         el('span', { class: 'pct' }, r.leads_entraram ? cv(r, 'conversao_pct', pctBr(r.conversao_pct)) : '–'),
         el('small', {}, cv(r, 'ganhos', num(r.ganhos)), ' ganhos de ', cv(r, 'leads_entraram', num(r.leads_entraram)), ' leads'));
-      put(boxCS, ...linhasCS.map((r) => barra(r, nomeArea(r.area), cor(r.area))), totC ? barra(totC, 'Total', ACC, true) : null);
+      put(boxCS, ...linhasCS.map((r) => barra(r, nomeArea(r.area), cor(r.area))), totC ? barra(totC, 'Total', ACC, true) : null, ...campCS.map((r) => barra(r, nomeArea(r.area), cor(r.area))));
       boxCS.onclick = (ev) => { const r = ev.target.closest('[data-area]'); if (r) escolherServico(r.dataset.area); };
     } else if (leadsCarregando) {
       boxCS.replaceChildren(el('div', { class: 'dash-skeleton', text: '—' }));
@@ -820,7 +823,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && es
         r.meta ? el('td', {}, el('b', {}, pa(r, 'atingido_pct'), '%'), mini(r)) : el('td', { class: 'muted', text: '–' }));
       const tot = paRow(mes, vend, 'Total');
       const corpo = A === 'Total'
-        ? [...ORDEM.map((a) => paRow(mes, vend, a)).filter((r) => !r._vazio).map((r) => lin(r, nomeArea(r.area))), lin(tot, 'Total', 'total')]
+        ? [...META.map((a) => paRow(mes, vend, a)).filter((r) => !r._vazio).map((r) => lin(r, nomeArea(r.area))), lin(tot, 'Total', 'total'),
+           ...CAMP.map((a) => paRow(mes, vend, a)).filter((r) => !r._vazio).map((r) => lin(r, nomeArea(r.area), 'campanha'))]
         : [lin(paRow(mes, vend, A), nomeArea(A))];
       $('tab-semanas').querySelector('tbody').replaceChildren(...corpo);
     }

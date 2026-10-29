@@ -38,6 +38,13 @@ const VENDEDORES = ['Lucas Wilker', 'Wilton Araújo', 'Gustavo Campos', 'Julia I
 const APELIDO = { 'Daniel Figueiredo': 'Julia IA' };
 const vendedorDe = (v) => { const n = APELIDO[String(v || '').trim()] || String(v || '').trim(); return VENDEDORES.includes(n) ? n : 'Outros'; };
 
+/* Campanhas sem meta: aparecem no painel com os números delas, mas não entram no Total, na meta do mês, nos recordes nem nos rankings. */
+const CAMPANHAS_SEM_META = ['Consumidor'];
+const ehCampanha = (a) => CAMPANHAS_SEM_META.includes(a);
+const rotuloArea = (a) => (ehCampanha(a) ? a + ' · campanha sem meta' : a);
+/* Onde um ganho/lead é somado: no próprio serviço e, se conta pra meta, no Total. */
+const totaisDe = (v, a, equipe) => (ehCampanha(a) ? [[v, a], [equipe, a]] : [[v, a], [v, 'Total'], [equipe, a], [equipe, 'Total']]);
+
 /* Serviço que começou no meio do mês: as semanas antes do início não têm meta. */
 const INICIO_SERVICO = { 'Juros Empréstimo menor': '2026-10-05' };
 
@@ -138,13 +145,14 @@ const calcPorArea = (ganhos, metas, calendario) => {
       let k = sem.findIndex((x) => g.data_ganho <= x.semana_fim);
       if (k < 0) k = sem.length - 1;
       const a = area(g.area), v = g.vendedor || 'Sem vendedor';
-      for (const grupo of [pegar(v, a), pegar(v, 'Total'), pegar(EQUIPE, a), pegar(EQUIPE, 'Total')]) {
+      for (const grupo of totaisDe(v, a, EQUIPE).map(([vv, aa]) => pegar(vv, aa))) {
         grupo.s[k] += g.n || 1; grupo.feito += g.n || 1; grupo.valor += g.valor || 0;
       }
     }
     for (const m of metas) {
       if (m.mes !== num || m.funil !== FUNIL) continue;
       const a = area(m.area);
+      if (ehCampanha(a)) continue; // campanha não tem meta
       for (const grupo of [pegar(m.vendedor, a), pegar(m.vendedor, 'Total'), pegar(EQUIPE, a), pegar(EQUIPE, 'Total')]) grupo.meta += m.meta;
     }
     const lista = Object.values(grupos).filter((g) => g.feito || g.meta || g.area === 'Total');
@@ -173,6 +181,7 @@ const calcPorArea = (ganhos, metas, calendario) => {
         falta: g.meta ? falta : null,
         por_dia_util: g.meta ? Math.round((c0.uteis_restantes > 0 ? falta / c0.uteis_restantes : falta) * 10) / 10 : null,
         valor: g.valor,
+        campanha: ehCampanha(g.area),
       };
       for (let k = 0; k < 5; k++) {
         linha['s' + (k + 1)] = k < sem.length ? g.s[k] : null;
@@ -203,7 +212,7 @@ const calcPorArea = (ganhos, metas, calendario) => {
   }
   for (const t of Object.values(soma)) {
     const linha = { chave: 'todos|' + t.vendedor + '|' + t.area, mes: 'todos', vendedor: t.vendedor, area: t.area, feito: t.feito, meta: t.meta || null,
-      atingido_pct: t.meta ? Math.round((t.feito / t.meta) * 100) : null, esperado_hoje: null, ritmo: null, atras: null, falta: null, por_dia_util: null, valor: t.valor };
+      atingido_pct: t.meta ? Math.round((t.feito / t.meta) * 100) : null, esperado_hoje: null, ritmo: null, atras: null, falta: null, por_dia_util: null, valor: t.valor, campanha: ehCampanha(t.area) };
     for (let k = 1; k <= 5; k++) { linha['s' + k] = null; linha['meta_s' + k] = null; }
     rows.push(linha);
   }
@@ -223,7 +232,7 @@ const calcConversao = (leads, por_area, calendario) => {
     if (!mes) continue;
     const v = l.vendedor || 'Não informado', a = area(l.area);
     for (const m of [mes, 'todos']) {
-      for (const k of [m + '|' + v + '|' + a, m + '|' + v + '|Total', m + '|' + EQUIPE + '|' + a, m + '|' + EQUIPE + '|Total']) entraram[k] = (entraram[k] || 0) + (l.n || 1);
+      for (const k of totaisDe(v, a, EQUIPE).map(([vv, aa]) => m + '|' + vv + '|' + aa)) entraram[k] = (entraram[k] || 0) + (l.n || 1);
     }
   }
   const chaves = new Set([...por_area.map((r) => r.chave), ...Object.keys(entraram)]);
@@ -242,7 +251,7 @@ const calcDiario = (ganhos, leads, calendario) => {
   const ini = calendario.reduce((m, c) => (c.ini < m ? c.ini : m), '9999'), fim = calendario.reduce((m, c) => (c.fim > m ? c.fim : m), '0000');
   const t = {};
   const somar = (dia, v, a, campo, n) => {
-    for (const [vv, aa] of [[v, a], [v, 'Total'], [EQUIPE, a], [EQUIPE, 'Total']]) {
+    for (const [vv, aa] of totaisDe(v, a, EQUIPE)) {
       const k = dia + '|' + vv + '|' + aa;
       (t[k] = t[k] || { chave: k, dia, vendedor: vv, area: aa, ganhos: 0, leads: 0 })[campo] += n;
     }
@@ -263,7 +272,7 @@ const calcRecordes = (ganhos) => {
   const tipos = { dia: (x) => x, semana: semanaDe, mes: mesDe };
   return Object.entries(tipos).map(([tipo, chaveDe]) => {
     const cont = {};
-    for (const g of ganhos) { const k = chaveDe(g.data_ganho); cont[k] = (cont[k] || 0) + (g.n || 1); }
+    for (const g of ganhos) { if (ehCampanha(areaDe(g.area))) continue; const k = chaveDe(g.data_ganho); cont[k] = (cont[k] || 0) + (g.n || 1); }
     const atualPeriodo = chaveDe(hoje), atual = cont[atualPeriodo] || 0;
     let rec = null, ant = null;
     for (const [k, n] of Object.entries(cont)) {
@@ -330,5 +339,7 @@ const resumoDe = (painel, vend) => {
   const util = uteisEntre(hoje, hoje) === 1, restSem = uteisEntre(hoje, sem.semana_fim);
   const metaHoje = metaSem && util ? Math.ceil(Math.max(0, metaSem - (feitoSem - feitoHoje)) / Math.max(1, restSem)) : null;
   const servicos = painel.por_area.filter((r) => r.mes === mes && r.vendedor === vend && r.area !== 'Total' && (r.feito || r.meta));
+  // campanhas sem meta vão pro fim da lista
+  servicos.sort((a, b) => ehCampanha(a.area) - ehCampanha(b.area));
   return { c0, sem, at, mes, hoje, util, feitoHoje, metaHoje, feitoSem, metaSem, restSem, T, servicos };
 };
